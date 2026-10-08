@@ -1,17 +1,20 @@
 import { z } from "zod";
 import assistantFile from "../../content/assistant.json";
+import blackGiantFile from "../../content/black-giant.json";
 import factsFile from "../../content/facts.json";
 import siteFile from "../../content/site.json";
 import {
   AssistantSchema,
+  BlackGiantSchema,
   FactsFileSchema,
   SiteSchema,
   type AssistantContent,
+  type BlackGiantContent,
   type Fact,
   type Site,
 } from "./schemas";
 
-export type { AssistantContent, Fact, NavLink, Site } from "./schemas";
+export type { AssistantContent, BlackGiantContent, Fact, NavLink, Site } from "./schemas";
 
 export class ContentError extends Error {
   override name = "ContentError";
@@ -130,6 +133,21 @@ export function getAssistant(): AssistantContent {
     getRegistry(),
   );
   return assistant;
+}
+
+let blackGiant: BlackGiantContent | undefined;
+
+export function getBlackGiant(): BlackGiantContent {
+  if (!blackGiant) {
+    const file = "content/black-giant.json";
+    const parsed = parseContent(BlackGiantSchema, blackGiantFile, file);
+    const unknown = parsed.factIds.filter((id) => !getRegistry().has(id));
+    if (unknown.length > 0) {
+      throw new ContentError(`${file}: unknown fact id(s) ${unknown.map((id) => `"${id}"`).join(", ")}`);
+    }
+    blackGiant = parsed;
+  }
+  return blackGiant;
 }
 
 export const SITE_TITLE = "EnergyX (demo)";

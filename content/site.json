@@ -16,6 +16,10 @@
     {
       "label": "Facts",
       "href": "/facts/"
+    },
+    {
+      "label": "Black Giant",
+      "href": "/black-giant/"
     }
   ],
   "menu": {
@@ -65,6 +69,40 @@
   "forwardLooking": {
     "marker": "†",
     "note": "Planned and estimated figures describe goals or projections. They may change, or may not happen. Each one links to the page it was taken from."
+  },
+  "llms": {
+    "title": "EnergyX Trust Layer (unaffiliated demo)",
+    "summary": "Sourced facts about EnergyX, compiled by Raj Purohith Arjun as an interview demo. Not an official EnergyX communication. No figure here has been approved by EnergyX.",
+    "notes": [
+      "Each fact states its basis: what the figure counts. \"stated\" means the source page says so; \"inferred\" means it does not, and the basis is this registry's reading.",
+      "Forward-looking figures are marked. They are plans or estimates EnergyX has published, not results. They are listed because they are published, not because they are expected to happen.",
+      "Only facts checked against their source are listed. This file is generated from the same registry as the pages on this site, so the two cannot disagree."
+    ],
+    "pagesHeading": "Pages",
+    "pages": [
+      {
+        "label": "Assistant",
+        "href": "/",
+        "note": "Answers questions from verified facts only, with sources. Refuses forward-looking and investment questions."
+      },
+      {
+        "label": "Fact registry",
+        "href": "/facts/",
+        "note": "Every fact with its basis, source, access date and approval state."
+      },
+      {
+        "label": "Black Giant",
+        "href": "/black-giant/",
+        "note": "The Black Giant project page, rebuilt for fast delivery."
+      }
+    ],
+    "factsHeading": "Facts",
+    "basis": "Basis ({basisSource})",
+    "forwardLooking": "Forward-looking ({kind}): a plan or estimate, not a result.",
+    "source": "Source",
+    "accessed": "accessed",
+    "alsoPublishedAs": "Also published as",
+    "approval": "Not approved by EnergyX."
   },
   "factsPage": {
     "title": "Facts",

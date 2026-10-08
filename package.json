@@ -10,6 +10,7 @@
     "lint:facts": "tsx scripts/lint-facts.ts",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "test:e2e": "playwright test",
     "check": "pnpm typecheck && pnpm lint && pnpm lint:facts && pnpm test"
   },
   "dependencies": {
@@ -19,6 +20,7 @@
     "zod": "^4.6.5"
   },
   "devDependencies": {
+    "@playwright/test": "^1.64.0",
     "@tailwindcss/turbopack": "^4",
     "@types/node": "^20",
     "@types/react": "^19",

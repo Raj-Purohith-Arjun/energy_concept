@@ -39,7 +39,8 @@ export function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    // Everything except build assets, optimized images and public media files.
-    "/((?!_next/static|_next/image|favicon\\.ico$|.*\\.(?:png|jpe?g|gif|webp|avif|svg|ico|woff2?|mp4|webm|spz)$).*)",
+    // Everything except build assets, optimized images, public media files and
+    // robots.txt (a disallow nobody can read is useless; it holds nothing private).
+    "/((?!_next/static|_next/image|favicon\\.ico$|robots\\.txt$|.*\\.(?:png|jpe?g|gif|webp|avif|svg|ico|woff2?|mp4|webm|spz)$).*)",
   ],
 };

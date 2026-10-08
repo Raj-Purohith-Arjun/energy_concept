@@ -122,6 +122,7 @@ export const SiteSchema = z.strictObject({
     }),
   }),
   forwardLooking: z.strictObject({ marker: nonEmpty, note: nonEmpty }),
+  llms: z.lazy(() => LlmsCopySchema),
   factsPage: z.strictObject({
     title: nonEmpty,
     heading: nonEmpty,
@@ -206,3 +207,56 @@ export const AssistantSchema = z.strictObject({
 });
 
 export type AssistantContent = z.infer<typeof AssistantSchema>;
+
+// ---------------------------------------------------------------------------
+// /black-giant page copy (content/black-giant.json)
+// ---------------------------------------------------------------------------
+
+export const BlackGiantSchema = z.strictObject({
+  $comment: comment.optional(),
+  title: nonEmpty,
+  heading: nonEmpty,
+  lead: nonEmpty,
+  poster: z.strictObject({ alt: nonEmpty }),
+  placeholderLabel: nonEmpty,
+  video: z.strictObject({
+    sources: z
+      .array(
+        z.strictObject({
+          // Local public/ files only: the video must never come from a third-party host.
+          src: z.string().regex(/^\/media\/[\w./-]+\.(?:mp4|webm)$/),
+          type: z.enum(["video/mp4", "video/webm"]),
+        }),
+      )
+      .min(1),
+    pause: nonEmpty,
+    play: nonEmpty,
+  }),
+  factsHeading: nonEmpty,
+  factIds: z.array(kebabId).min(1),
+  registryLink: NavLinkSchema,
+  delivery: z.strictObject({ heading: nonEmpty, points: z.array(nonEmpty).min(1) }),
+});
+
+export type BlackGiantContent = z.infer<typeof BlackGiantSchema>;
+
+// ---------------------------------------------------------------------------
+// llms.txt copy (content/site.json -> llms)
+// ---------------------------------------------------------------------------
+
+export const LlmsCopySchema = z.strictObject({
+  title: nonEmpty,
+  summary: nonEmpty,
+  notes: z.array(nonEmpty),
+  pagesHeading: nonEmpty,
+  pages: z.array(z.strictObject({ label: nonEmpty, href: nonEmpty, note: nonEmpty })),
+  factsHeading: nonEmpty,
+  basis: nonEmpty.includes("{basisSource}"),
+  forwardLooking: nonEmpty.includes("{kind}"),
+  source: nonEmpty,
+  accessed: nonEmpty,
+  alsoPublishedAs: nonEmpty,
+  approval: nonEmpty,
+});
+
+export type LlmsCopy = z.infer<typeof LlmsCopySchema>;

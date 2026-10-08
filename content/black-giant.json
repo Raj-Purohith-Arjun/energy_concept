@@ -1,0 +1,35 @@
+{
+  "$comment": [
+    "/black-giant: a rebuilt version of EnergyX's project page whose only job is to show",
+    "that the payload and LCP numbers can be fixed. Same content shape, correct delivery.",
+    "Placeholder footage: NASA 'Earth Views from the ISS - No Music' (NHQ_2020_1221_Earth Views),",
+    "public domain, a 12s segment re-encoded without audio. Not EnergyX footage."
+  ],
+  "title": "Black Giant",
+  "heading": "Black Giant",
+  "lead": "A rebuilt version of the EnergyX Black Giant page, delivered so the first screen loads fast on a phone. The figures come from the fact registry, with sources.",
+  "poster": {
+    "alt": "Placeholder image: Earth seen from the International Space Station. Not EnergyX footage."
+  },
+  "placeholderLabel": "Placeholder footage: Earth from the ISS (NASA, public domain). Not EnergyX's video.",
+  "video": {
+    "sources": [
+      { "src": "/media/black-giant/placeholder.mp4", "type": "video/mp4" },
+      { "src": "/media/black-giant/placeholder.webm", "type": "video/webm" }
+    ],
+    "pause": "Pause background video",
+    "play": "Play background video"
+  },
+  "factsHeading": "Key facts",
+  "factIds": ["ex-bg-location", "ex-bg-acres", "ex-bg-capacity", "ex-bg-insitu"],
+  "registryLink": { "label": "See every fact and its source in the registry", "href": "/facts/" },
+  "delivery": {
+    "heading": "How this page is delivered",
+    "points": [
+      "The first thing you see is a compressed still image, sized for your screen. It is the largest element on the page, so the page is usable as soon as it appears.",
+      "The video is a separate layer. None of it is downloaded until the page has finished loading and the browser has a moment to spare.",
+      "It never plays if your device asks for reduced motion or data saving, it pauses when it scrolls out of view, and it has a pause button.",
+      "The footage on EnergyX's own page is not the issue. What's missing there is the delivery step between a finished video and the browser, which is all this page adds."
+    ]
+  }
+}
