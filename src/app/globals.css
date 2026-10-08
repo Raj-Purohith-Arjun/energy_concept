@@ -24,3 +24,57 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+:root {
+  --header-h: 4rem;
+}
+
+:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+/* Header background lives on a pseudo-element so only its opacity animates.
+   Default (no hero, or no scroll-timeline support): solid blurred dark. */
+.site-header {
+  isolation: isolate;
+}
+
+.site-header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: rgb(10 10 10 / 0.72);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+}
+
+/* Pages with a hero opt in via [data-header-overlay]: transparent at the top,
+   fully blurred after 80px of scroll. Safari/iOS 26+, Chrome 115+. */
+@supports (animation-timeline: scroll()) {
+  body:has([data-header-overlay]) .site-header::before {
+    animation: header-solidify linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 80px;
+  }
+}
+
+@keyframes header-solidify {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Full-screen mobile menu: lock page scroll while the modal is open. */
+html:has(dialog.mobile-menu[open]) {
+  overflow: hidden;
+}
+
+.mobile-menu::backdrop {
+  background: transparent;
+}

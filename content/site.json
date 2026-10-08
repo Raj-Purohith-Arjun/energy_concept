@@ -1,0 +1,107 @@
+{
+  "banner": "Concept redesign by Raj — not an official EnergyX communication.",
+  "description": "A concept redesign of energyx.com. Not an official EnergyX communication.",
+  "skipLink": "Skip to content",
+  "brand": {
+    "name": "EnergyX",
+    "homeHref": "/"
+  },
+  "nav": [
+    { "label": "Company", "href": "#" },
+    { "label": "Lithium", "href": "#" },
+    { "label": "Nuclear", "href": "#" },
+    { "label": "Batteries", "href": "#" },
+    { "label": "Projects", "href": "#" },
+    { "label": "Media", "href": "#" },
+    { "label": "Careers", "href": "#" },
+    { "label": "Contact", "href": "#" }
+  ],
+  "invest": { "label": "Invest", "href": "#" },
+  "menu": {
+    "open": "Open menu",
+    "close": "Close menu",
+    "label": "Site menu"
+  },
+  "footer": {
+    "columns": [
+      {
+        "heading": "Company",
+        "links": [
+          { "label": "How It Started", "href": "#" },
+          { "label": "Our Values", "href": "#" },
+          { "label": "Leadership", "href": "#" },
+          { "label": "Global Locations", "href": "#" },
+          { "label": "Our Facilities", "href": "#" },
+          { "label": "Master Plan", "href": "#" }
+        ]
+      },
+      {
+        "heading": "Lithium",
+        "links": [
+          { "label": "GET-Lit™", "href": "#" },
+          { "label": "Direct Lithium Extraction", "href": "#" },
+          { "label": "Efficiency & Innovation", "href": "#" },
+          { "label": "Lithium Refinery", "href": "#" }
+        ]
+      },
+      {
+        "heading": "Battery",
+        "links": [
+          { "label": "Introducing SOLIS™", "href": "#" },
+          { "label": "Our Focus", "href": "#" },
+          { "label": "Improved Energy Density", "href": "#" }
+        ]
+      },
+      {
+        "heading": "Sustainability",
+        "links": [
+          { "label": "Global Threat", "href": "#" },
+          { "label": "Reducing Carbon Emissions", "href": "#" },
+          { "label": "Environmental Footprint", "href": "#" },
+          { "label": "ESG Pledge", "href": "#" },
+          { "label": "Community", "href": "#" }
+        ]
+      },
+      {
+        "heading": null,
+        "links": [
+          { "label": "Invest", "href": "#" },
+          { "label": "Media", "href": "#" },
+          { "label": "Investor Portal", "href": "#" },
+          { "label": "Careers", "href": "#" },
+          { "label": "Press", "href": "#" },
+          { "label": "Shop", "href": "#" },
+          { "label": "Resource Guide", "href": "#" },
+          { "label": "Privacy Policy", "href": "#" },
+          { "label": "SMS & Email Policy", "href": "#" },
+          { "label": "Offering Circular", "href": "#" }
+        ]
+      }
+    ],
+    "contact": {
+      "email": "hello@energyx.com",
+      "addressLines": ["2535 Ridgepoint Dr.", "Austin, TX 78754"],
+      "link": { "label": "Contact Us", "href": "#" }
+    },
+    "notice": {
+      "heading": "About this site",
+      "paragraphs": [
+        "This is an independent concept redesign of the EnergyX website. It is not affiliated with, endorsed by or reviewed by EnergyX.",
+        "Nothing on this site is an offer to sell, or a solicitation of an offer to buy, any security.",
+        "Figures shown here are taken from EnergyX's public web pages, and each one links to its source. They may be out of date."
+      ],
+      "official": {
+        "lead": "For anything official, including investment information, visit",
+        "label": "energyx.com",
+        "href": "https://energyx.com"
+      }
+    },
+    "credit": "Concept by Raj, not affiliated with or endorsed by EnergyX.",
+    "copyright": "© 2026 Energy Exploration Technologies."
+  },
+  "notFound": {
+    "title": "Not found",
+    "heading": "Page not found",
+    "homeLabel": "Back to the homepage"
+  }
+}
