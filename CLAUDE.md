@@ -1,241 +1,193 @@
-# EnergyX Concept Site — project rules for Claude Code
+# EnergyX Trust Layer — project rules for Claude Code
 
 Read this file before writing any code. It is the contract for this repo.
 If a request conflicts with a rule here, say so before you build.
+
+**This file replaced an earlier version that described a concept redesign of
+energyx.com. That project is cancelled.** EnergyX shipped a new Next.js site in
+early October 2026. Building a competing redesign of work their CMO just shipped
+is the wrong move. Do not build hero sections, scroll stories, globes, splat
+viewers or mirrored page structures. If you find references to those, they are stale.
 
 ---
 
 ## 1. What this is
 
-A private, password-protected concept redesign of energyx.com, built by Raj Purohith Arjun
-as part of an interview process for the AI Engineer role at EnergyX.
+A private, password-protected technical demo built by Raj Purohith Arjun for the
+AI Engineer interview at EnergyX. It is shown to Teague Egan (CEO), Kellee Khalil
+(CMO) and Luke Gustafson (design/3D). It is **not** an official EnergyX communication
+and it is **not** a redesign of their site.
 
-It is **not** an official EnergyX communication. It is shown on a laptop and a phone to
-Teague Egan (CEO), Kellee Khalil (CMO) and Luke Gustafson (design/3D).
+### The argument it makes
 
-### The three things it has to prove, in order
+EnergyX has 40,000+ retail shareholders, an active Reg A+ raise and an IPO ahead.
+Three things are true of their public information today, all measured:
 
-1. **It can be published in minutes, with review.** A press release becomes a reviewed,
-   live page in under five minutes. This is the whole point. Everything else supports it.
-2. **It is faster than the current site**, measured honestly on the same pages with the
-   same tools.
-3. **It looks more cinematic and more premium** than the current site.
+1. **It contradicts itself.** Their own pages have shown different patent counts.
+   (Verify current state before relying on this; if the conflict was fixed in the
+   rebuild, use whatever conflicts do exist, or drop the claim.)
+2. **It is too heavy to reach people.** Lighthouse mobile, Slow 4G, Oct 8 2026:
+   homepage Performance 55, LCP 5.9s, 32.9 MB total — 27.7 MB of it a hero video
+   served from a Box shared link. `/black-giant/` Performance 50, LCP 7.5s,
+   48.3 MB total — a single 39.9 MB autoplaying video that is itself the LCP element,
+   plus a second 7.9 MB video on the same page.
+3. **It is invisible to AI.** No `llms.txt`, no `ai-catalog.json`, no WebMCP tools
+   registered. Lighthouse 13.5 scores `/black-giant/` 1/2 on Agentic Browsing.
+   Retail investors increasingly research by asking a model.
 
-If a feature does not serve one of those three, it is cut. See §8.
+The demo fixes all three with one idea: make EnergyX's public information
+consistent, cited, fast and machine-readable.
 
-### What it must never become
+### Tone rule about Luke
 
-A beautiful site that is slow. The current energyx.com is already beautiful-ish and slow.
-Shipping a slower, prettier site loses the argument before it starts. Every visual
-decision is also a performance decision.
+The videos are Luke's work and he is the internal advocate for this candidate.
+The problem is never the content or the production value — it is that no delivery
+pipeline sits between his output and the browser. Never phrase it any other way,
+in code comments, copy, or the demo script.
 
 ---
 
 ## 2. Non-negotiable rules
 
-These are hard. Do not "temporarily" break them.
-
-1. **No typed numbers.** Every business claim — money, tonnes, acres, patents,
-   percentages, dates of future events — renders through `<Fact id="..." />` reading from
-   `content/facts.json`. `scripts/lint-facts.ts` fails the build on violations. This is
-   the single feature that proves the candidate understood their real problem
-   (their live site shows 120+, 140+ and 150+ patents on different pages).
-2. **No new claims.** Facts come from EnergyX's own public pages, each with a source URL
-   and access date. `approvedAt` is `null` on every fact — Raj is not EnergyX and cannot
-   approve their numbers. The UI shows that honestly.
-3. **Precise nouns.** Eni *stake*, Army *conditional lease*, Compass *non-binding MOU*,
-   Lonestar *demonstration plant*. Never upgrade an MOU to a partnership or a lease to a
-   contract. The AI publish prompt enforces this too.
+1. **No typed numbers.** Every business claim renders through `<Fact id="..." />`
+   reading `content/facts.json`. `scripts/lint-facts.ts` fails the build on
+   violations. Allowlist: years, ISO dates, list numbering, CSS and Tailwind
+   values, version strings, street addresses, copyright years.
+2. **No new claims.** Facts come from EnergyX's own public pages, each with a
+   source URL and access date. `approvedAt` is `null` on every fact — Raj is not
+   EnergyX and cannot approve their numbers. The UI says so.
+3. **Precise nouns.** Eni *stake*, Army *conditional lease*, Compass *non-binding
+   MOU*, Lonestar *demonstration plant*. Never upgrade an MOU to a partnership.
 4. **Forward-looking figures are chipped and footnoted.** `kind: planned | estimate`
-   renders an amber chip and registers an automatic forward-looking footnote on that page.
-   EnergyX runs a Reg A raise; this is not decoration.
-5. **Labeled as a concept, everywhere.** Non-dismissible banner on every page,
-   "(concept)" in every `<title>`, `X-Robots-Tag: noindex, nofollow`, robots disallow all,
-   basic auth on everything. No real invest flow, no forms that collect personal data,
-   no analytics or tracking pixels.
-6. **Performance budgets are enforced in CI**, not aspirational. See §5.
+   gets an amber chip and an automatic forward-looking footnote on that page.
+5. **Labeled as an unaffiliated demo, everywhere.** Non-dismissible banner, "(demo)"
+   in every title, `X-Robots-Tag: noindex, nofollow`, robots disallow, basic auth on
+   everything, production fail-closed. No invest flow, no forms collecting personal
+   data, no analytics or tracking pixels. Do not reproduce EnergyX's Reg A legal
+   text — Raj is not the issuer; the notice is in his own words.
+6. **Performance budgets enforced in CI.** See §5. This demo argues about speed;
+   it cannot be slow.
 7. **No secrets in client code.** Nothing sensitive behind `NEXT_PUBLIC_`.
-   `.env*` is gitignored before the first commit.
 
 ---
 
 ## 3. Stack
 
-| Layer | Choice | Note |
-| --- | --- | --- |
-| Framework | Next.js 16.x App Router, TypeScript strict | Same stack as their real site — the point is proving you can make *their* tech fast. Run `npm show next version` and pin current stable; do not hardcode a version from memory. |
-| Package manager | pnpm | lockfile committed |
-| Rendering | Static at build time for every page | Content changes a few times a day; static HTML from a CDN wins |
-| Styling | Tailwind + brand tokens as CSS variables | |
-| Content | JSON + MDX in Git, validated with Zod at build | Loader throws on invalid file, unknown fact ID, orphan milestone |
-| Motion | GSAP for the scroll story only; CSS everywhere else | |
-| 3D | `cobe` globe; `three` + `@sparkjsdev/spark` splat viewer | Both lazy, both behind a tap |
-| Hosting | Vercel, preview URL per PR | |
-| AI | One `generateDraft()` function. Model behind it is swappable. | |
-| Tests | Vitest, Playwright + axe, Lighthouse CI, linkinator, k6 | |
+Next.js 16.4 App Router, TypeScript strict, pnpm, Tailwind, static at build time,
+content as JSON + MDX validated with Zod, Vercel hosting. Tests: Vitest,
+Playwright + axe, Lighthouse CI.
 
-Do not add dependencies without asking. Every dependency is a liability and a page-weight
-cost. Specifically not wanted: a component library, a state manager, a CSS-in-JS library,
-a smooth-scroll library.
+Do not add dependencies without asking. No component library, no state manager,
+no CSS-in-JS, no animation library unless a specific route needs one and it is
+justified first.
 
 ---
 
 ## 4. Architecture rules
 
-- **Server components by default.** `"use client"` is allowed only in: hero video
-  controller, stat count-up, scroll story, projects carousel, globe, splat viewer,
-  mobile menu. Nothing else. If you think you need another, say why first.
-- Heavy libraries (`three`, `spark`, `gsap`, `cobe`) import via `next/dynamic` **inside**
-  the client island, never in `layout.tsx`.
-- All page copy comes from `/content` through `src/lib/content.ts`. Never hardcode copy
-  in a component.
-- Images: `next/image` with an honest `sizes`. Only the hero poster gets `priority`.
-  Always set width/height or use `fill` inside an aspect-ratio box.
-- Animate `transform` and `opacity` only. Never width, height, top, left.
-- Nothing animates before first paint. Respect `prefers-reduced-motion` and `Save-Data`.
-- Anything moving longer than 5s needs a visible pause control.
-- Accessibility: semantic HTML, visible focus rings, alt text, 44px tap targets,
-  labels on buttons. axe scan must show zero serious/critical.
-- Keep components under ~150 lines.
+- Server components by default. `"use client"` only for the mobile menu and the
+  assistant's chat input. Anything else, flag it first.
+- All copy comes from `/content` via `src/lib/content.ts`. Never hardcode copy.
+- `next/image` with honest `sizes`. Only an above-fold poster gets `priority`.
+- Animate `transform` and `opacity` only. Respect `prefers-reduced-motion`.
+- Accessibility: semantic HTML, visible focus, alt text, 44px tap targets.
+  axe must show zero serious/critical — the demo criticises their contrast failures,
+  so it cannot have its own.
+- Components under ~150 lines.
 
-### Folder shape
+### Routes
 
 ```
-content/        facts.json, projects/, milestones.json, press/*.mdx, faq.json, site.json
-public/         media/, splats/
-scripts/        new-press.ts (AI publish CLI), lint-facts.ts
-src/app/        layout, page, [slug], projects, press, concept, sitemap, robots, og
-src/components/ ui/ sections/ three/
-src/lib/        schemas.ts content.ts facts.ts validators.ts
-src/proxy.ts    basic auth (Next 16 name; older versions: middleware.ts)
-tests/          unit/ e2e/
+/                  what this is + the assistant
+/facts             the registry, with auto-generated conflicts table
+/black-giant       ONE page rebuilt properly — the performance proof
+/findings          audit numbers, before/after, what AI models say about EnergyX
 ```
 
-One `[slug]` route serves project pages and designed stub pages, with
-`generateStaticParams` and `dynamicParams = false` so unknown URLs 404 cleanly.
+Four routes. Not a site. Resist adding more.
 
 ---
 
 ## 5. Performance budgets (CI-enforced, mobile lab)
 
-| Metric | Budget |
-| --- | --- |
-| Lighthouse performance | ≥ 90 |
-| LCP | ≤ 2.5 s |
-| CLS | ≤ 0.1 |
-| Total blocking time | ≤ 200 ms |
-| First-load JS, compressed | ≤ 180 KB |
-| Page weight before hero video starts | ≤ 1.5 MB |
-| Hero poster | ≤ 200 KB |
-| Fonts | ≤ 2 files, ≤ 100 KB |
-| Splat file | ≤ 25 MB, downloaded **only after tap** |
+Lighthouse performance ≥ 95 · LCP ≤ 2.0s · CLS ≤ 0.05 · TBT ≤ 150ms ·
+first-load JS ≤ 150 KB compressed · any page ≤ 3 MB total.
 
-A Playwright test asserts no `.spz` request occurs before the 3D button is clicked.
-If a new effect blows a budget, the build fails and the effect gets simplified — not the
-budget raised.
+Tighter than a normal project on purpose: the argument is that their pages are
+50 and 55, so this one being 92 would be embarrassing. If an effect blows a
+budget, the effect gets simplified. Never the budget.
 
 ---
 
 ## 6. Build order
 
-Deploy before you design. The site must be live on a phone within the first hour, then
-everything after is an increment to a live site.
+**Phase A — the registry (do first, everything depends on it)**
+1. `src/lib/schemas.ts`, `src/lib/content.ts`, `content/facts.json`,
+   `<Fact/>`, `scripts/lint-facts.ts` + unit tests.
+2. `/facts` route: every fact with source, date, kind chip, approval state, and a
+   conflicts table generated from the registry.
 
-**Phase 0 — spine (do not skip, do not reorder)**
-1. Scaffold, push, connect Vercel, confirm the production URL loads on a phone.
-2. Basic auth proxy, noindex headers, concept banner, full EnergyX nav + footer shell.
-3. Design tokens, fonts.
-4. `schemas.ts`, `content.ts`, `facts.json`, `<Fact/>`, `lint-facts.ts` + its unit tests.
+**Phase B — the answer layer (the centrepiece)**
+3. An assistant that answers questions using **only** facts in the registry, cites
+   the source page for each, and says plainly when it doesn't know.
+4. **Refusal behaviour, which is the actual demo.** Forward-looking questions
+   ("when is the IPO", "what return will I get", "will this go up") get a visible,
+   explained decline and a handoff to IR — not a hedge, not a guess. Build the
+   classifier and the refusal copy before polishing the happy path.
+5. The three-tier framing in the UI: public (answerable here), gated (requires
+   identity — EnergyX already does this with DocSend), private (human only).
 
-**Phase 1 — the argument**
-5. Homepage sections in order: hero → numbers band → Brine-to-Battery scroll story →
-   featured project → projects showcase → conventional vs DLE → milestones → press →
-   invest placeholder → FAQ.
-6. Black Giant project page: hero, key facts, status stepper, milestone timeline,
-   gallery, 3D tour slot, partners, related press, forward-looking footnote.
-7. Press index + article template + RSS + OG images.
-8. AI publish flow (`pnpm new:press`) with validators and PR creation.
+**Phase C — AI discoverability**
+6. `llms.txt`, structured data, consistent facts. `/findings` shows before/after
+   screenshots of what ChatGPT and Claude say about EnergyX.
 
-**Phase 2 — proof**
-9. Tests, axe, Lighthouse CI, link check, GitHub Actions, branch protection.
-10. Before/after measurement, `/concept` leave-behind page with the numbers and the
-    fact-conflict table.
+**Phase D — the performance proof**
+7. `/black-giant` rebuilt: poster image as LCP, video `preload="none"` attached
+   after load, correctly sized images, no render-blocking CSS. Measure on the same
+   emulated device as the audit and put both numbers on `/findings`.
 
-**Phase 3 — the extras, only if Phase 2 is green**
-11. Globe, splat viewer, Lonestar + Powder Hound, stub pages for every remaining menu
-    item (Company, Lithium, Nuclear, Batteries, Media, Careers, Contact, Shop,
-    Investor Portal), image comparison slider, MCP server.
-
----
-
-## 7. The AI publish flow — the demo centerpiece
-
-`pnpm new:press --file releases/x.txt --project powder-hound`
-
-1. Read release text.
-2. Load `facts.json`, brand rules, three example articles.
-3. Model call with a JSON response schema, temperature ~0.3.
-4. Zod parse.
-5. Checks: every `<Fact id>` exists · facts lint passes on the body · forward-looking
-   detector · banned promotional phrases ("guaranteed", "risk-free", "can't lose",
-   "best investment") · title ≤ 90 chars · summary 80–160 · unique slug · sourceUrl present.
-6. Write `content/press/<slug>.mdx`, branch, commit, push, `gh pr create`.
-7. Vercel comments the preview URL; CI runs everything.
-8. Human reviews the preview and merges. Live in about a minute.
-
-**The model writes structured data, never code, and can never introduce a number that is
-not in the registry.** Numbers it finds in the release that are not in the registry go
-into `newClaims[]` with the exact text and why it matters, and the PR is labeled
-`needs-fact-approval`. Say that sentence out loud in the demo — it is the answer to
-"how do you stop it hallucinating a lithium yield into an investor-facing page."
-
-Always keep the no-API fallback working: `--print-prompt` prints the full prompt to paste
-into a chat, `--from-json draft.json` runs the identical checks and PR steps. If the API
-is rate-limited on demo morning, the demo still runs.
+**Stretch, only if Phases A–D are done and green**
+8. The AI publish flow (`pnpm new:press`): release text → structured draft → Zod →
+   validators → branch → PR → preview → human merge. The model writes structured
+   data, never code, and can never introduce a number absent from the registry;
+   unknown numbers go to `newClaims[]` for a human. Needs a working `gh` CLI.
 
 ---
 
-## 8. Cut order
+## 7. Cut order
 
-When time runs short, drop from the top. Decide by the list, not by mood at 11pm.
+Drop from the top when time runs short:
 
-1. MCP server
-2. Git-based CMS editor
-3. Image comparison slider (keep the table)
-4. Lonestar / Powder Hound pages (keep as designed stubs)
-5. Globe interactivity (keep a static map with pins)
-6. GSAP pinning on desktop (keep fade-in cards)
-7. k6 load test (keep Lighthouse CI)
+1. The publish flow (stretch anyway)
+2. The three-tier UI framing — keep it as a talking point instead
+3. `/black-giant` full rebuild — a hero-only rebuild still proves the number
+4. Before/after AI screenshots — keep `llms.txt` itself
 
-**Never cut:** the deployed private URL · the hero · numbers via the facts registry ·
-Black Giant page with status stepper · the publish flow · before/after numbers ·
-CI with tests · the compliance guardrails · the backup screen recording.
+**Never cut:** the facts registry, the conflicts table, the assistant's refusal
+behaviour, the measured performance numbers, the compliance guardrails, the
+backup screen recording.
 
 ---
 
-## 9. Things Claude Code must not do in this repo
+## 8. Deadline
 
-- Do not type a number into a component or MDX body.
-- Do not add a dependency without asking.
-- Do not add `"use client"` to a component outside the approved island list without
-  flagging it.
-- Do not generate fake photographs of EnergyX facilities, equipment or people.
-  AI-generated backgrounds are abstract only and labeled "illustrative".
-- Do not remove or weaken the concept banner, the noindex headers or the basic auth.
-- Do not point any load test at energyx.com. Only at our own preview deployment.
-- Do not invent EnergyX facts, partnerships, dates or figures to fill a section.
-  If content is missing, leave a `TODO(content)` and say so.
-- Do not raise a performance budget to make a build pass.
+Decisions land mid-week of Oct 13 2026. **Ship and send by Monday Oct 12.**
+Something smaller in their hands before the decision beats something better after it.
+When in doubt, cut scope, not the send date.
 
 ---
 
-## 10. Open scope question
+## 9. Things Claude Code must not do
 
-Raj has asked for a more interactive, "state of the art" experience than the original
-weekend plan, plus a link to official merchandise.
-
-Treat added interactivity as a **Phase 3** item that must pass the §5 budgets. The merch
-link is a nav/footer item pointing to the designed Shop stub — trivial, do it in Phase 3
-step 11. Resolve the ambition against the budgets, never by relaxing them: the headline
-claim of this build is "more cinematic *and* faster", and the second half is the half
-that is hard to argue with.
+- Type a number into a component or MDX body.
+- Add a dependency without asking.
+- Invent EnergyX facts, partnerships, dates or figures. Leave `TODO(content)` and say so.
+- Generate fake photographs of EnergyX facilities, equipment or people.
+- Reproduce EnergyX's legal, Reg A or offering text.
+- Make the assistant answer a forward-looking or investment-advice question, even
+  partially, even hedged. The refusal is the product.
+- Weaken the banner, the noindex headers, the basic auth or the production fail-closed.
+- Raise a performance budget to make a build pass.
+- Point any load test at energyx.com.
+- Build merchandise, shop or product-design features. Out of role, and it steps on
+  Luke's work.

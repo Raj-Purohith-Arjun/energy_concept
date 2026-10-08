@@ -1,0 +1,458 @@
+{
+  "$comment": [
+    "Copy and retrieval vocabulary for the assistant on /.",
+    "Refusals are decided by src/lib/assistant/prefilter.ts (deterministic, no model).",
+    "factConcepts: a verified fact is retrieved when the question contains EVERY concept",
+    "listed for it. Each concept is a list of phrases; any phrase counts.",
+    "TODO(content): replace handoff.href with the exact EnergyX Investor Relations page once confirmed."
+  ],
+  "pageTitle": "Assistant",
+  "intro": {
+    "heading": "Ask about EnergyX's public information",
+    "body": "Answers come only from the fact registry: figures EnergyX has published, and Raj's own measurements of its website, each with its source. If a question isn't covered, it says so instead of guessing.",
+    "hardRule": "This assistant never answers forward-looking or investment questions, not partly and not with caveats. That check runs before any model is involved."
+  },
+  "form": {
+    "label": "Your question",
+    "placeholder": "For example: how long does EnergyX's DLE process take?",
+    "submit": "Ask",
+    "pending": "Checking…",
+    "privacy": "This demo doesn't store questions. Your question goes in the page address, so the host's request logs may hold it briefly. Don't include personal details."
+  },
+  "maxLength": 300,
+  "examples": {
+    "heading": "Try one",
+    "groups": [
+      {
+        "label": "Answered from the registry",
+        "questions": [
+          "How long does EnergyX's DLE process take?",
+          "How much water does EnergyX save compared with conventional extraction?",
+          "Has GM invested in EnergyX?",
+          "How heavy is the Black Giant page?"
+        ]
+      },
+      {
+        "label": "Refused, by design",
+        "questions": [
+          "When is the IPO?",
+          "Should I invest in EnergyX?",
+          "What return could I get?",
+          "What is Black Giant's capacity?"
+        ]
+      },
+      {
+        "label": "No sourced answer",
+        "questions": [
+          "Who is EnergyX's CEO?",
+          "What is EnergyX's revenue?"
+        ]
+      }
+    ]
+  },
+  "youAsked": "You asked",
+  "recognisedAs": "Recognised as {label}",
+  "refusals": {
+    "ipo": {
+      "label": "a question about an IPO or a stock listing",
+      "title": "I can't discuss an IPO or a stock listing.",
+      "why": "Whether, when or how a company lists its shares is forward-looking, and what's said about it is tightly regulated, especially while a company is raising money from the public. Anything I said would be speculation presented as information."
+    },
+    "future-timing": {
+      "label": "a question about future timing",
+      "title": "I can't tell you when things will happen.",
+      "why": "Dates for future events, such as production starts, launches and completions, are plans, and plans change. If I gave you a date, you might rely on it as if it were a fact. Only EnergyX can tell you what it currently plans and how firm that is."
+    },
+    "returns": {
+      "label": "a question about investment returns",
+      "title": "I can't tell you what an investment might return.",
+      "why": "Nobody knows future returns. A number or a direction from me would read like a promise, and past figures or company milestones don't tell you what you'd get back."
+    },
+    "advice": {
+      "label": "a request for investment advice",
+      "title": "I can't give investment advice.",
+      "why": "Whether to invest depends on your money, your goals and how much risk you can take. I know none of that, and I'm not licensed to advise anyone. I can tell you what EnergyX has published, with sources; the decision needs someone who can look at your situation."
+    },
+    "valuation": {
+      "label": "a question about valuation or share price",
+      "title": "I can't put a value on the company or its shares.",
+      "why": "A valuation is an opinion about the future, not a published fact. Share terms in an offering are set out in the offering documents, which I don't summarise. Read them directly or ask Investor Relations."
+    },
+    "guarantees": {
+      "label": "a question about safety or guarantees",
+      "title": "I can't call any investment safe or guaranteed.",
+      "why": "That would be a promise about the future, which nobody can honestly make. The offering documents describe the risks as the company sees them."
+    },
+    "comparison": {
+      "label": "a comparison with other investments",
+      "title": "I can't compare EnergyX with other investments.",
+      "why": "Saying one investment is better than another is a recommendation, even when it's phrased as a comparison. It also depends on things about you that I don't know."
+    },
+    "offering": {
+      "label": "a question about buying shares",
+      "title": "I can't help with buying shares.",
+      "why": "This demo has no investment flow and doesn't summarise offering terms. EnergyX publishes those itself, and its Investor Relations team can take you through them."
+    },
+    "planned-figure": {
+      "label": "a question whose answer is a target or estimate",
+      "title": "That figure is a target, not a result.",
+      "why": "EnergyX has published a figure for this, but it's a plan or an estimate, and those can change or not happen. I only state measured or reported facts, so I won't give it as an answer. You can read it in its original context here:"
+    }
+  },
+  "handoff": {
+    "lead": "For this, go to EnergyX directly:",
+    "label": "energyx.com",
+    "href": "https://energyx.com/",
+    "tail": "and its Investor Relations team."
+  },
+  "noAnswer": {
+    "no-match": {
+      "title": "I don't have a sourced answer for that.",
+      "body": "I only answer from facts that have been checked against a published source, and none of them covers this question."
+    },
+    "post-check": {
+      "title": "I don't have a sourced answer for that.",
+      "body": "A draft answer included something I couldn't trace back to a sourced fact, so I dropped it rather than show it."
+    },
+    "language": {
+      "title": "I can only answer in English.",
+      "body": "The fact registry and its checks are written in English, so I can't reliably answer questions in other languages yet."
+    },
+    "empty": {
+      "title": "Ask a question to get started.",
+      "body": "Type a question about EnergyX's published facts, or pick one of the examples."
+    },
+    "too-long": {
+      "title": "Ask one short question.",
+      "body": "Long messages are hard to check reliably, so this assistant only accepts short questions."
+    },
+    "coverageLead": "Here's what I can answer:"
+  },
+  "answer": {
+    "heading": "Sourced answer",
+    "factLine": "{label}: {value}.",
+    "alsoLine": "Also published as {value}.",
+    "sourcesHeading": "Sources"
+  },
+  "concepts": {
+    "dle": [
+      "dle",
+      "direct lithium extraction",
+      "get-lit",
+      "get lit",
+      "extraction process",
+      "their process",
+      "energyx process",
+      "energyx's process"
+    ],
+    "duration": [
+      "how long",
+      "how fast",
+      "how quick",
+      "how quickly",
+      "duration",
+      "processing time",
+      "time",
+      "take"
+    ],
+    "water": [
+      "water",
+      "freshwater",
+      "fresh water",
+      "gallon"
+    ],
+    "reduction": [
+      "reduce",
+      "reduction",
+      "save",
+      "saving",
+      "less",
+      "cut",
+      "lower",
+      "percent",
+      "percentage"
+    ],
+    "conventional": [
+      "conventional",
+      "traditional",
+      "evaporation",
+      "evaporation pond",
+      "brine pond"
+    ],
+    "energyx-process": [
+      "energyx",
+      "energy x",
+      "dle",
+      "direct lithium extraction",
+      "get-lit",
+      "get lit"
+    ],
+    "patents": [
+      "patent",
+      "intellectual property",
+      "ip portfolio"
+    ],
+    "founded": [
+      "founded",
+      "founding",
+      "established",
+      "incorporated",
+      "how old",
+      "started"
+    ],
+    "team": [
+      "team",
+      "employee",
+      "staff",
+      "headcount",
+      "member",
+      "workforce",
+      "how many people",
+      "people work"
+    ],
+    "funding": [
+      "funding",
+      "raised",
+      "capital",
+      "funded",
+      "financing",
+      "money has energyx",
+      "how much money"
+    ],
+    "land": [
+      "acre",
+      "acreage",
+      "land",
+      "hectare",
+      "area",
+      "footprint"
+    ],
+    "projects": [
+      "projects",
+      "how many projects",
+      "number of projects",
+      "project count"
+    ],
+    "gm": [
+      "gm",
+      "general motors"
+    ],
+    "black-giant": [
+      "black giant",
+      "black-giant",
+      "punta negra",
+      "antofagasta"
+    ],
+    "location": [
+      "where",
+      "location",
+      "located",
+      "situated",
+      "which country",
+      "which region"
+    ],
+    "capacity": [
+      "capacity",
+      "production",
+      "produce",
+      "output",
+      "tpa",
+      "tonnes per year",
+      "tons per year"
+    ],
+    "resource": [
+      "in-situ",
+      "in situ",
+      "resource estimate",
+      "lithium resource",
+      "lithium in the ground",
+      "reserves",
+      "deposit size",
+      "how much lithium"
+    ],
+    "lonestar": [
+      "lonestar",
+      "lone star",
+      "texarkana"
+    ],
+    "battery-mecca": [
+      "battery mecca"
+    ],
+    "powder-hound": [
+      "powder hound",
+      "great salt lake",
+      "ogden"
+    ],
+    "grant": [
+      "grant",
+      "doe",
+      "department of energy",
+      "federal funding"
+    ],
+    "homepage": [
+      "homepage",
+      "home page",
+      "front page",
+      "main page",
+      "landing page",
+      "energyx.com"
+    ],
+    "payload": [
+      "payload",
+      "page weight",
+      "page size",
+      "how heavy",
+      "heavy",
+      "megabyte",
+      "mb",
+      "download size",
+      "bytes",
+      "data transfer"
+    ],
+    "video": [
+      "video",
+      "hero video",
+      "mp4"
+    ],
+    "lcp": [
+      "lcp",
+      "largest contentful paint",
+      "load",
+      "page speed",
+      "how fast"
+    ],
+    "lighthouse-score": [
+      "lighthouse",
+      "performance score",
+      "perf score",
+      "pagespeed",
+      "page speed score"
+    ],
+    "box": [
+      "box",
+      "box.com",
+      "boxcloud"
+    ],
+    "agentic": [
+      "agentic",
+      "ai agent",
+      "agents",
+      "webmcp",
+      "llms.txt",
+      "llms txt",
+      "ai-catalog",
+      "machine-readable",
+      "machine readable",
+      "visible to ai",
+      "ai browsing"
+    ]
+  },
+  "factConcepts": {
+    "ex-dle-time": [
+      "dle",
+      "duration"
+    ],
+    "ex-water-reduction": [
+      "water",
+      "reduction"
+    ],
+    "ex-water-conventional": [
+      "water",
+      "conventional"
+    ],
+    "ex-water-dle": [
+      "water",
+      "energyx-process"
+    ],
+    "ex-patents": [
+      "patents"
+    ],
+    "ex-founded": [
+      "founded"
+    ],
+    "ex-team": [
+      "team"
+    ],
+    "ex-funding": [
+      "funding"
+    ],
+    "ex-acres": [
+      "land"
+    ],
+    "ex-projects-count": [
+      "projects"
+    ],
+    "ex-gm": [
+      "gm"
+    ],
+    "ex-bg-location": [
+      "black-giant",
+      "location"
+    ],
+    "ex-bg-acres": [
+      "black-giant",
+      "land"
+    ],
+    "ex-bg-capacity": [
+      "black-giant",
+      "capacity"
+    ],
+    "ex-bg-insitu": [
+      "black-giant",
+      "resource"
+    ],
+    "ex-lonestar-doe": [
+      "lonestar",
+      "grant"
+    ],
+    "ex-lonestar-target": [
+      "lonestar",
+      "capacity"
+    ],
+    "ex-ph-capacity": [
+      "powder-hound",
+      "capacity"
+    ],
+    "ex-bm-target": [
+      "battery-mecca",
+      "capacity"
+    ],
+    "lh-bg-weight": [
+      "black-giant",
+      "payload"
+    ],
+    "lh-bg-hero-video": [
+      "black-giant",
+      "video"
+    ],
+    "lh-bg-lcp": [
+      "black-giant",
+      "lcp"
+    ],
+    "lh-bg-perf": [
+      "black-giant",
+      "lighthouse-score"
+    ],
+    "lh-home-weight": [
+      "homepage",
+      "payload"
+    ],
+    "lh-home-box": [
+      "homepage",
+      "box"
+    ],
+    "lh-home-lcp-element": [
+      "homepage",
+      "lcp"
+    ],
+    "lh-agentic": [
+      "agentic"
+    ]
+  },
+  "related": {
+    "ex-water-reduction": [
+      "ex-water-conventional",
+      "ex-water-dle"
+    ]
+  }
+}

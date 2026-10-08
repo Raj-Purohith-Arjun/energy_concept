@@ -34,8 +34,7 @@ body {
   outline-offset: 2px;
 }
 
-/* Header background lives on a pseudo-element so only its opacity animates.
-   Default (no hero, or no scroll-timeline support): solid blurred dark. */
+/* Header background: solid blurred dark. */
 .site-header {
   isolation: isolate;
 }
@@ -51,25 +50,6 @@ body {
   backdrop-filter: blur(16px);
 }
 
-/* Pages with a hero opt in via [data-header-overlay]: transparent at the top,
-   fully blurred after 80px of scroll. Safari/iOS 26+, Chrome 115+. */
-@supports (animation-timeline: scroll()) {
-  body:has([data-header-overlay]) .site-header::before {
-    animation: header-solidify linear both;
-    animation-timeline: scroll(root);
-    animation-range: 0 80px;
-  }
-}
-
-@keyframes header-solidify {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
 /* Full-screen mobile menu: lock page scroll while the modal is open. */
 html:has(dialog.mobile-menu[open]) {
   overflow: hidden;
@@ -77,4 +57,55 @@ html:has(dialog.mobile-menu[open]) {
 
 .mobile-menu::backdrop {
   background: transparent;
+}
+
+/* <Fact> source panel: checkbox-in-label disclosure, no JavaScript needed. */
+.fact-toggle {
+  position: relative;
+  display: inline-flex;
+  margin-left: 0.25rem;
+  cursor: pointer;
+  vertical-align: middle;
+  line-height: 1;
+  border-radius: 9999px;
+}
+
+/* Invisible hit area: about 44px around a small glyph, without moving layout. */
+.fact-toggle::after {
+  content: "";
+  position: absolute;
+  inset: -0.75rem;
+}
+
+.fact-toggle:has(.fact-toggle-input:focus-visible) {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+.fact-panel {
+  display: none;
+}
+
+.fact:has(.fact-toggle-input:checked) .fact-panel {
+  display: block;
+  max-width: 36rem;
+  margin-block: 0.5rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
+  border-radius: 0.5rem;
+  background: var(--background);
+  color: var(--foreground);
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+/* Forward-looking footnote: shown only by the innermost page frame that
+   contains a planned/estimate chip (see src/app/template.tsx). */
+.fl-footnote {
+  display: none;
+}
+
+.page-frame:not(:has(.page-frame)):has([data-forward-looking]) > .fl-footnote {
+  display: block;
 }

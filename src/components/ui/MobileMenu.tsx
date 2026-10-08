@@ -7,13 +7,12 @@ import type { NavLink, Site } from "@/lib/content";
 
 interface MobileMenuProps {
   links: NavLink[];
-  invest: NavLink;
   labels: Site["menu"];
 }
 
 // Native <dialog> + showModal() gives the focus trap (rest of the page is
 // inert), Escape-to-close and top-layer stacking without any dependency.
-export function MobileMenu({ links, invest, labels }: MobileMenuProps) {
+export function MobileMenu({ links, labels }: MobileMenuProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const [open, setOpen] = useState(false);
@@ -83,7 +82,7 @@ export function MobileMenu({ links, invest, labels }: MobileMenuProps) {
             <ul className="flex flex-col">
               {links.map((item) => (
                 <li key={item.label}>
-                  {/* Placeholder "#" links don't change the route, so close explicitly too. */}
+                  {/* Close explicitly too: a link to the current page doesn't change the route. */}
                   <Link
                     href={item.href}
                     onClick={closeMenu}
@@ -95,14 +94,6 @@ export function MobileMenu({ links, invest, labels }: MobileMenuProps) {
               ))}
             </ul>
           </nav>
-
-          <Link
-            href={invest.href}
-            onClick={closeMenu}
-            className="mt-6 flex min-h-11 items-center justify-center rounded-full bg-white px-5 py-3 text-base font-semibold text-neutral-950"
-          >
-            {invest.label}
-          </Link>
         </div>
       </dialog>
     </>
