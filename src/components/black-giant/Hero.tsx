@@ -4,7 +4,9 @@ import { getBlackGiant } from "@/lib/content";
 import { HeroVideo } from "./HeroVideo";
 
 // Fixed-height box, so nothing moves when the video fades in over the poster.
-// The poster is the one preloaded image on the page and the LCP element.
+// The poster is the LCP element and the only high-priority image on the page.
+// fetchPriority="high" rather than `preload`: with `preload` Lighthouse saw the
+// request go out at Low priority, competing with the framework JS.
 export function Hero() {
   const { heading, lead, poster: posterCopy, placeholderLabel, video } = getBlackGiant();
   return (
@@ -13,7 +15,8 @@ export function Hero() {
         src={poster}
         alt={posterCopy.alt}
         fill
-        preload
+        fetchPriority="high"
+        loading="eager"
         sizes="100vw"
         className="object-cover"
       />
