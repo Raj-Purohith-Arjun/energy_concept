@@ -2,19 +2,24 @@ import { z } from "zod";
 import assistantFile from "../../content/assistant.json";
 import blackGiantFile from "../../content/black-giant.json";
 import factsFile from "../../content/facts.json";
+import findingsFile from "../../content/findings.json";
 import siteFile from "../../content/site.json";
+import { factTokenIds, malformedFactTokens } from "./fact-text";
 import {
   AssistantSchema,
   BlackGiantSchema,
   FactsFileSchema,
+  FindingsSchema,
+  isTodo,
   SiteSchema,
   type AssistantContent,
   type BlackGiantContent,
   type Fact,
+  type FindingsContent,
   type Site,
 } from "./schemas";
 
-export type { AssistantContent, BlackGiantContent, Fact, NavLink, Site } from "./schemas";
+export type { AssistantContent, BlackGiantContent, Fact, FindingsContent, NavLink, Site } from "./schemas";
 
 export class ContentError extends Error {
   override name = "ContentError";
@@ -148,6 +153,70 @@ export function getBlackGiant(): BlackGiantContent {
     blackGiant = parsed;
   }
   return blackGiant;
+}
+
+function strings(value: unknown): string[] {
+  if (typeof value === "string") return [value];
+  if (Array.isArray(value)) return value.flatMap(strings);
+  if (value && typeof value === "object") return Object.values(value).flatMap(strings);
+  return [];
+}
+
+// /findings must never show an unverified fact, so every reference (cells,
+// payload parts, {fact:id} tokens in prose) is checked here and a bad one
+// fails the build. TODO(content) cells are allowed: they render as pending.
+export function validateFindings(
+  findings: FindingsContent,
+  registry: FactRegistry,
+  file = "content/findings.json",
+): FindingsContent {
+  const problems: string[] = [];
+  const check = (id: string, where: string): Fact | undefined => {
+    const fact = registry.get(id);
+    if (!fact) problems.push(`${where}: unknown fact id "${id}"`);
+    else if (!fact.verified) problems.push(`${where}: fact "${id}" is unverified`);
+    return fact?.verified ? fact : undefined;
+  };
+
+  // $comment is an author note, never rendered, so it may mention token syntax.
+  for (const text of strings({ ...findings, $comment: undefined })) {
+    if (malformedFactTokens(text)) problems.push(`malformed {fact:...} token in "${text}"`);
+    for (const id of factTokenIds(text)) check(id, "{fact} token");
+  }
+  for (const page of findings.payload.pages) {
+    if (isTodo(page.total)) {
+      if (page.parts.length > 0) problems.push(`payload "${page.label}": parts need a measured total`);
+    } else {
+      check(page.total, `payload "${page.label}" total`);
+    }
+    for (const part of page.parts) {
+      const fact = check(part.fact, `payload "${page.label}" part`);
+      if (fact && (fact.unit !== "KiB" || fact.numeric === undefined)) {
+        problems.push(`payload part "${part.fact}" must be a byte fact (numeric in KiB)`);
+      }
+    }
+  }
+  for (const row of findings.comparison.rows) {
+    for (const ref of [row.before, row.after]) if (!isTodo(ref)) check(ref, `comparison "${row.label}"`);
+  }
+  for (const c of findings.registry.cases) {
+    const fact = c.figures === undefined ? undefined : check(c.figures, `registry case "${c.heading}"`);
+    if (fact && fact.alsoPublishedAs.length === 0) {
+      problems.push(`registry case "${c.heading}": "${fact.id}" has no alsoPublishedAs figures`);
+    }
+  }
+  if (problems.length > 0) throw new ContentError(`${file} is invalid:\n${problems.join("\n")}`);
+  return findings;
+}
+
+let findings: FindingsContent | undefined;
+
+export function getFindings(): FindingsContent {
+  findings ??= validateFindings(
+    parseContent(FindingsSchema, findingsFile, "content/findings.json"),
+    getRegistry(),
+  );
+  return findings;
 }
 
 export const SITE_TITLE = "EnergyX (demo)";

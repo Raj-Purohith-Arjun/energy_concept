@@ -35,7 +35,7 @@ describe("normalisation", () => {
 
 describe("post-check", () => {
   it("passes when every number comes from the facts", () => {
-    expect(postcheck({ text: "Black Giant page total payload: 48.3 MB.", citations: [bgWeight.id] }, [bgWeight]))
+    expect(postcheck({ text: "Black Giant page total payload: 50.6 MB.", citations: [bgWeight.id] }, [bgWeight]))
       .toEqual({ ok: true });
   });
 
@@ -44,7 +44,7 @@ describe("post-check", () => {
   });
 
   it.each([
-    ["an invented number", "Black Giant page total payload: 48.3 MB, about 99.8% heavier.", "untraced numbers: 99.8"],
+    ["an invented number", "Black Giant page total payload: 50.6 MB, about 99.8% heavier.", "untraced numbers: 99.8"],
     ["a number in words", "The page is forty megabytes.", "untraced number words: forty"],
     ["a computed figure", "That is 51 MB.", "untraced numbers: 51"],
   ])("drops %s", (_name, text, reason) => {

@@ -32,6 +32,33 @@ function Figure({ value, basis, basisSource, url, title, accessed }: FigureProps
   );
 }
 
+// Every published figure for one fact, each next to its own basis. Also used
+// by /findings.
+export function PublishedFigures({ fact }: { fact: Fact }) {
+  return (
+    <ul className="mt-4 grid gap-4 md:grid-cols-[repeat(auto-fit,minmax(15rem,1fr))]">
+      <Figure
+        value={<FactValue fact={fact} />}
+        basis={fact.basis}
+        basisSource={fact.basisSource}
+        url={fact.source.url}
+        title={fact.source.title}
+        accessed={fact.source.accessed}
+      />
+      {fact.alsoPublishedAs.map((alt) => (
+        <Figure
+          key={`${alt.value}|${alt.url}`}
+          value={<span className="font-semibold tabular-nums">{alt.value}</span>}
+          basis={alt.basis}
+          basisSource={alt.basisSource}
+          url={alt.url}
+          accessed={alt.accessed}
+        />
+      ))}
+    </ul>
+  );
+}
+
 // Facts that EnergyX publishes with more than one figure, each figure next to
 // its own basis. Framing is deliberately neutral; see factsPage.sameSubject.
 export function SameSubject({ facts }: { facts: Fact[] }) {
@@ -48,26 +75,7 @@ export function SameSubject({ facts }: { facts: Fact[] }) {
           <h3 id={`same-${fact.id}`} className="text-lg font-semibold">
             {fact.label}
           </h3>
-          <ul className="mt-4 grid gap-4 md:grid-cols-[repeat(auto-fit,minmax(15rem,1fr))]">
-            <Figure
-              value={<FactValue fact={fact} />}
-              basis={fact.basis}
-              basisSource={fact.basisSource}
-              url={fact.source.url}
-              title={fact.source.title}
-              accessed={fact.source.accessed}
-            />
-            {fact.alsoPublishedAs.map((alt) => (
-              <Figure
-                key={`${alt.value}|${alt.url}`}
-                value={<span className="font-semibold tabular-nums">{alt.value}</span>}
-                basis={alt.basis}
-                basisSource={alt.basisSource}
-                url={alt.url}
-                accessed={alt.accessed}
-              />
-            ))}
-          </ul>
+          <PublishedFigures fact={fact} />
         </article>
       ))}
     </section>

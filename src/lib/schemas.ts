@@ -241,6 +241,66 @@ export const BlackGiantSchema = z.strictObject({
 export type BlackGiantContent = z.infer<typeof BlackGiantSchema>;
 
 // ---------------------------------------------------------------------------
+// /findings page copy (content/findings.json)
+//
+// Prose may embed figures as {fact:<id>} tokens, rendered as <Fact> by
+// FactText. Table and payload cells are fact ids, or a TODO(content) marker for
+// a figure not yet measured, which renders as visible "pending" text.
+// ---------------------------------------------------------------------------
+
+const factRef = z.union([kebabId, z.string().startsWith(TODO_PREFIX)]);
+
+const PayloadPageSchema = z.strictObject({
+  label: nonEmpty,
+  total: factRef,
+  // Byte facts that add up to `total`; `video` picks the bar shade.
+  parts: z.array(z.strictObject({ label: nonEmpty, fact: kebabId, video: z.boolean() })),
+});
+
+export const FindingsSchema = z.strictObject({
+  $comment: comment.optional(),
+  title: nonEmpty,
+  heading: nonEmpty,
+  intro: nonEmpty,
+  caveatsLink: nonEmpty,
+  pending: nonEmpty,
+  payload: z.strictObject({
+    heading: nonEmpty,
+    body: z.array(nonEmpty).min(1),
+    totalLabel: nonEmpty,
+    pages: z.array(PayloadPageSchema).min(1),
+    scaleNote: nonEmpty,
+  }),
+  comparison: z.strictObject({
+    heading: nonEmpty,
+    intro: nonEmpty,
+    caption: nonEmpty,
+    columns: z.strictObject({ metric: nonEmpty, before: nonEmpty, after: nonEmpty }),
+    rows: z.array(z.strictObject({ label: nonEmpty, before: factRef, after: factRef })).min(1),
+    method: nonEmpty,
+  }),
+  caveats: z.strictObject({ heading: nonEmpty, points: z.array(nonEmpty).min(1) }),
+  registry: z.strictObject({
+    heading: nonEmpty,
+    intro: nonEmpty,
+    cases: z
+      .array(
+        z.strictObject({
+          heading: nonEmpty,
+          body: z.array(nonEmpty).min(1),
+          // A fact with alsoPublishedAs figures, shown side by side.
+          figures: kebabId.optional(),
+        }),
+      )
+      .min(1),
+  }),
+  firstWeek: z.strictObject({ heading: nonEmpty, intro: nonEmpty, points: z.array(nonEmpty).length(5) }),
+});
+
+export type PayloadPage = z.infer<typeof PayloadPageSchema>;
+export type FindingsContent = z.infer<typeof FindingsSchema>;
+
+// ---------------------------------------------------------------------------
 // llms.txt copy (content/site.json -> llms)
 // ---------------------------------------------------------------------------
 

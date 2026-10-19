@@ -20,6 +20,10 @@
     {
       "label": "Black Giant",
       "href": "/black-giant/"
+    },
+    {
+      "label": "Findings",
+      "href": "/findings/"
     }
   ],
   "menu": {
@@ -94,6 +98,11 @@
         "label": "Black Giant",
         "href": "/black-giant/",
         "note": "The Black Giant project page, rebuilt for fast delivery."
+      },
+      {
+        "label": "Findings",
+        "href": "/findings/",
+        "note": "Measured page weight and speed, before and after, with caveats, and what the fact registry found."
       }
     ],
     "factsHeading": "Facts",

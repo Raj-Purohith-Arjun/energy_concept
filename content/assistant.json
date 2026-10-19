@@ -345,6 +345,53 @@
       "machine readable",
       "visible to ai",
       "ai browsing"
+    ],
+    "second-video": [
+      "second video",
+      "other video",
+      "another video"
+    ],
+    "video-total": [
+      "both videos",
+      "all the video",
+      "all video",
+      "videos combined",
+      "total video",
+      "video total"
+    ],
+    "non-video": [
+      "non-video",
+      "without the video",
+      "without video",
+      "excluding the video",
+      "apart from the video",
+      "besides the video",
+      "other than the video",
+      "except the video"
+    ],
+    "cls": [
+      "cls",
+      "cumulative layout shift",
+      "layout shift"
+    ],
+    "tbt": [
+      "tbt",
+      "total blocking time",
+      "blocking time"
+    ],
+    "implied": [
+      "imply",
+      "implied",
+      "implies",
+      "work out",
+      "works out",
+      "actual reduction",
+      "calculated"
+    ],
+    "demo": [
+      "demo",
+      "rebuild",
+      "rebuilt"
     ]
   },
   "factConcepts": {
@@ -447,6 +494,77 @@
     ],
     "lh-agentic": [
       "agentic"
+    ],
+    "ex-water-implied-reduction": [
+      "water",
+      "reduction",
+      "implied"
+    ],
+    "lh-bg-second-video": [
+      "black-giant",
+      "video",
+      "second-video"
+    ],
+    "lh-bg-video-total": [
+      "black-giant",
+      "video",
+      "video-total"
+    ],
+    "lh-bg-other-bytes": [
+      "black-giant",
+      "video",
+      "non-video"
+    ],
+    "lh-bg-cls": [
+      "black-giant",
+      "cls"
+    ],
+    "lh-bg-tbt": [
+      "black-giant",
+      "tbt"
+    ],
+    "demo-bg-perf": [
+      "demo",
+      "black-giant",
+      "lighthouse-score"
+    ],
+    "demo-bg-lcp": [
+      "demo",
+      "black-giant",
+      "lcp"
+    ],
+    "demo-bg-cls": [
+      "demo",
+      "black-giant",
+      "cls"
+    ],
+    "demo-bg-tbt": [
+      "demo",
+      "black-giant",
+      "tbt"
+    ],
+    "demo-bg-weight": [
+      "demo",
+      "black-giant",
+      "payload"
+    ],
+    "lh-home-second-video": [
+      "homepage",
+      "video",
+      "second-video"
+    ],
+    "lh-home-other-bytes": [
+      "homepage",
+      "video",
+      "non-video"
+    ],
+    "lh-home-cls": [
+      "homepage",
+      "cls"
+    ],
+    "lh-home-tbt": [
+      "homepage",
+      "tbt"
     ]
   },
   "related": {

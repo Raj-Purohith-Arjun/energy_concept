@@ -1,0 +1,112 @@
+{
+  "$comment": [
+    "/findings: the whole argument on one page.",
+    "DRAFT copy throughout, especially caveats and firstWeek. Raj to edit.",
+    "Figures in prose are {fact:<id>} tokens, rendered as <Fact>. Never type a number here.",
+    "TODO(content) cells render as 'Pending measurement'. To fill one, add the demo-* fact",
+    "to content/facts.json (verified: true) and replace the TODO string with its id."
+  ],
+  "title": "Findings",
+  "heading": "Findings",
+  "intro": "The whole argument on one page: what EnergyX's pages transfer and why, what this demo changes, what it cannot prove, and what the fact registry turned up. Every figure links to its source.",
+  "caveatsLink": "Read the caveats",
+  "pending": "Pending measurement",
+
+  "payload": {
+    "heading": "Where the bytes go",
+    "body": [
+      "EnergyX's Black Giant page transfers {fact:lh-bg-weight} on a first visit. Of that, {fact:lh-bg-video-total} is two video files. Everything else on the page together comes to {fact:lh-bg-other-bytes}.",
+      "So the page is not heavy because it is rich. The design, copy and images are a small slice of the total. The weight is two finished videos reaching the browser as large single downloads, because there is no delivery step between the footage and the page. The homepage has the same shape."
+    ],
+    "totalLabel": "Total",
+    "pages": [
+      {
+        "label": "EnergyX Black Giant page",
+        "total": "lh-bg-weight",
+        "parts": [
+          { "label": "Hero video", "fact": "lh-bg-hero-video", "video": true },
+          { "label": "Second video", "fact": "lh-bg-second-video", "video": true },
+          { "label": "Everything else", "fact": "lh-bg-other-bytes", "video": false }
+        ]
+      },
+      {
+        "label": "EnergyX homepage",
+        "total": "lh-home-weight",
+        "parts": [
+          { "label": "Hero video, via a Box shared link", "fact": "lh-home-box", "video": true },
+          { "label": "Second video", "fact": "lh-home-second-video", "video": true },
+          { "label": "Everything else", "fact": "lh-home-other-bytes", "video": false }
+        ]
+      },
+      {
+        "label": "This demo's Black Giant page",
+        "total": "demo-bg-weight",
+        "parts": []
+      }
+    ],
+    "scaleNote": "Bars share one scale, so their lengths compare directly. Solid segments are video; lighter segments are everything else."
+  },
+
+  "comparison": {
+    "heading": "Before and after",
+    "intro": "The Black Giant page as EnergyX serves it, and as this demo delivers it: a still poster first, video only after the page has loaded.",
+    "caption": "Lighthouse lab results, Black Giant page",
+    "columns": {
+      "metric": "Measure",
+      "before": "EnergyX",
+      "after": "This demo"
+    },
+    "rows": [
+      { "label": "Performance score", "before": "lh-bg-perf", "after": "demo-bg-perf" },
+      { "label": "Largest Contentful Paint", "before": "lh-bg-lcp", "after": "demo-bg-lcp" },
+      { "label": "Cumulative Layout Shift", "before": "lh-bg-cls", "after": "demo-bg-cls" },
+      { "label": "Total Blocking Time", "before": "lh-bg-tbt", "after": "demo-bg-tbt" },
+      { "label": "Total bytes", "before": "lh-bg-weight", "after": "demo-bg-weight" }
+    ],
+    "method": "Both columns use the same settings: Lighthouse 13.5.0, mobile, emulated Moto G Power on Slow 4G throttling, first visit. Each figure links to its report."
+  },
+
+  "caveats": {
+    "heading": "What these numbers do not show",
+    "points": [
+      "The video on this demo's Black Giant page is a placeholder: a short public-domain NASA clip, not EnergyX's footage. EnergyX's hero file alone is {fact:lh-bg-hero-video}. The placeholder is far smaller, so this demo's total says nothing about how small EnergyX's own video would be once prepared for the web.",
+      "Deferring the video fixes the Largest Contentful Paint: the first screen no longer waits for a video. It does not reduce the bytes. A phone that goes on to play the video still downloads all of it. Cutting the payload takes re-encoding, at sizes and in formats made for phones. That is the second half of the fix, and it has not been done here on EnergyX's files.",
+      "All of this is lab data: Lighthouse on one emulated phone over a throttled connection. It is repeatable, which makes it useful for before and after, but it is not what real visitors experience. Field data from real devices could be better or worse, and single Lighthouse runs vary from run to run.",
+      "This demo's figures are from the US West test region, because that is the region the EnergyX measurement ran in. US East scored higher and is not used."
+    ]
+  },
+
+  "registry": {
+    "heading": "What the registry found",
+    "intro": "Putting every published figure in one place, each with what it counts, surfaced two cases worth a look. Neither means a published figure is off. Both are about what a figure says it measures.",
+    "cases": [
+      {
+        "heading": "Days or hours: one process, two published timings",
+        "body": [
+          "The homepage comparison table gives the DLE processing time as {fact:ex-dle-time}. The FAQ on the same page says hours.",
+          "Both can be accurate if they measure different spans of the process. Neither says which span it measures, so a retail investor, or a model summarising the page, cannot tell them apart."
+        ],
+        "figures": "ex-dle-time"
+      },
+      {
+        "heading": "Water: the claim undersells EnergyX's own figures",
+        "body": [
+          "The homepage FAQ says DLE cuts freshwater use by {fact:ex-water-reduction}. The same FAQ gives the figures behind it: {fact:ex-water-conventional} for conventional extraction, and {fact:ex-water-dle} for EnergyX's process. Those two figures work out to a reduction of {fact:ex-water-implied-reduction}.",
+          "The published claim is accurate, just far more modest than the figures beside it. This is the one case where making the figures agree makes EnergyX's claim stronger."
+        ]
+      }
+    ]
+  },
+
+  "firstWeek": {
+    "heading": "First week on your codebase",
+    "intro": "If I joined, this is what the first week would look like, in plain terms. None of it changes how the site looks.",
+    "points": [
+      "Measure before changing anything: add speed data from real visitors next to the lab numbers, so every change is judged by what investors' phones actually experience.",
+      "Add a video delivery step: each finished video is automatically resized and re-encoded for phones, served from EnergyX's own domain, and loaded only once the page is usable. The people making the videos don't have to do anything differently.",
+      "Make speed and accessibility checks part of every release, with performance budgets (Lighthouse CI) and automated accessibility tests (axe), so a page that gets heavier or harder to read fails before it ships rather than in an audit afterwards.",
+      "Start one registry for every public figure: what it counts, where it is published and who owns it. Pages, FAQs and investor material read from it, so a number changes in one place.",
+      "Generate llms.txt and structured data from that registry, so AI assistants describe EnergyX with the same figures investors see on the site, and hand forward-looking questions to IR instead of answering them."
+    ]
+  }
+}

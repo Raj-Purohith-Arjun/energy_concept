@@ -153,6 +153,12 @@ const TABLE: [string, Expect][] = [
   ["What is the homepage LCP element?", { answer: ["lh-home-lcp-element"] }],
   ["Is EnergyX visible to AI agents?", { answer: ["lh-agentic"] }],
   ["Wеird spacing:   how heavy is the   Black   Giant page?", { answer: ["lh-bg-weight"] }],
+  ["How big is the second video on the Black Giant page?", { answer: ["lh-bg-second-video"] }],
+  ["How much do both videos on the Black Giant page weigh?", { answer: ["lh-bg-video-total"] }],
+  ["What does the Black Giant page transfer apart from the video?", { answer: ["lh-bg-other-bytes"] }],
+  ["What is the CLS of the Black Giant page?", { answer: ["lh-bg-cls"] }],
+  ["What's the total blocking time on the homepage?", { answer: ["lh-home-tbt"] }],
+  ["What water reduction do the published figures imply?", { answer: ["ex-water-implied-reduction"] }],
 
   // --- Must not be refused (false-positive guards) ------------------------------
   ["Does DLE pump brine?", { notRefused: true }],

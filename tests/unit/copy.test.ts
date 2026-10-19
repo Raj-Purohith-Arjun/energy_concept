@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import findingsFile from "../../content/findings.json";
 import siteFile from "../../content/site.json";
 
 // The /facts framing is "same subject, different measures": figures that are
@@ -14,7 +15,10 @@ function strings(value: unknown): string[] {
 }
 
 describe("facts copy framing", () => {
-  const copy = strings([siteFile.factsPage, siteFile.factUi, siteFile.forwardLooking]);
+  // findings.json: the registry section shares the /facts framing, and the
+  // rest of its copy has no reason to use these words either.
+  const findings = { ...findingsFile, $comment: undefined };
+  const copy = strings([siteFile.factsPage, siteFile.factUi, siteFile.forwardLooking, findings]);
 
   it("has copy to check", () => {
     expect(copy.length).toBeGreaterThan(0);
