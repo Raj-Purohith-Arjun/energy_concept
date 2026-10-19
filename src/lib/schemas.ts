@@ -257,13 +257,32 @@ const PayloadPageSchema = z.strictObject({
   parts: z.array(z.strictObject({ label: nonEmpty, fact: kebabId, video: z.boolean() })),
 });
 
+// A <details> summary's item count, e.g. "{count} points".
+const countLabel = nonEmpty.includes("{count}");
+
 export const FindingsSchema = z.strictObject({
   $comment: comment.optional(),
   title: nonEmpty,
   heading: nonEmpty,
+  // Three before -> after pairs shown large above all prose.
+  verdict: z.strictObject({
+    heading: nonEmpty,
+    pairs: z.array(z.strictObject({ label: nonEmpty, before: kebabId, after: kebabId })).length(3),
+    summary: nonEmpty,
+  }),
   intro: nonEmpty,
   caveatsLink: nonEmpty,
   pending: nonEmpty,
+  // Two phones replaying measured First Contentful Paint -> LCP at real speed.
+  timeline: z.strictObject({
+    heading: nonEmpty,
+    intro: nonEmpty,
+    play: nonEmpty,
+    firstPaint: nonEmpty,
+    mainPaint: nonEmpty,
+    caption: nonEmpty,
+    phones: z.array(z.strictObject({ label: nonEmpty, fcp: kebabId, lcp: kebabId })).length(2),
+  }),
   payload: z.strictObject({
     heading: nonEmpty,
     body: z.array(nonEmpty).min(1),
@@ -279,9 +298,10 @@ export const FindingsSchema = z.strictObject({
     rows: z.array(z.strictObject({ label: nonEmpty, before: factRef, after: factRef })).min(1),
     method: nonEmpty,
   }),
-  caveats: z.strictObject({ heading: nonEmpty, points: z.array(nonEmpty).min(1) }),
+  caveats: z.strictObject({ heading: nonEmpty, count: countLabel, points: z.array(nonEmpty).min(1) }),
   registry: z.strictObject({
     heading: nonEmpty,
+    count: countLabel,
     intro: nonEmpty,
     cases: z
       .array(
@@ -294,7 +314,12 @@ export const FindingsSchema = z.strictObject({
       )
       .min(1),
   }),
-  firstWeek: z.strictObject({ heading: nonEmpty, intro: nonEmpty, points: z.array(nonEmpty).length(5) }),
+  firstWeek: z.strictObject({
+    heading: nonEmpty,
+    count: countLabel,
+    intro: nonEmpty,
+    points: z.array(nonEmpty).length(5),
+  }),
 });
 
 export type PayloadPage = z.infer<typeof PayloadPageSchema>;

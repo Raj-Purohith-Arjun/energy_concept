@@ -165,6 +165,15 @@ function strings(value: unknown): string[] {
 // /findings must never show an unverified fact, so every reference (cells,
 // payload parts, {fact:id} tokens in prose) is checked here and a bad one
 // fails the build. TODO(content) cells are allowed: they render as pending.
+// A timing fact in seconds, for the /findings load timeline; undefined when the
+// fact is not a timing.
+export function factSeconds(fact: Fact): number | undefined {
+  if (fact.numeric === undefined) return undefined;
+  if (fact.unit === "s") return fact.numeric;
+  if (fact.unit === "ms") return fact.numeric / 1000;
+  return undefined;
+}
+
 export function validateFindings(
   findings: FindingsContent,
   registry: FactRegistry,
@@ -198,6 +207,21 @@ export function validateFindings(
   }
   for (const row of findings.comparison.rows) {
     for (const ref of [row.before, row.after]) if (!isTodo(ref)) check(ref, `comparison "${row.label}"`);
+  }
+  for (const pair of findings.verdict.pairs) {
+    check(pair.before, `verdict "${pair.label}"`);
+    check(pair.after, `verdict "${pair.label}"`);
+  }
+  for (const phone of findings.timeline.phones) {
+    const [fcp, lcp] = [phone.fcp, phone.lcp].map((id) => {
+      const fact = check(id, `timeline "${phone.label}"`);
+      const seconds = fact && factSeconds(fact);
+      if (fact && seconds === undefined) problems.push(`timeline fact "${id}" must be a timing (numeric in s or ms)`);
+      return seconds;
+    });
+    if (fcp !== undefined && lcp !== undefined && fcp > lcp) {
+      problems.push(`timeline "${phone.label}": first paint comes after the largest paint`);
+    }
   }
   for (const c of findings.registry.cases) {
     const fact = c.figures === undefined ? undefined : check(c.figures, `registry case "${c.heading}"`);

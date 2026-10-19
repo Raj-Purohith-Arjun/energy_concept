@@ -392,6 +392,11 @@
       "demo",
       "rebuild",
       "rebuilt"
+    ],
+    "fcp": [
+      "fcp",
+      "first contentful paint",
+      "first paint"
     ]
   },
   "factConcepts": {
@@ -522,6 +527,15 @@
     "lh-bg-tbt": [
       "black-giant",
       "tbt"
+    ],
+    "lh-bg-fcp": [
+      "black-giant",
+      "fcp"
+    ],
+    "demo-bg-fcp": [
+      "demo",
+      "black-giant",
+      "fcp"
     ],
     "demo-bg-perf": [
       "demo",

@@ -8,9 +8,14 @@ const scriptSrcs = (page: Page) =>
 test("renders every section, with every table cell measured", async ({ page }) => {
   await page.goto(PATH);
   await expect(page.getByRole("heading", { level: 1, name: "Findings" })).toBeVisible();
-  for (const name of ["Where the bytes go", "Before and after", "What these numbers do not show", "What the registry found", "First week on your codebase"]) {
+  for (const name of ["What that wait looks like", "Where the bytes go", "Before and after", "What these numbers do not show", "What the registry found", "First week on your codebase"]) {
     await expect(page.getByRole("heading", { level: 2, name })).toBeVisible();
   }
+  // Verdict above all prose: three before/after pairs, each a registry fact.
+  await expect(page.locator("#verdict ~ dl [data-fact]")).toHaveCount(6);
+  // Caveats, registry findings and first week start collapsed.
+  await expect(page.locator("details")).toHaveCount(3);
+  await expect(page.locator("details[open]")).toHaveCount(0);
   const table = page.getByRole("table");
   await expect(table.getByRole("row")).toHaveCount(6); // header + five measures
   await expect(table.locator("[data-fact]")).toHaveCount(10); // every before and after cell is a registry fact
@@ -23,7 +28,26 @@ test("the caveats link targets the caveats section", async ({ page }) => {
   await page.goto(PATH);
   await page.getByRole("link", { name: "Read the caveats" }).click();
   await expect(page).toHaveURL(/#caveats$/);
+  await expect(page.locator("details:has(#caveats)")).toHaveAttribute("open", "");
   await expect(page.locator("#caveats")).toBeInViewport();
+});
+
+test("load timeline: end state by default, replays from blank on play", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto(PATH);
+  const main = page.locator(".lt-main").first();
+  await expect(main).toHaveCSS("opacity", "1");
+  await page.getByRole("checkbox", { name: "Play at real speed" }).check({ force: true });
+  // Mid-replay, EnergyX's largest element has not painted yet.
+  await expect(main).toHaveCSS("opacity", "0");
+});
+
+test("load timeline: reduced motion hides play and shows end states", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto(PATH);
+  await expect(page.locator(".lt-play-label")).toBeHidden();
+  await expect(page.locator(".lt-main").first()).toHaveCSS("opacity", "1");
+  await expect(page.locator(".lt-main").first()).toHaveCSS("animation-name", "none");
 });
 
 test("loads no client JS beyond what /facts already loads", async ({ page }) => {

@@ -107,3 +107,124 @@ html:has(dialog.mobile-menu[open]) {
 .page-frame:not(:has(.page-frame)):has([data-forward-looking]) > .fl-footnote {
   display: block;
 }
+
+/* /findings load timeline (LoadTimeline.tsx). Replays measured lab timings at
+   real speed; --fcp and --lcp come from the fact registry. Only opacity and
+   transform animate. Unplayed, or with reduced motion, both phones show their
+   end state, so the comparison never depends on the animation. */
+.lt-phone {
+  max-width: 12rem;
+}
+
+.lt-screen {
+  position: relative;
+  aspect-ratio: 9 / 16;
+  overflow: hidden;
+  border: 3px solid currentColor;
+  border-radius: 1.25rem;
+  background: var(--background);
+}
+
+.lt-first {
+  display: grid;
+  gap: 0.5rem;
+  padding: 1rem 0.75rem;
+}
+
+.lt-line {
+  display: block;
+  height: 0.5rem;
+  width: 70%;
+  border-radius: 9999px;
+  background: color-mix(in srgb, currentColor 25%, transparent);
+}
+
+.lt-line-wide {
+  width: 90%;
+}
+
+.lt-line-short {
+  width: 45%;
+}
+
+.lt-main {
+  position: absolute;
+  inset: 45% 0.75rem 1rem;
+  border-radius: 0.5rem;
+  background: color-mix(in srgb, currentColor 70%, transparent);
+}
+
+.lt-track {
+  position: relative;
+  height: 0.375rem;
+  border-radius: 9999px;
+  background: color-mix(in srgb, currentColor 15%, transparent);
+}
+
+.lt-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: inherit;
+  background: currentColor;
+  transform-origin: left;
+}
+
+.lt-mark {
+  position: absolute;
+  top: -0.25rem;
+  width: 2px;
+  height: 0.875rem;
+  background: currentColor;
+}
+
+.lt-glyph::before {
+  content: "▶";
+}
+
+.lt:has(.lt-play:checked) .lt-glyph::before {
+  content: "↺";
+}
+
+.lt-play-label:has(.lt-play:focus-visible) {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+@keyframes lt-appear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes lt-grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* 1ms appear: each state shows at its measured time, not eased in after it. */
+@media (prefers-reduced-motion: no-preference) {
+  .lt:has(.lt-play:checked) .lt-first {
+    animation: lt-appear 1ms linear var(--fcp) both;
+  }
+
+  .lt:has(.lt-play:checked) .lt-main {
+    animation: lt-appear 1ms linear var(--lcp) both;
+  }
+
+  .lt:has(.lt-play:checked) .lt-fill {
+    animation: lt-grow var(--lcp) linear both;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lt-play-label {
+    display: none;
+  }
+}

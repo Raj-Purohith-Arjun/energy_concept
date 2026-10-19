@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import factsFile from "../../content/facts.json";
 import findingsFile from "../../content/findings.json";
-import { buildRegistry, ContentError, getFindings, parseContent, validateFindings, type FactRegistry } from "@/lib/content";
+import { buildRegistry, ContentError, factSeconds, getFindings, parseContent, validateFindings, type FactRegistry } from "@/lib/content";
 import { factTokenIds, malformedFactTokens, parseFactText } from "@/lib/fact-text";
 import { FindingsSchema, type FindingsContent } from "@/lib/schemas";
 
@@ -72,6 +72,29 @@ describe("findings content", () => {
 
   it("rejects a figures case whose fact has no other published figures", () => {
     expect(invalid((f) => (f.registry.cases[0].figures = "ex-founded"))).toThrow(/no alsoPublishedAs/);
+  });
+
+  it("rejects an unknown fact id in the verdict", () => {
+    expect(invalid((f) => (f.verdict.pairs[0].after = "no-such-fact"))).toThrow(/verdict.*unknown fact id/);
+  });
+
+  it("rejects a timeline fact that is not a timing", () => {
+    expect(invalid((f) => (f.timeline.phones[0].lcp = "lh-bg-perf"))).toThrow(/must be a timing/);
+  });
+
+  it("rejects a timeline whose first paint comes after its largest paint", () => {
+    expect(
+      invalid((f) => {
+        const phone = f.timeline.phones[0];
+        [phone.fcp, phone.lcp] = [phone.lcp, phone.fcp];
+      }),
+    ).toThrow(/first paint comes after/);
+  });
+
+  it("reads timing facts in seconds whether stored in s or ms", () => {
+    expect(factSeconds(registry.get("lh-bg-lcp")!)).toBe(7.5);
+    expect(factSeconds(registry.get("demo-bg-fcp")!)).toBeCloseTo(0.939);
+    expect(factSeconds(registry.get("lh-bg-weight")!)).toBeUndefined();
   });
 
   it("payload parts add up to their page total", () => {

@@ -8,9 +8,31 @@
   ],
   "title": "Findings",
   "heading": "Findings",
+  "verdict": {
+    "heading": "Black Giant page: EnergyX → this demo",
+    "pairs": [
+      { "label": "Largest Contentful Paint", "before": "lh-bg-lcp", "after": "demo-bg-lcp" },
+      { "label": "Page weight", "before": "lh-bg-weight", "after": "demo-bg-weight" },
+      { "label": "Performance score", "before": "lh-bg-perf", "after": "demo-bg-perf" }
+    ],
+    "summary": "{fact:lh-bg-video-total} of {fact:lh-bg-weight} is two video files. The rest of the page — design, images, code — is {fact:lh-bg-other-bytes}."
+  },
   "intro": "The whole argument on one page: what EnergyX's pages transfer and why, what this demo changes, what it cannot prove, and what the fact registry turned up. Every figure links to its source.",
   "caveatsLink": "Read the caveats",
   "pending": "Pending measurement",
+
+  "timeline": {
+    "heading": "What that wait looks like",
+    "intro": "Both phones replay the measured lab timings at real speed: the first paint, then the largest element on the screen, the thing a visitor came for.",
+    "play": "Play at real speed",
+    "firstPaint": "First paint",
+    "mainPaint": "Largest element painted",
+    "caption": "A visualisation of the measured Lighthouse lab figures, not a recording of either page.",
+    "phones": [
+      { "label": "EnergyX", "fcp": "lh-bg-fcp", "lcp": "lh-bg-lcp" },
+      { "label": "This demo", "fcp": "demo-bg-fcp", "lcp": "demo-bg-lcp" }
+    ]
+  },
 
   "payload": {
     "heading": "Where the bytes go",
@@ -68,6 +90,7 @@
 
   "caveats": {
     "heading": "What these numbers do not show",
+    "count": "{count} caveats",
     "points": [
       "The video on this demo's Black Giant page is a placeholder: a short public-domain NASA clip, not EnergyX's footage. EnergyX's hero file alone is {fact:lh-bg-hero-video}. The placeholder is far smaller, so this demo's total says nothing about how small EnergyX's own video would be once prepared for the web.",
       "Deferring the video fixes the Largest Contentful Paint: the first screen no longer waits for a video. It does not reduce the bytes. A phone that goes on to play the video still downloads all of it. Cutting the payload takes re-encoding, at sizes and in formats made for phones. That is the second half of the fix, and it has not been done here on EnergyX's files.",
@@ -78,6 +101,7 @@
 
   "registry": {
     "heading": "What the registry found",
+    "count": "{count} cases",
     "intro": "Putting every published figure in one place, each with what it counts, surfaced two cases worth a look. Neither means a published figure is off. Both are about what a figure says it measures.",
     "cases": [
       {
@@ -100,13 +124,14 @@
 
   "firstWeek": {
     "heading": "First week on your codebase",
+    "count": "{count} steps",
     "intro": "If I joined, this is what the first week would look like, in plain terms. None of it changes how the site looks.",
     "points": [
-      "Measure before changing anything: add speed data from real visitors next to the lab numbers, so every change is judged by what investors' phones actually experience.",
-      "Add a video delivery step: each finished video is automatically resized and re-encoded for phones, served from EnergyX's own domain, and loaded only once the page is usable. The people making the videos don't have to do anything differently.",
-      "Make speed and accessibility checks part of every release, with performance budgets (Lighthouse CI) and automated accessibility tests (axe), so a page that gets heavier or harder to read fails before it ships rather than in an audit afterwards.",
-      "Start one registry for every public figure: what it counts, where it is published and who owns it. Pages, FAQs and investor material read from it, so a number changes in one place.",
-      "Generate llms.txt and structured data from that registry, so AI assistants describe EnergyX with the same figures investors see on the site, and hand forward-looking questions to IR instead of answering them."
+      "Measure real visitors' phones alongside the lab numbers, and judge every change by both.",
+      "Add a video delivery step: phone-sized, re-encoded video, with no change for the people making it.",
+      "Gate each release on performance budgets (Lighthouse CI) and accessibility tests (axe).",
+      "Start one registry for every public figure, so each number changes in one place.",
+      "Generate llms.txt from it, so AI tools quote the same figures and refer forward-looking questions to IR."
     ]
   }
 }

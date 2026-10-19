@@ -446,6 +446,34 @@
       "verified": true
     },
     {
+      "id": "lh-bg-fcp",
+      "label": "Black Giant First Contentful Paint",
+      "value": "1.7 s",
+      "numeric": 1.7,
+      "unit": "s",
+      "basis": "Lighthouse 13.5.0 lab measurement, emulated Moto G Power, Slow 4G, US West (us-west1) test location: when the first text or image painted. Same report as the Black Giant LCP. A lab figure, not field data from real users.",
+      "basisSource": "stated",
+      "kind": "actual",
+      "source": { "title": "Lighthouse report, /black-giant/", "url": "https://lighthouse-metrics.com/lighthouse/checks/61b0122a-6331-465b-8a57-b53766d3c8a8", "accessed": "2026-10-08" },
+      "owner": "Raj (own measurement)",
+      "approvedAt": null,
+      "verified": true
+    },
+    {
+      "id": "demo-bg-fcp",
+      "label": "This demo's Black Giant First Contentful Paint",
+      "value": "939 ms",
+      "numeric": 939,
+      "unit": "ms",
+      "basis": "Lighthouse 13.5.0 lab measurement of this demo's deployed /black-giant/, mobile, US West (us-west1) test location, the same region as the EnergyX measurement: when the first text or image painted. A lab figure, not field data from real users.",
+      "basisSource": "stated",
+      "kind": "actual",
+      "source": { "title": "Lighthouse report, this demo's /black-giant/, US West", "url": "https://lighthouse-metrics.com/lighthouse/checks/168b3b56-46ac-4476-8552-6ab6acc1413c/runs/009ad0ce-9418-45b2-9d80-172127bb2ccf", "accessed": "2026-10-19" },
+      "owner": "Raj (own measurement)",
+      "approvedAt": null,
+      "verified": true
+    },
+    {
       "id": "demo-bg-perf",
       "label": "This demo's Black Giant Lighthouse performance score",
       "value": "95",
@@ -502,10 +530,10 @@
     {
       "id": "demo-bg-weight",
       "label": "This demo's Black Giant page total payload",
-      "value": "1.0 MB",
-      "numeric": 930,
+      "value": "0.9 MB",
+      "numeric": 908.2,
       "unit": "KiB",
-      "basis": "Total transferred for this demo's deployed /black-giant/ across 12 requests, measured by Lighthouse 13.5.0, mobile, US West (us-west1) test location, initial load.",
+      "basis": "Total transferred for this demo's deployed /black-giant/ across 12 requests, measured by Lighthouse 13.5.0, mobile, US West (us-west1) test location, initial load. lighthouse-metrics reported 930 kB (decimal kilobytes, 930,000 bytes); stored as 908.2 KiB under the registry's byte convention.",
       "basisSource": "stated",
       "kind": "actual",
       "source": { "title": "Lighthouse report, this demo's /black-giant/, US West", "url": "https://lighthouse-metrics.com/lighthouse/checks/168b3b56-46ac-4476-8552-6ab6acc1413c/runs/009ad0ce-9418-45b2-9d80-172127bb2ccf", "accessed": "2026-10-19" },
