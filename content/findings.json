@@ -90,7 +90,7 @@
 
   "caveats": {
     "heading": "What these numbers do not show",
-    "count": "{count} caveats",
+    "count": { "one": "{count} caveat", "other": "{count} caveats" },
     "points": [
       "The video on this demo's Black Giant page is a placeholder: a short public-domain NASA clip, not EnergyX's footage. EnergyX's hero file alone is {fact:lh-bg-hero-video}. The placeholder is far smaller, so this demo's total says nothing about how small EnergyX's own video would be once prepared for the web.",
       "Deferring the video fixes the Largest Contentful Paint: the first screen no longer waits for a video. It does not reduce the bytes. A phone that goes on to play the video still downloads all of it. Cutting the payload takes re-encoding, at sizes and in formats made for phones. That is the second half of the fix, and it has not been done here on EnergyX's files.",
@@ -101,7 +101,7 @@
 
   "registry": {
     "heading": "What the registry found",
-    "count": "{count} cases",
+    "count": { "one": "{count} case", "other": "{count} cases" },
     "intro": "Putting every published figure in one place, each with what it counts, surfaced two cases worth a look. Neither means a published figure is off. Both are about what a figure says it measures.",
     "cases": [
       {
@@ -124,7 +124,7 @@
 
   "firstWeek": {
     "heading": "First week on your codebase",
-    "count": "{count} steps",
+    "count": { "one": "{count} step", "other": "{count} steps" },
     "intro": "If I joined, this is what the first week would look like, in plain terms. None of it changes how the site looks.",
     "points": [
       "Measure real visitors' phones alongside the lab numbers, and judge every change by both.",

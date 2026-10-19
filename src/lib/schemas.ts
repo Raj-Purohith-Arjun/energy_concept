@@ -261,8 +261,8 @@ const PayloadPageSchema = z.strictObject({
   parts: z.array(z.strictObject({ label: nonEmpty, fact: kebabId, video: z.boolean() })),
 });
 
-// A <details> summary's item count, e.g. "{count} points".
-const countLabel = nonEmpty.includes("{count}");
+// A count in copy: { one, other } forms, each with {count} (see lib/plural.ts).
+const countLabel = z.strictObject({ one: nonEmpty.includes("{count}"), other: nonEmpty.includes("{count}") });
 
 export const FindingsSchema = z.strictObject({
   $comment: comment.optional(),
@@ -334,13 +334,44 @@ export const FindingsSchema = z.strictObject({
 // ---------------------------------------------------------------------------
 
 const labels = z.record(z.string(), nonEmpty);
-const countTemplate = nonEmpty.includes("{count}");
-const listSection = { heading: nonEmpty, all: nonEmpty, count: countTemplate };
+// Collapsed sections: a heading, plus a { one, other } count for the summary.
+const collapsed = { heading: nonEmpty, count: countLabel };
 
 export const EvalsSchema = z.strictObject({
   $comment: comment.optional(),
   title: nonEmpty,
   heading: nonEmpty,
+  intro: nonEmpty,
+  // Three questions that are eval cases (checked at build), linked into the assistant.
+  tryIt: z.strictObject({
+    heading: nonEmpty,
+    intro: nonEmpty,
+    expect: nonEmpty.includes("{outcome}"),
+    questions: z.array(z.strictObject({ question: nonEmpty, note: nonEmpty })).length(3),
+  }),
+  rejections: z.strictObject({
+    heading: nonEmpty,
+    intro: nonEmpty,
+    allOmissions: nonEmpty,
+    none: nonEmpty,
+    columns: z.strictObject({ wrote: nonEmpty, why: nonEmpty, shipped: nonEmpty }),
+    omitted: nonEmpty.includes("{missing}"),
+    other: nonEmpty.includes("{reason}"),
+    times: nonEmpty.includes("{count}"),
+  }),
+  mutation: z.strictObject({
+    heading: nonEmpty,
+    intro: nonEmpty,
+    // Mutant ids shown open; the rest are in the collapsed full table.
+    highlights: z.array(nonEmpty).min(1),
+    // Shown under the big number, so no {count} here.
+    failed: z.strictObject({ one: nonEmpty, other: nonEmpty }),
+    missed: nonEmpty,
+    full: z.strictObject({ ...collapsed }),
+    columns: z.strictObject({ mutant: nonEmpty, failed: nonEmpty, where: nonEmpty }),
+    labels,
+    groupCount: nonEmpty.includes("{count}").includes("{label}"),
+  }),
   verdict: z.strictObject({
     heading: nonEmpty,
     cases: nonEmpty,
@@ -350,8 +381,28 @@ export const EvalsSchema = z.strictObject({
     someFail: nonEmpty.includes("{failed}"),
   }),
   model: nonEmpty,
+  groups: labels,
+  refusals: z.strictObject({
+    ...collapsed,
+    intro: nonEmpty,
+    expected: nonEmpty,
+    example: nonEmpty,
+  }),
+  adversarial: z.strictObject({
+    ...collapsed,
+    intro: nonEmpty,
+    techniques: z.record(z.string(), z.strictObject({ name: nonEmpty, attempts: nonEmpty })),
+    labels: z.strictObject({ attempts: nonEmpty, example: nonEmpty, result: nonEmpty }),
+  }),
+  mustNotRefuse: z.strictObject({
+    heading: nonEmpty,
+    lead: nonEmpty.includes("{count}"),
+    list: z.strictObject({ ...collapsed }),
+  }),
+  modelSlot: z.strictObject({ ...collapsed, intro: nonEmpty, stubs: labels, expected: nonEmpty }),
   composer: z.strictObject({
     heading: nonEmpty,
+    count: countLabel,
     withModel: nonEmpty.includes("{model}"),
     templateOnly: nonEmpty,
     unchanged: nonEmpty,
@@ -363,44 +414,7 @@ export const EvalsSchema = z.strictObject({
     opsErrors: nonEmpty.includes("{errors}"),
     opsNoErrors: nonEmpty.includes("{min}"),
   }),
-  rejections: z.strictObject({
-    heading: nonEmpty,
-    intro: nonEmpty,
-    allOmissions: nonEmpty,
-    none: nonEmpty,
-    columns: z.strictObject({ fact: nonEmpty, wrote: nonEmpty, why: nonEmpty, shipped: nonEmpty }),
-    omitted: nonEmpty.includes("{missing}"),
-    other: nonEmpty.includes("{reason}"),
-    times: countTemplate,
-  }),
-  mutation: z.strictObject({
-    heading: nonEmpty,
-    intro: nonEmpty,
-    columns: z.strictObject({ mutant: nonEmpty, failed: nonEmpty, where: nonEmpty }),
-    missed: nonEmpty,
-    labels,
-    groupCount: countTemplate.includes("{label}"),
-  }),
-  groups: labels,
-  refusals: z.strictObject({
-    ...listSection,
-    intro: nonEmpty,
-    columns: z.strictObject({ category: nonEmpty, why: nonEmpty, cases: nonEmpty, example: nonEmpty }),
-    expected: nonEmpty,
-  }),
-  adversarial: z.strictObject({
-    ...listSection,
-    intro: nonEmpty,
-    techniques: z.record(z.string(), z.strictObject({ name: nonEmpty, attempts: nonEmpty })),
-    columns: z.strictObject({ technique: nonEmpty, attempts: nonEmpty, example: nonEmpty, outcome: nonEmpty }),
-  }),
-  mustNotRefuse: z.strictObject({
-    ...listSection,
-    body: z.array(nonEmpty).min(1),
-    proof: countTemplate.includes("{total}"),
-  }),
-  modelSlot: z.strictObject({ ...listSection, intro: nonEmpty, stubs: labels, expected: nonEmpty }),
-  other: z.strictObject({ heading: nonEmpty, intro: nonEmpty, count: countTemplate }),
+  other: z.strictObject({ ...collapsed, intro: nonEmpty }),
   table: z.strictObject({
     question: nonEmpty,
     outcome: nonEmpty,

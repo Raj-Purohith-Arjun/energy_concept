@@ -3,9 +3,8 @@ import type { ReactNode } from "react";
 interface CollapsibleProps {
   headingId: string;
   heading: string;
-  // A "{count} ..." template from content, filled with `count`.
-  countLabel: string;
-  count: number;
+  /** Shown beside the heading, e.g. "4 caveats" (already pluralised). */
+  note: string;
   className?: string;
   children: ReactNode;
 }
@@ -13,7 +12,7 @@ interface CollapsibleProps {
 // Native <details>, closed by default: the summary names the section and how
 // many items it holds, so a skimming reader knows what they are skipping. No
 // JavaScript; fragment links into a closed <details> open it in Chromium.
-export function Collapsible({ headingId, heading, countLabel, count, className = "", children }: CollapsibleProps) {
+export function Collapsible({ headingId, heading, note, className = "", children }: CollapsibleProps) {
   return (
     <section aria-labelledby={headingId} className={`mt-12 ${className}`}>
       <details>
@@ -21,7 +20,7 @@ export function Collapsible({ headingId, heading, countLabel, count, className =
           <h2 id={headingId} className="text-2xl font-semibold tracking-tight">
             {heading}
           </h2>
-          <span className="text-sm">{countLabel.replace("{count}", String(count))}</span>
+          <span className="text-sm">{note}</span>
         </summary>
         {children}
       </details>

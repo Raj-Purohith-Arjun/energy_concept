@@ -1,13 +1,14 @@
 import { PublishedFigures } from "@/components/facts/SameSubject";
 import { FactText } from "@/components/ui/FactText";
 import { getFact, getFindings } from "@/lib/content";
+import { plural } from "@/lib/plural";
 import { Collapsible } from "./Collapsible";
 
 // Framing follows /facts: "same subject, different measures", never an error.
 export function RegistryFindings() {
   const { heading, count, intro, cases } = getFindings().registry;
   return (
-    <Collapsible headingId="registry-findings" heading={heading} countLabel={count} count={cases.length}>
+    <Collapsible headingId="registry-findings" heading={heading} note={plural(cases.length, count)}>
       <p className="mt-3 max-w-3xl leading-7">{intro}</p>
       {cases.map((c, i) => (
         <article key={c.heading} aria-labelledby={`registry-case-${i}`} className="mt-10">

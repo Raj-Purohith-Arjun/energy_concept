@@ -26,7 +26,7 @@
       "href": "/findings/"
     },
     {
-      "label": "Evals",
+      "label": "Guardrails",
       "href": "/evals/"
     }
   ],
@@ -109,9 +109,9 @@
         "note": "Measured page weight and speed, before and after, with caveats, and what the fact registry found."
       },
       {
-        "label": "Evals",
+        "label": "Guardrails",
         "href": "/evals/",
-        "note": "The assistant's test suite, run on every build, including mutation testing: each guardrail switched off in turn, and how many tests catch it."
+        "note": "How the assistant's guardrails are tested on every build (evals): live examples, real model errors the checks caught, and each guardrail switched off in turn to show the tests notice (mutation testing)."
       }
     ],
     "factsHeading": "Facts",

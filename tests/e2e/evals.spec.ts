@@ -5,24 +5,46 @@ const PATH = "/evals/";
 const scriptSrcs = (page: Page) =>
   page.locator("script[src]").evaluateAll((els) => els.map((el) => new URL((el as HTMLScriptElement).src).pathname));
 
-test("verdict first, mutation table, every section, long lists collapsed", async ({ page }) => {
+test("strongest first: try it, model errors, mutation, then the pass rate; the rest collapsed", async ({ page }) => {
   await page.goto(PATH);
-  await expect(page.getByRole("heading", { level: 1, name: "Evals" })).toBeVisible();
-  await expect(page.getByText("which on its own proves nothing")).toBeVisible();
-  for (const name of [
-    "Mutation testing: switch a guardrail off, count what breaks",
-    "What gets refused, and why",
-    "Attempts to get around the refusals",
-    "Questions it must not refuse",
-    "If the model misbehaves",
-  ]) {
-    await expect(page.getByRole("heading", { level: 2, name })).toBeVisible();
-  }
-  // Every mutant is caught: each row shows a count, none shows "Not caught".
-  await expect(page.locator("[data-mutant]")).not.toHaveCount(0);
+  await expect(page.getByRole("heading", { level: 1, name: "Guardrails, and how they're tested (evals)" })).toBeVisible();
+  const order = ["try-it", "rejections", "mutation", "eval-verdict"];
+  const tops = await Promise.all(order.map(async (id) => (await page.locator(`#${id}`).boundingBox())!.y));
+  expect([...tops].sort((a, b) => a - b)).toEqual(tops);
+  // Three highlighted guardrails open, every one of them caught.
+  await expect(page.locator("[data-mutant]")).toHaveCount(3);
   await expect(page.getByText("Not caught")).toHaveCount(0);
+  await expect(page.getByText("which on its own proves nothing")).toBeVisible();
+  // The must-not-refuse point stays visible even with its list collapsed.
+  await expect(page.getByText("most test suites don't have them")).toBeVisible();
+  await expect(page.locator("details")).toHaveCount(7);
   await expect(page.locator("details[open]")).toHaveCount(0);
-  await expect(page.locator("details")).toHaveCount(5);
+});
+
+test("try-it links open the live assistant with the question asked", async ({ page }) => {
+  await page.goto(PATH);
+  const links = page.locator("section[aria-labelledby='try-it'] a");
+  await expect(links).toHaveCount(3);
+  await links.first().click();
+  await expect(page).toHaveURL(/\/\?q=When%20is%20the%20IPO%3F$/);
+  await expect(page.getByRole("heading", { name: "I can't discuss an IPO or a stock listing." })).toBeVisible();
+});
+
+test("every example question is a link to /?q=, and no counts or arrows render broken", async ({ page }) => {
+  await page.goto(PATH);
+  for (const summary of await page.locator("summary").all()) await summary.click();
+  const hrefs = await page.locator("main").locator("td a, dd a, p a").evaluateAll((els) => els.map((el) => el.getAttribute("href")));
+  expect(hrefs.length).toBeGreaterThan(100);
+  for (const href of hrefs) expect(href).toMatch(/^\/\?q=/);
+  const text = await page.locator("main").innerText();
+  expect(text).not.toMatch(/\b1 (questions|tests|guardrails|cases)\b/);
+  expect(text).not.toMatch(/→\s*\./);
+});
+
+test("the nav calls it Guardrails", async ({ page }) => {
+  await page.goto(PATH);
+  // At phone width the desktop nav is hidden and the menu closed, so check the markup.
+  await expect(page.locator('header a[href="/evals/"]').first()).toHaveText("Guardrails");
 });
 
 test("a collapsed list opens without JavaScript and shows pass results", async ({ browser }) => {

@@ -1,9 +1,11 @@
 import type { Graded } from "@/lib/assistant/evals";
 import { getEvals } from "@/lib/content";
-import { outcomeText, questionText } from "@/lib/evals-view";
+import { outcomeText } from "@/lib/evals-view";
+import { QuestionLink } from "./QuestionLink";
 
-// One row per eval case: the question as asked, what the assistant actually
-// did at build time, and whether that matches the expectation.
+// One row per eval case: the question (a link into the live assistant), what
+// the assistant actually did at build time, and whether that matches the
+// expectation. `label` replaces the question for rows that aren't questions.
 export function CaseTable({ rows, label }: { rows: Graded[]; label?: (g: Graded) => string }) {
   const t = getEvals().table;
   return (
@@ -18,7 +20,9 @@ export function CaseTable({ rows, label }: { rows: Graded[]; label?: (g: Graded)
       <tbody>
         {rows.map((row, i) => (
           <tr key={i} className="border-b border-current/15 align-top">
-            <td className="py-2 pr-3 [overflow-wrap:anywhere]">{label ? label(row) : questionText(row.case.question)}</td>
+            <td className="py-2 pr-3 [overflow-wrap:anywhere]">
+              {label ? label(row) : <QuestionLink question={row.case.question} />}
+            </td>
             <td className="py-2 pr-3 [overflow-wrap:anywhere]">{outcomeText(row.outcome)}</td>
             <td className={`py-2 font-semibold ${row.pass ? "" : "text-red-700 dark:text-red-400"}`}>
               {row.pass ? t.pass : t.fail}
