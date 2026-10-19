@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import type { Composer } from "@/lib/assistant/compose";
+import { templateComposer, type Composer } from "@/lib/assistant/compose";
 import { baseNormalize, deLeet, fixTypos, joinSpacedLetters } from "@/lib/assistant/normalize";
 import { ask } from "@/lib/assistant/pipeline";
 import { numbersIn, postcheck } from "@/lib/assistant/postcheck";
@@ -35,7 +35,7 @@ describe("normalisation", () => {
 
 describe("post-check", () => {
   it("passes when every number comes from the facts", () => {
-    expect(postcheck({ text: "Black Giant page total payload: 50.6 MB.", citations: [bgWeight.id] }, [bgWeight]))
+    expect(postcheck({ text: "Black Giant page total payload: 50.6 MB.", citations: [bgWeight.id], wordedBy: [] }, [bgWeight]))
       .toEqual({ ok: true });
   });
 
@@ -48,40 +48,64 @@ describe("post-check", () => {
     ["a number in words", "The page is forty megabytes.", "untraced number words: forty"],
     ["a computed figure", "That is 51 MB.", "untraced numbers: 51"],
   ])("drops %s", (_name, text, reason) => {
-    expect(postcheck({ text, citations: [bgWeight.id] }, [bgWeight])).toEqual({ ok: false, reason });
+    expect(postcheck({ text, citations: [bgWeight.id], wordedBy: [] }, [bgWeight])).toEqual({ ok: false, reason });
   });
 
   it("drops citations of facts that were not retrieved", () => {
-    expect(postcheck({ text: "x", citations: ["ex-patents"] }, [bgWeight])).toEqual({
+    expect(postcheck({ text: "x", citations: ["ex-patents"], wordedBy: [] }, [bgWeight])).toEqual({
       ok: false,
       reason: "cites unretrieved facts: ex-patents",
     });
   });
 
   it("drops answers without citations", () => {
-    expect(postcheck({ text: "x", citations: [] }, [bgWeight])).toMatchObject({ ok: false });
+    expect(postcheck({ text: "x", citations: [], wordedBy: [] }, [bgWeight])).toMatchObject({ ok: false });
   });
 });
 
 describe("pipeline with a stubbed composer", () => {
   const question = "How heavy is the Black Giant page?";
 
-  it("replaces a dropped answer with the no-sourced-answer message and logs why", async () => {
+  // A failed or dropped composition is re-worded by the template and checked
+  // again; the answer says so (wordedBy), and the reason is logged.
+  it("re-words a dropped answer with the template, and logs why", async () => {
     const warn = vi.fn();
-    const lying: Composer = async () => ({ text: "It is 99 MB.", citations: [bgWeight.id] });
+    const lying: Composer = async () => ({ text: "It is 99 MB.", citations: [bgWeight.id], wordedBy: ["stub"] });
     const outcome = await ask(question, { facts: realFacts, assistant, compose: lying, now: NOW, warn });
-    expect(outcome).toMatchObject({ kind: "no-answer", reason: "post-check" });
+    expect(outcome).toMatchObject({ kind: "answer", wordedBy: ["template"] });
+    expect(outcome.kind === "answer" && outcome.text).not.toContain("99");
     expect(warn).toHaveBeenCalledWith(expect.stringContaining("untraced numbers: 99"));
   });
 
-  it("treats a composer failure as no answer, and logs it", async () => {
+  it("catches a forecast with no number and valid citations (output pre-filter)", async () => {
+    const warn = vi.fn();
+    const forecasts: Composer = async () => ({
+      text: "EnergyX will likely list soon.",
+      citations: [bgWeight.id],
+      wordedBy: ["stub"],
+    });
+    const outcome = await ask(question, { facts: realFacts, assistant, compose: forecasts, now: NOW, warn });
+    expect(outcome).toMatchObject({ kind: "answer", wordedBy: ["template"] });
+    expect(outcome.kind === "answer" && outcome.text).not.toMatch(/list soon/);
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining("output pre-filter"));
+  });
+
+  it("re-words a composer failure with the template, and logs it", async () => {
     const warn = vi.fn();
     const broken: Composer = async () => {
       throw new Error("model timeout");
     };
     const outcome = await ask(question, { facts: realFacts, assistant, compose: broken, now: NOW, warn });
-    expect(outcome).toMatchObject({ kind: "no-answer", reason: "post-check" });
+    expect(outcome).toMatchObject({ kind: "answer", wordedBy: ["template"] });
     expect(warn).toHaveBeenCalledWith(expect.stringContaining("model timeout"));
+  });
+
+  it("gives no answer when even the template fails the checks", async () => {
+    // A registry value that would trip the output check: the template states
+    // it verbatim, so there is nothing safe left to show.
+    const facts = realFacts.map((f) => (f.id === bgWeight.id ? { ...f, value: "It will list soon" } : f));
+    const outcome = await ask(question, { facts, assistant, compose: templateComposer, now: NOW, warn: () => {} });
+    expect(outcome).toMatchObject({ kind: "no-answer", reason: "post-check" });
   });
 
   it("never calls the composer for a refused question", async () => {

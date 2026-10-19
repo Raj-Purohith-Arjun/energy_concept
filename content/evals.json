@@ -3,7 +3,8 @@
     "/evals: proof the assistant's guardrails are measured, not asserted.",
     "DRAFT copy. Raj to edit. Never type a number here: every count, rate and example",
     "is generated at build from src/lib/assistant/eval-cases.ts. {placeholders} are",
-    "filled by the page. A missing label for a mutant, group, technique or stub fails the build."
+    "filled by the page. A missing label for a mutant, group, technique or stub fails the build.",
+    "composer.opsErrors mentions an earlier run whose record for two facts was replaced on retry. Remove that sentence after the next full `pnpm compose:facts`, which makes the record complete."
   ],
   "title": "Evals",
   "heading": "Evals",
@@ -16,6 +17,29 @@
     "someFail": "{failed} of {total} cases fail in this build. Code in this state should not ship; the failing cases are marked below."
   },
   "model": "No model decides what gets refused. A model can only write answers, and every answer passes a number-and-source check before anyone sees it. When the model changes, these cases are how you know the guardrails still hold.",
+  "composer": {
+    "heading": "Who writes the answers",
+    "withModel": "Answers are worded by {model}, from sentences it wrote ahead of time on {date}. {modelFacts} facts use its wording; {templateFacts} use the built-in template.",
+    "templateOnly": "Answers are worded by the built-in template. No model-written sentences are committed yet.",
+    "unchanged": "Every result above, each test question and the whole mutation table, is identical when the built-in template words every answer instead. The build checks this; it is not a claim.",
+    "changed": "Some results above differ when the built-in template words every answer instead. That should not happen; the failing cases are marked.",
+    "decisionHeading": "Design decision: the model never sees the question",
+    "decision": "Visitors' questions never reach the model, so a visitor cannot inject instructions into it. The only text it reads is the fact registry, which is reviewed by hand and committed to this repo. The model writes one sentence per fact before the site is built; nothing is generated while a visitor reads.",
+    "tradeOffHeading": "The trade-off",
+    "tradeOff": "Answers that use more than one fact are put together from per-fact sentences, not written for that combination. Writing each answer live would read slightly better, but would cost about {median} s per answer while the visitor waits, and nobody could review the wording before it is shown. This build chose reviewability: every sentence the model wrote is committed to the repo, and re-checked on every build.",
+    "opsErrors": "Across the recorded attempts behind these sentences, calls took {min} to {max} s each, and {errors} of {attempts} recorded attempts failed ({statuses}) and were retried. An earlier run hit more rate limits, and its record for two facts was replaced when they were retried, so these figures are the attempts on record, not a cumulative total. That is why the fallback exists and is tested: if the API fails, times out or has no key, that fact keeps the template wording. Generating live, a production build would need retries and a timeout budget.",
+    "opsNoErrors": "Across the recorded attempts behind these sentences, calls took {min} to {max} s each. The fallback exists and is tested anyway: if the API fails, times out or has no key, that fact keeps the template wording. Generating live, a production build would need retries and a timeout budget."
+  },
+  "rejections": {
+    "heading": "When the model got it wrong",
+    "intro": "These are sentences the model actually wrote, on real figures, that the checks refused to ship. Each row shows what it wrote, why it was stopped, and what readers see instead.",
+    "allOmissions": "Every rejection here is the model dropping one of two figures EnergyX publishes for the same thing, the very disagreements the fact registry exists to surface. Each sentence read fine, and every number in it was real. The check that every published figure appears exactly is what caught it.",
+    "none": "No sentence the model wrote has been rejected so far.",
+    "columns": { "fact": "Figure", "wrote": "What the model wrote", "why": "Why it was stopped", "shipped": "What readers see instead" },
+    "omitted": "Left out {missing}, which EnergyX also publishes for this figure.",
+    "other": "Failed a check: {reason}",
+    "times": "Written and rejected {count} times."
+  },
   "mutation": {
     "heading": "Mutation testing: switch a guardrail off, count what breaks",
     "intro": "Mutation testing means breaking the code on purpose and rerunning the tests. If nothing fails, the tests were never really checking that part. Every build of this page switches off each guardrail below, one at a time, and runs every test question against the broken version.",
@@ -34,6 +58,7 @@
       "normalise-off": "Clean-up of disguised spelling: look-alike letters, spaced-out letters, digits for letters, typos",
       "planned-check-off": "Refusing targets and estimates",
       "postcheck-off": "The number-and-source check on every answer",
+      "output-check-off": "The refusal check run again over every answer's wording",
       "refuse-all": "A gate that refuses everything",
       "refuse-none": "A gate that refuses nothing"
     },
@@ -90,15 +115,16 @@
   },
   "modelSlot": {
     "heading": "If the model misbehaves",
-    "intro": "A model is only ever allowed to write the wording of an answer. These tests stand in a deliberately broken model and check that nothing it gets wrong reaches the reader.",
+    "intro": "A model is only ever allowed to write the wording of an answer. These tests stand in a deliberately broken model and check that nothing it gets wrong reaches the reader. Each answer is checked twice: every number and source must trace to the registry, and the refusal check runs again over the wording itself.",
     "stubs": {
       "invents-number": "Invents a number that is not in the registry",
       "number-in-words": "Writes an untraced number in words",
       "cites-unretrieved": "Cites a fact it was not given",
       "no-citations": "Gives an answer with no sources",
+      "forecasts": "Writes a forecast with no number: \"EnergyX will likely list soon.\"",
       "crashes": "Fails or times out"
     },
-    "expected": "Expected outcome: the answer is dropped and the reader sees that there is no sourced answer.",
+    "expected": "Expected outcome: the model's answer is dropped, the built-in template re-words it from the same facts and is checked again, and the reader is told the template wrote it.",
     "all": "Every model check",
     "count": "{count} tests"
   },

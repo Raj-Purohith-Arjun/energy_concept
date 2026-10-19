@@ -1,0 +1,577 @@
+{
+  "$comment": [
+    "Written by `pnpm compose:facts`. Do not edit by hand: re-run the script.",
+    "One model-written sentence per verified fact. Each is re-checked at build; a stale",
+    "or failing sentence is rejected and its fact uses the built-in template."
+  ],
+  "model": "gemini-3.5-flash-lite",
+  "generatedAt": "2026-10-19T16:41:19.366Z",
+  "sentences": {
+    "ex-water-reduction": {
+      "text": "Freshwater reduction vs conventional extraction is over 90%.",
+      "label": "Freshwater reduction vs conventional extraction",
+      "value": "over 90%",
+      "alsoPublishedAs": [],
+      "attempts": [
+        {
+          "status": "200",
+          "ms": 1034
+        }
+      ],
+      "tokensIn": 113,
+      "tokensOut": 40
+    },
+    "ex-water-conventional": {
+      "text": "Freshwater use, conventional extraction is up to 400,000 gallons per ton.",
+      "label": "Freshwater use, conventional extraction",
+      "value": "up to 400,000 gallons per ton",
+      "alsoPublishedAs": [],
+      "attempts": [
+        {
+          "status": "200",
+          "ms": 8450
+        }
+      ],
+      "tokensIn": 121,
+      "tokensOut": 48
+    },
+    "ex-water-dle": {
+      "text": "Freshwater use, EnergyX DLE is around 800 gallons per ton.",
+      "label": "Freshwater use, EnergyX DLE",
+      "value": "around 800 gallons per ton",
+      "alsoPublishedAs": [],
+      "attempts": [
+        {
+          "status": "200",
+          "ms": 688
+        }
+      ],
+      "tokensIn": 118,
+      "tokensOut": 32
+    },
+    "ex-water-implied-reduction": {
+      "text": "Freshwater reduction implied by EnergyX's own figures is up to about 99.8%.",
+      "label": "Freshwater reduction implied by EnergyX's own figures",
+      "value": "up to about 99.8%",
+      "alsoPublishedAs": [],
+      "attempts": [
+        {
+          "status": "200",
+          "ms": 1450
+        }
+      ],
+      "tokensIn": 125,
+      "tokensOut": 39
+    },
+    "ex-founded": {
+      "text": "Founded in 2018.",
+      "label": "Founded",
+      "value": "2018",
+      "alsoPublishedAs": [],
+      "attempts": [
+        {
+          "status": "200",
+          "ms": 5220
+        }
+      ],
+      "tokensIn": 107,
+      "tokensOut": 33
+    },
+    "ex-team": {
+      "text": "Team: 110+",
+      "label": "Team",
+      "value": "110+",
+      "alsoPublishedAs": [],
+      "attempts": [
+        {
+          "status": "200",
+          "ms": 761
+        }
+      ],
+      "tokensIn": 107,
+      "tokensOut": 32
+    },
+    "ex-funding": {
+      "text": "Funding raised is $175M+.",
+      "label": "Funding raised",
+      "value": "$175M+",
+      "alsoPublishedAs": [],
+      "attempts": [
+        {
+          "status": "200",
+          "ms": 4969
+        }
+      ],
+      "tokensIn": 109,
+      "tokensOut": 22
+    },
+    "ex-acres": {
+      "text": "Acres: 214K",
+      "label": "Acres",
+      "value": "214K",
+      "alsoPublishedAs": [],
+      "attempts": [
+        {
+          "status": "200",
+          "ms": 5351
+        }
+      ],
+      "tokensIn": 107,
+      "tokensOut": 21
+    },
+    "ex-projects-count": {
+      "text": "Projects has a value of 5.",
+      "label": "Projects",
+      "value": "5",
+      "alsoPublishedAs": [],
+      "attempts": [
+        {
+          "status": "200",
+          "ms": 6060
+        }
+      ],
+      "tokensIn": 106,
+      "tokensOut": 22
+    },
+    "ex-gm": {
+      "text": "GM has invested in EnergyX",
+      "label": "General Motors investment",
+      "value": "GM has invested in EnergyX",
+      "alsoPublishedAs": [],
+      "attempts": [
+        {
+          "status": "200",
+          "ms": 1545
+        }
+      ],
+      "tokensIn": 110,
+      "tokensOut": 32
+    },
+    "ex-bg-location": {
+      "text": "The Black Giant location is Salar de Punta Negra, Antofagasta, Chile.",
+      "label": "Black Giant location",
+      "value": "Salar de Punta Negra, Antofagasta, Chile",
+      "alsoPublishedAs": [],
+      "attempts": [
+        {
+          "status": "200",
+          "ms": 685
+        }
+      ],
+      "tokensIn": 118,
+      "tokensOut": 39
+    },
+    "ex-bg-acres": {
+      "text": "The Black Giant resource area has 100,000+ acres.",
+      "label": "Black Giant resource area",
+      "value": "100,000+ acres",
+      "alsoPublishedAs": [],
+      "attempts": [
+        {
+          "status": "200",
+          "ms": 7567
+        }
+      ],
+      "tokensIn": 117,
+      "tokensOut": 44
+    },
+    "ex-lonestar-doe": {
+      "text": "The Lonestar DOE grant is $5M.",
+      "label": "Lonestar DOE grant",
+      "value": "$5M",
+      "alsoPublishedAs": [],
+      "attempts": [
+        {
+          "status": "200",
+          "ms": 1655
+        }
+      ],
+      "tokensIn": 111,
+      "tokensOut": 38
+    },
+    "lh-bg-weight": {
+      "text": "Black Giant page total payload is 50.6 MB.",
+      "label": "Black Giant page total payload",
+      "value": "50.6 MB",
+      "alsoPublishedAs": [],
+      "attempts": [
+        {
+          "status": "200",
+          "ms": 1667
+        }
+      ],
+      "tokensIn": 114,
+      "tokensOut": 40
+    },
+    "lh-bg-hero-video": {
+      "text": "The Black Giant hero video size is 40.9 MB.",
+      "label": "Black Giant hero video size",
+      "value": "40.9 MB",
+      "alsoPublishedAs": [],
+      "attempts": [
+        {
+          "status": "500",
+          "ms": 85
+        },
+        {
+          "status": "200",
+          "ms": 1265
+        }
+      ],
+      "tokensIn": 116,
+      "tokensOut": 43
+    },
+    "lh-bg-second-video": {
+      "text": "The Black Giant second video size is 8.1 MB.",
+      "label": "Black Giant second video size",
+      "value": "8.1 MB",
+      "alsoPublishedAs": [],
+      "attempts": [
+        {
+          "status": "200",
+          "ms": 1123
+        }
+      ],
+      "tokensIn": 115,
+      "tokensOut": 42
+    },
+    "lh-bg-video-total": {
+      "text": "Black Giant video bytes, both files is 49.0 MB.",
+      "label": "Black Giant video bytes, both files",
+      "value": "49.0 MB",
+      "alsoPublishedAs": [],
+      "attempts": [
+        {
+          "status": "200",
+          "ms": 758
+        }
+      ],
+      "tokensIn": 118,
+      "tokensOut": 44
+    },
+    "lh-bg-other-bytes": {
+      "text": "The Black Giant page bytes other than video is 1.6 MB.",
+      "label": "Black Giant page bytes other than video",
+      "value": "1.6 MB",
+      "alsoPublishedAs": [],
+      "attempts": [
+        {
+          "status": "200",
+          "ms": 1510
+        }
+      ],
+      "tokensIn": 117,
+      "tokensOut": 44
+    },
+    "lh-bg-lcp": {
+      "text": "The Black Giant Largest Contentful Paint is 7.5 s.",
+      "label": "Black Giant Largest Contentful Paint",
+      "value": "7.5 s",
+      "alsoPublishedAs": [],
+      "attempts": [
+        {
+          "status": "200",
+          "ms": 5810
+        }
+      ],
+      "tokensIn": 115,
+      "tokensOut": 42
+    },
+    "lh-bg-perf": {
+      "text": "The Black Giant Lighthouse performance score is 50.",
+      "label": "Black Giant Lighthouse performance score",
+      "value": "50",
+      "alsoPublishedAs": [],
+      "attempts": [
+        {
+          "status": "200",
+          "ms": 1234
+        }
+      ],
+      "tokensIn": 111,
+      "tokensOut": 25
+    },
+    "lh-bg-cls": {
+      "text": "The Black Giant Cumulative Layout Shift is 0.006.",
+      "label": "Black Giant Cumulative Layout Shift",
+      "value": "0.006",
+      "alsoPublishedAs": [],
+      "attempts": [
+        {
+          "status": "200",
+          "ms": 1416
+        }
+      ],
+      "tokensIn": 114,
+      "tokensOut": 41
+    },
+    "lh-bg-tbt": {
+      "text": "The Black Giant Total Blocking Time is 1,320 ms.",
+      "label": "Black Giant Total Blocking Time",
+      "value": "1,320 ms",
+      "alsoPublishedAs": [],
+      "attempts": [
+        {
+          "status": "200",
+          "ms": 1287
+        }
+      ],
+      "tokensIn": 116,
+      "tokensOut": 43
+    },
+    "lh-bg-fcp": {
+      "text": "Black Giant First Contentful Paint is 1.7 s.",
+      "label": "Black Giant First Contentful Paint",
+      "value": "1.7 s",
+      "alsoPublishedAs": [],
+      "attempts": [
+        {
+          "status": "200",
+          "ms": 1079
+        }
+      ],
+      "tokensIn": 115,
+      "tokensOut": 41
+    },
+    "demo-bg-fcp": {
+      "text": "This demo's Black Giant First Contentful Paint is 939 ms.",
+      "label": "This demo's Black Giant First Contentful Paint",
+      "value": "939 ms",
+      "alsoPublishedAs": [],
+      "attempts": [
+        {
+          "status": "200",
+          "ms": 7222
+        }
+      ],
+      "tokensIn": 119,
+      "tokensOut": 45
+    },
+    "demo-bg-cls": {
+      "text": "This demo's Black Giant Cumulative Layout Shift is 0.000.",
+      "label": "This demo's Black Giant Cumulative Layout Shift",
+      "value": "0.000",
+      "alsoPublishedAs": [],
+      "attempts": [
+        {
+          "status": "200",
+          "ms": 1294
+        }
+      ],
+      "tokensIn": 118,
+      "tokensOut": 44
+    },
+    "demo-bg-tbt": {
+      "text": "This demo's Black Giant Total Blocking Time is 222 ms.",
+      "label": "This demo's Black Giant Total Blocking Time",
+      "value": "222 ms",
+      "alsoPublishedAs": [],
+      "attempts": [
+        {
+          "status": "429",
+          "ms": 57
+        },
+        {
+          "status": "429",
+          "ms": 50
+        },
+        {
+          "status": "200",
+          "ms": 953
+        }
+      ],
+      "tokensIn": 118,
+      "tokensOut": 31
+    },
+    "demo-bg-weight": {
+      "text": "This demo's Black Giant page total payload is 0.9 MB.",
+      "label": "This demo's Black Giant page total payload",
+      "value": "0.9 MB",
+      "alsoPublishedAs": [],
+      "attempts": [
+        {
+          "status": "200",
+          "ms": 6697
+        }
+      ],
+      "tokensIn": 117,
+      "tokensOut": 30
+    },
+    "lh-home-weight": {
+      "text": "Homepage total payload is 33.7 MB.",
+      "label": "Homepage total payload",
+      "value": "33.7 MB",
+      "alsoPublishedAs": [],
+      "attempts": [
+        {
+          "status": "200",
+          "ms": 27711
+        }
+      ],
+      "tokensIn": 112,
+      "tokensOut": 38
+    },
+    "lh-home-box": {
+      "text": "Homepage bytes served from Box is 28.4 MB.",
+      "label": "Homepage bytes served from Box",
+      "value": "28.4 MB",
+      "alsoPublishedAs": [],
+      "attempts": [
+        {
+          "status": "200",
+          "ms": 1068
+        }
+      ],
+      "tokensIn": 114,
+      "tokensOut": 40
+    },
+    "lh-home-second-video": {
+      "text": "Homepage second video size is 4.5 MB.",
+      "label": "Homepage second video size",
+      "value": "4.5 MB",
+      "alsoPublishedAs": [],
+      "attempts": [
+        {
+          "status": "200",
+          "ms": 1101
+        }
+      ],
+      "tokensIn": 114,
+      "tokensOut": 40
+    },
+    "lh-home-other-bytes": {
+      "text": "Homepage bytes other than video is 0.9 MB.",
+      "label": "Homepage bytes other than video",
+      "value": "0.9 MB",
+      "alsoPublishedAs": [],
+      "attempts": [
+        {
+          "status": "200",
+          "ms": 729
+        }
+      ],
+      "tokensIn": 115,
+      "tokensOut": 41
+    },
+    "lh-home-lcp-element": {
+      "text": "The Homepage LCP element is the cookie consent paragraph.",
+      "label": "Homepage LCP element",
+      "value": "the cookie consent paragraph",
+      "alsoPublishedAs": [],
+      "attempts": [
+        {
+          "status": "200",
+          "ms": 1289
+        }
+      ],
+      "tokensIn": 114,
+      "tokensOut": 41
+    },
+    "lh-home-cls": {
+      "text": "The Homepage Cumulative Layout Shift is 0.002.",
+      "label": "Homepage Cumulative Layout Shift",
+      "value": "0.002",
+      "alsoPublishedAs": [],
+      "attempts": [
+        {
+          "status": "200",
+          "ms": 1134
+        }
+      ],
+      "tokensIn": 113,
+      "tokensOut": 40
+    },
+    "lh-home-tbt": {
+      "text": "The Homepage Total Blocking Time is 590 ms.",
+      "label": "Homepage Total Blocking Time",
+      "value": "590 ms",
+      "alsoPublishedAs": [],
+      "attempts": [
+        {
+          "status": "200",
+          "ms": 613
+        }
+      ],
+      "tokensIn": 113,
+      "tokensOut": 40
+    },
+    "lh-agentic": {
+      "text": "The Agentic Browsing score for Black Giant is 1 of 2.",
+      "label": "Agentic Browsing score, Black Giant",
+      "value": "1 of 2",
+      "alsoPublishedAs": [],
+      "attempts": [
+        {
+          "status": "200",
+          "ms": 1014
+        }
+      ],
+      "tokensIn": 115,
+      "tokensOut": 29
+    },
+    "demo-bg-perf": {
+      "text": "This demo's Black Giant Lighthouse performance score is 95.",
+      "label": "This demo's Black Giant Lighthouse performance score",
+      "value": "95",
+      "alsoPublishedAs": [],
+      "attempts": [
+        {
+          "status": "200",
+          "ms": 985
+        }
+      ],
+      "tokensIn": 115,
+      "tokensOut": 41
+    },
+    "demo-bg-lcp": {
+      "text": "This demo's Black Giant Largest Contentful Paint is 2.1 s.",
+      "label": "This demo's Black Giant Largest Contentful Paint",
+      "value": "2.1 s",
+      "alsoPublishedAs": [],
+      "attempts": [
+        {
+          "status": "200",
+          "ms": 1082
+        }
+      ],
+      "tokensIn": 119,
+      "tokensOut": 32
+    }
+  },
+  "failed": {
+    "ex-dle-time": {
+      "reason": "rejected: does not state \"Hours\" exactly",
+      "attempts": [
+        {
+          "status": "200",
+          "ms": 1526
+        }
+      ]
+    },
+    "ex-patents": {
+      "reason": "rejected: does not state \"150+\" exactly",
+      "attempts": [
+        {
+          "status": "200",
+          "ms": 1351
+        }
+      ]
+    }
+  },
+  "rejections": [
+    {
+      "factId": "ex-dle-time",
+      "model": "gemini-3.5-flash-lite",
+      "at": "2026-10-19T16:55:45.530Z",
+      "text": "DLE processing time is Days.",
+      "reason": "does not state \"Hours\" exactly"
+    },
+    {
+      "factId": "ex-patents",
+      "model": "gemini-3.5-flash-lite",
+      "at": "2026-10-19T16:55:45.530Z",
+      "text": "Patents: 140+",
+      "reason": "does not state \"150+\" exactly"
+    }
+  ]
+}

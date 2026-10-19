@@ -132,7 +132,10 @@
     "heading": "Sourced answer",
     "factLine": "{label}: {value}.",
     "alsoLine": "Also published as {value}.",
-    "sourcesHeading": "Sources"
+    "sourcesHeading": "Sources",
+    "wordedByModel": "Worded by {model}, from the sources below.",
+    "wordedByTemplate": "Worded by the built-in template, from the sources below.",
+    "wordedByMixed": "Worded by {model}, with the built-in template for some facts, from the sources below."
   },
   "concepts": {
     "dle": [

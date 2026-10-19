@@ -1,11 +1,11 @@
 import type { AssistantContent, Fact } from "@/lib/schemas";
 
-// Step 4 of the pipeline, and the ONLY place a model may ever plug in. It
-// receives the already-retrieved verified facts and nothing else; whatever it
-// returns still goes through postcheck() before anyone sees it.
+// Step 6 of the pipeline, and the ONLY place a model may ever plug in. It
+// receives the already-retrieved verified facts and nothing else: there is no
+// question field, so a visitor's words cannot reach a composer at all. Whatever
+// it returns still goes through postcheck() and the output pre-filter.
 
 export interface ComposeInput {
-  question: string;
   facts: Fact[];
   copy: AssistantContent["answer"];
 }
@@ -15,6 +15,8 @@ export interface ComposedAnswer {
   text: string;
   /** Ids of the facts the text relies on; must be a subset of the input. */
   citations: string[];
+  /** Who wrote the wording: model ids and/or "template". Shown to the reader. */
+  wordedBy: string[];
 }
 
 export type Composer = (input: ComposeInput) => Promise<ComposedAnswer>;
@@ -34,7 +36,8 @@ export const templateComposer: Composer = async ({ facts, copy }) => ({
     )
     .join("\n"),
   citations: facts.map((fact) => fact.id),
+  wordedBy: ["template"],
 });
 
-// Swap this one binding for a model-backed composer with the same signature.
-export const composeAnswer: Composer = templateComposer;
+// The binding the pipeline uses lives in composed.ts: stored model sentences,
+// with this template for any fact without one.

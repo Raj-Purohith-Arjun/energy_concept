@@ -6,7 +6,8 @@ import {
   type NoAnswerReason,
   type RefusalCategory,
 } from "@/lib/schemas";
-import { composeAnswer, type Composer } from "./compose";
+import { templateComposer, type ComposedAnswer, type Composer } from "./compose";
+import { composeAnswer } from "./composed";
 import type { GateMutation } from "./mutation";
 import { baseNormalize, hasNonLatinLetters } from "./normalize";
 import { postcheck } from "./postcheck";
@@ -21,7 +22,7 @@ export type AssistantOutcome =
       /** For "planned-figure": where to read the figure, without stating it. */
       sources: { title: string; url: string }[];
     }
-  | { kind: "answer"; text: string; facts: Fact[] }
+  | { kind: "answer"; text: string; facts: Fact[]; wordedBy: string[] }
   | { kind: "no-answer"; reason: NoAnswerReason; coverage: string[] };
 
 export interface AskDeps {
@@ -42,7 +43,9 @@ function coverage(facts: Fact[], assistant: AssistantContent): string[] {
 
 // 1. validate input  2. deterministic pre-filter  3. language guard
 // 4. retrieval over verified facts  5. planned/estimate -> refuse
-// 6. compose (swappable)  7. post-check numbers and citations
+// 6. compose (swappable)  7. post-check numbers and citations, then the
+// pre-filter again over the composed text; on failure, re-compose with the
+// template and check again
 export async function ask(input: unknown, deps: AskDeps): Promise<AssistantOutcome> {
   const outcome = await runPipeline(input, deps);
   // Mutant: the real gate, plus refusing everything it would have let through.
@@ -94,20 +97,48 @@ async function runPipeline(input: unknown, deps: AskDeps): Promise<AssistantOutc
     .filter((f): f is Fact => f !== undefined && !isForwardLooking(f));
   const answerFacts = [...new Map([...matched, ...related].map((f) => [f.id, f])).values()];
 
-  let composed;
-  try {
-    composed = await compose({ question, facts: answerFacts, copy: assistant.answer });
-  } catch (error) {
-    warn(`[assistant] composer failed: ${error instanceof Error ? error.message : String(error)}`);
-    return noAnswer("post-check");
-  }
-
-  const check = mutation.postcheckOff ? ({ ok: true } as const) : postcheck(composed, answerFacts);
-  if (!check.ok) {
-    warn(`[assistant] answer dropped by post-check: ${check.reason}`);
-    return noAnswer("post-check");
-  }
+  // A composer sees only the facts (ComposeInput has no question field).
+  const attempt = async (composer: Composer, name: string): Promise<ComposedAnswer | null> => {
+    let composed: ComposedAnswer;
+    try {
+      composed = await composer({ facts: answerFacts, copy: assistant.answer });
+    } catch (error) {
+      warn(`[assistant] ${name} composer failed: ${error instanceof Error ? error.message : String(error)}`);
+      return null;
+    }
+    const problem = composedProblem(composed, answerFacts, now, mutation);
+    if (problem) {
+      warn(`[assistant] ${name} answer dropped: ${problem}`);
+      return null;
+    }
+    return composed;
+  };
+  // Fallback is visible, not silent: the answer says which composer wrote it.
+  const composed =
+    (await attempt(compose, "primary")) ??
+    (compose === templateComposer ? null : await attempt(templateComposer, "template fallback"));
+  if (!composed) return noAnswer("post-check");
 
   const cited = new Set(composed.citations);
-  return { kind: "answer", text: composed.text, facts: answerFacts.filter((f) => cited.has(f.id)) };
+  return {
+    kind: "answer",
+    text: composed.text,
+    facts: answerFacts.filter((f) => cited.has(f.id)),
+    wordedBy: composed.wordedBy,
+  };
+}
+
+// Post-check (numbers and citations), then the refusal pre-filter over the
+// composed text, so "EnergyX will likely list soon" (no number, no citation
+// problem) is still caught. The output check never takes gate mutations.
+function composedProblem(composed: ComposedAnswer, facts: Fact[], now: Date, mutation: GateMutation): string | null {
+  if (!mutation.postcheckOff) {
+    const check = postcheck(composed, facts);
+    if (!check.ok) return `post-check: ${check.reason}`;
+  }
+  if (!mutation.outputCheckOff) {
+    const hit = prefilter(composed.text, now);
+    if (hit) return `output pre-filter: ${hit.category} (${hit.trigger})`;
+  }
+  return null;
 }

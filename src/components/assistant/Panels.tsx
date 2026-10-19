@@ -1,10 +1,20 @@
 import { getAssistant, getSite } from "@/lib/content";
+import { TEMPLATE } from "@/lib/assistant/composed";
 import type { AssistantOutcome } from "@/lib/assistant/pipeline";
 import type { Fact } from "@/lib/schemas";
 import { ApprovalState, BasisText, IsoDate, SourceLink } from "@/components/ui/FactParts";
 import { FactValue } from "@/components/ui/FactValue";
 
 type Of<K extends AssistantOutcome["kind"]> = Extract<AssistantOutcome, { kind: K }>;
+
+// Who wrote the wording, so a fallback to the template is visible to the reader.
+export function wordedByLine(wordedBy: string[]): string {
+  const { answer } = getAssistant();
+  const models = wordedBy.filter((w) => w !== TEMPLATE);
+  if (models.length === 0) return answer.wordedByTemplate;
+  const model = models.join(", ");
+  return (wordedBy.includes(TEMPLATE) ? answer.wordedByMixed : answer.wordedByModel).replace("{model}", model);
+}
 
 function YouAsked({ question }: { question: string }) {
   return (
@@ -115,6 +125,9 @@ export function AnswerPanel({ outcome, question }: { outcome: Of<"answer">; ques
           {line}
         </p>
       ))}
+      <p className="mt-3 text-sm" data-worded-by={outcome.wordedBy.join(" ")}>
+        {wordedByLine(outcome.wordedBy)}
+      </p>
       <h3 className="mt-5 text-sm font-semibold tracking-wide uppercase opacity-80">{answer.sourcesHeading}</h3>
       <ul className="mt-2 grid gap-3">
         {outcome.facts.map((fact) => (

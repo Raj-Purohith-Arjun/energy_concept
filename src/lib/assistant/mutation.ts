@@ -15,6 +15,8 @@ export interface GateMutation {
   plannedCheckOff?: boolean;
   /** Checking composed answers for untraced numbers and citations. */
   postcheckOff?: boolean;
+  /** Running the refusal pre-filter over composed answer text. */
+  outputCheckOff?: boolean;
   /** Replace the gate with one that refuses every question. */
   refuseAll?: boolean;
 }

@@ -50,10 +50,14 @@ test("load timeline: reduced motion hides play and shows end states", async ({ p
   await expect(page.locator(".lt-main").first()).toHaveCSS("animation-name", "none");
 });
 
+// networkidle on both pages: the header prefetches "/" (and its next/form
+// chunk) after load, so reading scripts before that raced the prefetch.
 test("loads no client JS beyond what /facts already loads", async ({ page }) => {
   await page.goto("/facts/");
+  await page.waitForLoadState("networkidle");
   const baseline = new Set(await scriptSrcs(page));
   await page.goto(PATH);
+  await page.waitForLoadState("networkidle");
   const extra = (await scriptSrcs(page)).filter((src) => !baseline.has(src));
   expect(extra).toEqual([]);
 });

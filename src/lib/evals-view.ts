@@ -1,3 +1,4 @@
+import type { CheckedStore } from "@/lib/assistant/composed";
 import type { AssistantOutcome } from "@/lib/assistant/pipeline";
 import { getEvals, labelFor } from "@/lib/content";
 
@@ -17,6 +18,33 @@ export function groupLabel(group: string): string {
 /** Rounded down, so a suite with one failure never shows as 100%. */
 export function percent(part: number, total: number): string {
   return `${total === 0 ? 0 : Math.floor((part / total) * 100)}%`;
+}
+
+export interface RunStats {
+  min: string;
+  median: string;
+  max: string;
+  attempts: number;
+  errors: number;
+  statuses: string;
+}
+
+const seconds = (ms: number) => (ms / 1000).toFixed(1);
+
+/** Latency and errors of the compose:facts run, from the attempts it recorded. */
+export function runStats(store: Pick<CheckedStore, "sentences" | "failed">): RunStats | null {
+  const all = [...Object.values(store.sentences), ...Object.values(store.failed)].flatMap((s) => s.attempts);
+  const ok = all.filter((a) => a.status === "200").map((a) => a.ms).sort((a, b) => a - b);
+  if (ok.length === 0) return null;
+  const errors = all.filter((a) => a.status !== "200");
+  return {
+    min: seconds(ok[0]),
+    median: seconds(ok[Math.floor(ok.length / 2)]),
+    max: seconds(ok[ok.length - 1]),
+    attempts: all.length,
+    errors: errors.length,
+    statuses: [...new Set(errors.map((a) => a.status))].join(", "),
+  };
 }
 
 const MAX_QUESTION = 80;
