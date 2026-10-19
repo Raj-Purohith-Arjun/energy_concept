@@ -7,6 +7,7 @@ import {
   type RefusalCategory,
 } from "@/lib/schemas";
 import { composeAnswer, type Composer } from "./compose";
+import type { GateMutation } from "./mutation";
 import { baseNormalize, hasNonLatinLetters } from "./normalize";
 import { postcheck } from "./postcheck";
 import { prefilter } from "./prefilter";
@@ -29,6 +30,8 @@ export interface AskDeps {
   compose?: Composer;
   now?: Date;
   warn?: (message: string) => void;
+  /** Mutation testing only (/evals): switches a guardrail off. */
+  mutation?: GateMutation;
 }
 
 function coverage(facts: Fact[], assistant: AssistantContent): string[] {
@@ -41,7 +44,17 @@ function coverage(facts: Fact[], assistant: AssistantContent): string[] {
 // 4. retrieval over verified facts  5. planned/estimate -> refuse
 // 6. compose (swappable)  7. post-check numbers and citations
 export async function ask(input: unknown, deps: AskDeps): Promise<AssistantOutcome> {
-  const { assistant, compose = composeAnswer, now = new Date(), warn = console.warn } = deps;
+  const outcome = await runPipeline(input, deps);
+  // Mutant: the real gate, plus refusing everything it would have let through.
+  // Refusal cases all still pass, so only must-not-refuse cases can catch it.
+  if (deps.mutation?.refuseAll && outcome.kind !== "refuse") {
+    return { kind: "refuse", category: "advice", trigger: "(mutation: refuse all)", sources: [] };
+  }
+  return outcome;
+}
+
+async function runPipeline(input: unknown, deps: AskDeps): Promise<AssistantOutcome> {
+  const { assistant, compose = composeAnswer, now = new Date(), warn = console.warn, mutation = {} } = deps;
   // Unverified facts are invisible here even if a caller passes them in.
   const facts = deps.facts.filter((f) => f.verified);
   const noAnswer = (reason: NoAnswerReason): AssistantOutcome => ({
@@ -54,7 +67,7 @@ export async function ask(input: unknown, deps: AskDeps): Promise<AssistantOutco
   if (question === "") return noAnswer("empty");
   if (question.length > assistant.maxLength) return noAnswer("too-long");
 
-  const hit = prefilter(question, now);
+  const hit = prefilter(question, now, mutation);
   if (hit) return { kind: "refuse", category: hit.category, trigger: hit.trigger, sources: [] };
 
   if (hasNonLatinLetters(baseNormalize(question))) return noAnswer("language");
@@ -63,7 +76,7 @@ export async function ask(input: unknown, deps: AskDeps): Promise<AssistantOutco
   if (matched.length === 0) return noAnswer("no-match");
 
   const forwardLooking = matched.filter(isForwardLooking);
-  if (forwardLooking.length > 0) {
+  if (forwardLooking.length > 0 && !mutation.plannedCheckOff) {
     return {
       kind: "refuse",
       category: "planned-figure",
@@ -89,7 +102,7 @@ export async function ask(input: unknown, deps: AskDeps): Promise<AssistantOutco
     return noAnswer("post-check");
   }
 
-  const check = postcheck(composed, answerFacts);
+  const check = mutation.postcheckOff ? ({ ok: true } as const) : postcheck(composed, answerFacts);
   if (!check.ok) {
     warn(`[assistant] answer dropped by post-check: ${check.reason}`);
     return noAnswer("post-check");

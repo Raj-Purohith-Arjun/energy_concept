@@ -102,9 +102,11 @@ justified first.
 /facts             the registry, with auto-generated conflicts table
 /black-giant       ONE page rebuilt properly — the performance proof
 /findings          audit numbers, before/after, what AI models say about EnergyX
+/evals             the assistant's eval suite and mutation testing, generated at build
 ```
 
-Four routes. Not a site. Resist adding more.
+Five routes. Not a site. Resist adding more. (`/evals` added Oct 19 2026 by
+Raj's explicit override.)
 
 ---
 

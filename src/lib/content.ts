@@ -1,6 +1,7 @@
 import { z } from "zod";
 import assistantFile from "../../content/assistant.json";
 import blackGiantFile from "../../content/black-giant.json";
+import evalsFile from "../../content/evals.json";
 import factsFile from "../../content/facts.json";
 import findingsFile from "../../content/findings.json";
 import siteFile from "../../content/site.json";
@@ -8,18 +9,20 @@ import { factTokenIds, malformedFactTokens } from "./fact-text";
 import {
   AssistantSchema,
   BlackGiantSchema,
+  EvalsSchema,
   FactsFileSchema,
   FindingsSchema,
   isTodo,
   SiteSchema,
   type AssistantContent,
   type BlackGiantContent,
+  type EvalsContent,
   type Fact,
   type FindingsContent,
   type Site,
 } from "./schemas";
 
-export type { AssistantContent, BlackGiantContent, Fact, FindingsContent, NavLink, Site } from "./schemas";
+export type { AssistantContent, BlackGiantContent, EvalsContent, Fact, FindingsContent, NavLink, Site } from "./schemas";
 
 export class ContentError extends Error {
   override name = "ContentError";
@@ -241,6 +244,20 @@ export function getFindings(): FindingsContent {
     getRegistry(),
   );
   return findings;
+}
+
+let evals: EvalsContent | undefined;
+
+export function getEvals(): EvalsContent {
+  evals ??= parseContent(EvalsSchema, evalsFile, "content/evals.json");
+  return evals;
+}
+
+/** A label from a content map, failing the build when one is missing. */
+export function labelFor(map: Record<string, string>, key: string, file: string): string {
+  const label = map[key];
+  if (label === undefined) throw new ContentError(`${file}: no label for "${key}"`);
+  return label;
 }
 
 export const SITE_TITLE = "EnergyX (demo)";

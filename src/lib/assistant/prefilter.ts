@@ -1,4 +1,5 @@
 import type { RefusalCategory } from "@/lib/schemas";
+import type { GateMutation } from "./mutation";
 import { variants } from "./normalize";
 
 // Deterministic refusal gate (CLAUDE.md §6 Phase B step 4, §9). No model is
@@ -124,9 +125,11 @@ const RULES: Rule[] = [
 ];
 
 /** First matching rule across all normalised variants, or null. */
-export function prefilter(question: string, now: Date): PrefilterHit | null {
-  const texts = variants(question);
+export function prefilter(question: string, now: Date, mutation: GateMutation = {}): PrefilterHit | null {
+  if (mutation.prefilterOff) return null;
+  const texts = mutation.normaliseOff ? [question.toLowerCase()] : variants(question);
   for (const rule of RULES) {
+    if (mutation.categoriesOff?.includes(rule.category)) continue;
     for (const text of texts) {
       const trigger = rule.test(text, now);
       if (trigger !== null) return { category: rule.category, trigger };

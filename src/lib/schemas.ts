@@ -322,6 +322,75 @@ export const FindingsSchema = z.strictObject({
   }),
 });
 
+// ---------------------------------------------------------------------------
+// /evals page copy (content/evals.json)
+//
+// No figures at all: every count and rate is generated at build from the eval
+// cases. Label maps are records; the page fails the build on a missing key.
+// ---------------------------------------------------------------------------
+
+const labels = z.record(z.string(), nonEmpty);
+const countTemplate = nonEmpty.includes("{count}");
+const listSection = { heading: nonEmpty, all: nonEmpty, count: countTemplate };
+
+export const EvalsSchema = z.strictObject({
+  $comment: comment.optional(),
+  title: nonEmpty,
+  heading: nonEmpty,
+  verdict: z.strictObject({
+    heading: nonEmpty,
+    cases: nonEmpty,
+    categories: nonEmpty.includes("{total}"),
+    passRate: nonEmpty,
+    allPass: nonEmpty.includes("{rate}"),
+    someFail: nonEmpty.includes("{failed}"),
+  }),
+  model: nonEmpty,
+  mutation: z.strictObject({
+    heading: nonEmpty,
+    intro: nonEmpty,
+    columns: z.strictObject({ mutant: nonEmpty, failed: nonEmpty, where: nonEmpty }),
+    missed: nonEmpty,
+    labels,
+    groupCount: countTemplate.includes("{label}"),
+  }),
+  groups: labels,
+  refusals: z.strictObject({
+    ...listSection,
+    intro: nonEmpty,
+    columns: z.strictObject({ category: nonEmpty, why: nonEmpty, cases: nonEmpty, example: nonEmpty }),
+    expected: nonEmpty,
+  }),
+  adversarial: z.strictObject({
+    ...listSection,
+    intro: nonEmpty,
+    techniques: z.record(z.string(), z.strictObject({ name: nonEmpty, attempts: nonEmpty })),
+    columns: z.strictObject({ technique: nonEmpty, attempts: nonEmpty, example: nonEmpty, outcome: nonEmpty }),
+  }),
+  mustNotRefuse: z.strictObject({
+    ...listSection,
+    body: z.array(nonEmpty).min(1),
+    proof: countTemplate.includes("{total}"),
+  }),
+  modelSlot: z.strictObject({ ...listSection, intro: nonEmpty, stubs: labels, expected: nonEmpty }),
+  other: z.strictObject({ heading: nonEmpty, intro: nonEmpty, count: countTemplate }),
+  table: z.strictObject({
+    question: nonEmpty,
+    outcome: nonEmpty,
+    result: nonEmpty,
+    pass: nonEmpty,
+    fail: nonEmpty,
+    empty: nonEmpty,
+    refused: nonEmpty.includes("{label}"),
+    answered: nonEmpty.includes("{facts}"),
+    noAnswer: z.strictObject(
+      Object.fromEntries(NO_ANSWER_REASONS.map((r) => [r, nonEmpty])) as Record<NoAnswerReason, typeof nonEmpty>,
+    ),
+  }),
+});
+
+export type EvalsContent = z.infer<typeof EvalsSchema>;
+
 export type PayloadPage = z.infer<typeof PayloadPageSchema>;
 export type FindingsContent = z.infer<typeof FindingsSchema>;
 

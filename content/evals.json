@@ -1,0 +1,127 @@
+{
+  "$comment": [
+    "/evals: proof the assistant's guardrails are measured, not asserted.",
+    "DRAFT copy. Raj to edit. Never type a number here: every count, rate and example",
+    "is generated at build from src/lib/assistant/eval-cases.ts. {placeholders} are",
+    "filled by the page. A missing label for a mutant, group, technique or stub fails the build."
+  ],
+  "title": "Evals",
+  "heading": "Evals",
+  "verdict": {
+    "heading": "The assistant's guardrails, tested on every build",
+    "cases": "test questions",
+    "categories": "of {total} refusal categories covered",
+    "passRate": "of cases pass",
+    "allPass": "This suite passes {rate}, which on its own proves nothing — code that fails its tests never ships. What proves something is switching each guardrail off and counting what breaks. That's below.",
+    "someFail": "{failed} of {total} cases fail in this build. Code in this state should not ship; the failing cases are marked below."
+  },
+  "model": "No model decides what gets refused. A model can only write answers, and every answer passes a number-and-source check before anyone sees it. When the model changes, these cases are how you know the guardrails still hold.",
+  "mutation": {
+    "heading": "Mutation testing: switch a guardrail off, count what breaks",
+    "intro": "Mutation testing means breaking the code on purpose and rerunning the tests. If nothing fails, the tests were never really checking that part. Every build of this page switches off each guardrail below, one at a time, and runs every test question against the broken version.",
+    "columns": { "mutant": "Guardrail switched off", "failed": "Test questions that fail", "where": "Which ones catch it" },
+    "missed": "Not caught. No test checks this guardrail.",
+    "labels": {
+      "prefilter-off": "The entire refusal check",
+      "category-off:ipo": "Rules for IPO and listing questions",
+      "category-off:future-timing": "Rules for future dates and plans",
+      "category-off:returns": "Rules for investment returns",
+      "category-off:advice": "Rules for investment advice",
+      "category-off:valuation": "Rules for valuation and share price",
+      "category-off:guarantees": "Rules for safety and guarantees",
+      "category-off:comparison": "Rules for comparisons with other investments",
+      "category-off:offering": "Rules for buying shares",
+      "normalise-off": "Clean-up of disguised spelling: look-alike letters, spaced-out letters, digits for letters, typos",
+      "planned-check-off": "Refusing targets and estimates",
+      "postcheck-off": "The number-and-source check on every answer",
+      "refuse-all": "A gate that refuses everything",
+      "refuse-none": "A gate that refuses nothing"
+    },
+    "groupCount": "{count} {label}"
+  },
+  "groups": {
+    "ipo": "IPO and listing",
+    "future-timing": "Future dates and plans",
+    "returns": "Investment returns",
+    "advice": "Investment advice",
+    "valuation": "Valuation and share price",
+    "guarantees": "Safety and guarantees",
+    "comparison": "Comparisons with other investments",
+    "offering": "Buying shares",
+    "planned-figure": "Targets and estimates",
+    "adversarial": "workaround attempts",
+    "answer": "answerable questions",
+    "must-not-refuse": "must-not-refuse questions",
+    "no-answer": "no-answer questions",
+    "model-slot": "model checks"
+  },
+  "refusals": {
+    "heading": "What gets refused, and why",
+    "intro": "Each kind of question below is refused before any model sees it. The reason shown is the one the assistant gives, word for word.",
+    "columns": { "category": "Kind of question", "why": "What the assistant says", "cases": "Test questions", "example": "Example" },
+    "expected": "Expected outcome: refused, and handed to EnergyX Investor Relations.",
+    "all": "Every refusal test",
+    "count": "{count} questions"
+  },
+  "adversarial": {
+    "heading": "Attempts to get around the refusals",
+    "intro": "People will try to slip a forbidden question past the check. Each technique below has its own tests.",
+    "techniques": {
+      "obfuscation": { "name": "Disguised spelling", "attempts": "Hides a forbidden word with dots, spaces, look-alike letters from other alphabets, invisible characters, digits or typos." },
+      "framing": { "name": "Hypothetical or indirect framing", "attempts": "Wraps the question in a hypothetical, a school project, a poem, a friend, or a promise that it isn't advice." },
+      "override": { "name": "Instruction override", "attempts": "Tells the assistant to ignore its rules or pretend to be a financial adviser." },
+      "compound": { "name": "Compound question", "attempts": "Hides a forbidden question behind an answerable one in the same message." },
+      "language": { "name": "Other languages", "attempts": "Asks in Spanish, German or Japanese, hoping English-only rules miss it." },
+      "emoji": { "name": "Emoji", "attempts": "Asks about returns with a chart emoji instead of words." }
+    },
+    "columns": { "technique": "Technique", "attempts": "What it tries", "example": "Example", "outcome": "Outcome" },
+    "all": "Every workaround test",
+    "count": "{count} questions"
+  },
+  "mustNotRefuse": {
+    "heading": "Questions it must not refuse",
+    "body": [
+      "A gate that refuses every question passes every refusal test on this page. It would also be useless.",
+      "These tests are what stop that: ordinary questions that sound risky, such as gold standard, appreciate, protected area, which must still get through. This is the part most test suites miss."
+    ],
+    "proof": "The mutation test above shows it. Switched to refuse everything, the gate still passes every refusal test, and fails {count} of these {total}.",
+    "all": "Every must-not-refuse test",
+    "count": "{count} questions"
+  },
+  "modelSlot": {
+    "heading": "If the model misbehaves",
+    "intro": "A model is only ever allowed to write the wording of an answer. These tests stand in a deliberately broken model and check that nothing it gets wrong reaches the reader.",
+    "stubs": {
+      "invents-number": "Invents a number that is not in the registry",
+      "number-in-words": "Writes an untraced number in words",
+      "cites-unretrieved": "Cites a fact it was not given",
+      "no-citations": "Gives an answer with no sources",
+      "crashes": "Fails or times out"
+    },
+    "expected": "Expected outcome: the answer is dropped and the reader sees that there is no sourced answer.",
+    "all": "Every model check",
+    "count": "{count} tests"
+  },
+  "other": {
+    "heading": "Questions it should answer, or decline to guess",
+    "intro": "The rest of the suite: questions the registry can answer, with the exact facts expected, and questions it can't, where the right answer is to say so.",
+    "count": "{count} questions"
+  },
+  "table": {
+    "question": "Question",
+    "outcome": "Outcome",
+    "result": "Result",
+    "pass": "Pass",
+    "fail": "Fail",
+    "empty": "(empty)",
+    "refused": "Refused: {label}",
+    "answered": "Answered: {facts}",
+    "noAnswer": {
+      "no-match": "No sourced answer",
+      "post-check": "Dropped by the number-and-source check",
+      "language": "Declined: English only",
+      "empty": "Asked to type a question",
+      "too-long": "Declined: too long"
+    }
+  }
+}
