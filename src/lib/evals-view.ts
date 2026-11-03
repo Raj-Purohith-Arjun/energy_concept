@@ -59,5 +59,7 @@ export function outcomeText(o: AssistantOutcome): string {
   const t = getEvals().table;
   if (o.kind === "refuse") return fill(t.refused, { label: groupLabel(o.category) });
   if (o.kind === "answer") return fill(t.answered, { facts: o.facts.map((f) => f.label).join("; ") });
+  if (o.kind === "draft") return fill(t.drafted, { facts: o.facts.map((f) => f.label).join("; ") });
+  if (o.kind === "clarify") return t.clarified[o.why];
   return t.noAnswer[o.reason];
 }

@@ -25,14 +25,20 @@ function fill(template: string, values: Record<string, string>): string {
   return template.replace(/\{(\w+)\}/g, (_, key: string) => values[key] ?? `{${key}}`);
 }
 
+/** The one sentence the template writes for a fact, before its other published figures. */
+export function templateLine(fact: Fact, copy: AssistantContent["answer"]): string {
+  // Hand-written wording wins when it exists: it reads like a person, not a label.
+  const phrasing = copy.phrasings[fact.id];
+  if (phrasing !== undefined) return fill(phrasing, { value: fact.value });
+  const line = fact.kind === "planned" ? copy.plannedLine : fact.kind === "estimate" ? copy.estimateLine : copy.factLine;
+  return fill(line, { label: fact.label, value: fact.value });
+}
+
 /** No model: one line per fact, plus its other published figures. */
 export const templateComposer: Composer = async ({ facts, copy }) => ({
   text: facts
     .map((fact) =>
-      [
-        fill(copy.factLine, { label: fact.label, value: fact.value }),
-        ...fact.alsoPublishedAs.map((alt) => fill(copy.alsoLine, { value: alt.value })),
-      ].join(" "),
+      [templateLine(fact, copy), ...fact.alsoPublishedAs.map((alt) => fill(copy.alsoLine, { value: alt.value }))].join(" "),
     )
     .join("\n"),
   citations: facts.map((fact) => fact.id),

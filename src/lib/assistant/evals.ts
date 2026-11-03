@@ -44,6 +44,8 @@ export function runCase(c: EvalCase, mutation?: GateMutation, compose?: Composer
 export function describeOutcome(o: AssistantOutcome): string {
   if (o.kind === "refuse") return `refuse:${o.category} (${o.trigger})`;
   if (o.kind === "answer") return `answer:${o.facts.map((f) => f.id).join(",")}`;
+  if (o.kind === "draft") return `draft:${o.facts.map((f) => f.id).join(",")}`;
+  if (o.kind === "clarify") return `clarify:${o.why}`;
   return `none:${o.reason}`;
 }
 
@@ -66,6 +68,11 @@ export function gradeCase(c: EvalCase, outcome: AssistantOutcome): Graded {
     }
   } else if ("none" in e) {
     pass = outcome.kind === "no-answer" && outcome.reason === e.none;
+  } else if ("draft" in e) {
+    const got = outcome.kind === "draft" ? outcome.facts.map((f) => f.id).sort() : null;
+    pass = got !== null && JSON.stringify(got) === JSON.stringify([...e.draft].sort());
+  } else if ("clarify" in e) {
+    pass = outcome.kind === "clarify" && outcome.why === e.clarify;
   } else {
     pass = outcome.kind !== "refuse";
   }
@@ -80,16 +87,14 @@ export async function runSuite(mutation?: GateMutation, compose?: Composer, case
 // "caught" when at least one case fails. Labels live in content/evals.json.
 export const MUTANTS: { id: string; mutation: GateMutation }[] = [
   { id: "prefilter-off", mutation: { prefilterOff: true } },
-  ...REFUSAL_CATEGORIES.filter((c) => c !== "planned-figure").map((c) => ({
+  ...REFUSAL_CATEGORIES.map((c) => ({
     id: `category-off:${c}`,
     mutation: { categoriesOff: [c] } as GateMutation,
   })),
   { id: "normalise-off", mutation: { normaliseOff: true } },
-  { id: "planned-check-off", mutation: { plannedCheckOff: true } },
   { id: "postcheck-off", mutation: { postcheckOff: true } },
   { id: "output-check-off", mutation: { outputCheckOff: true } },
   { id: "refuse-all", mutation: { refuseAll: true } },
-  { id: "refuse-none", mutation: { prefilterOff: true, plannedCheckOff: true } },
 ];
 
 export interface MutantResult {

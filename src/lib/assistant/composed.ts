@@ -117,7 +117,8 @@ export function storedComposer(store: Pick<CheckedStore, "model" | "accepted">):
     const lines: string[] = [];
     const wordedBy = new Set<string>();
     for (const fact of input.facts) {
-      const sentence = store.model ? store.accepted.get(fact.id) : undefined;
+      // A reviewed phrasing in assistant.json outranks a stored model sentence.
+      const sentence = store.model && !(fact.id in input.copy.phrasings) ? store.accepted.get(fact.id) : undefined;
       if (sentence !== undefined && store.model) {
         lines.push(sentence);
         wordedBy.add(store.model);

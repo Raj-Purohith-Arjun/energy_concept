@@ -1,6 +1,7 @@
 import { ask } from "@/lib/assistant/pipeline";
 import { getAssistant, getVerifiedFacts } from "@/lib/content";
-import { AnswerPanel, NoAnswerPanel, RefusalPanel } from "./Panels";
+import { recordUnanswered } from "@/lib/assistant/unanswered";
+import { AnswerPanel, ClarifyPanel, DraftPanel, NoAnswerPanel, RefusalPanel } from "./Panels";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
@@ -16,6 +17,11 @@ export async function AssistantResponse({ searchParams }: { searchParams: Search
 
   if (outcome.kind === "refuse") return <RefusalPanel outcome={outcome} question={question} />;
   if (outcome.kind === "answer") return <AnswerPanel outcome={outcome} question={question} />;
+  if (outcome.kind === "draft") return <DraftPanel outcome={outcome} question={question} />;
+  // Asked back, not a gap: nothing is logged.
+  if (outcome.kind === "clarify") return <ClarifyPanel outcome={outcome} question={question} />;
+  // Questions it can't answer are the content backlog (CLAUDE.md §3, §5).
+  await recordUnanswered(outcome.reason, question);
   // Don't echo empty or over-long input back onto the page.
   const echo = outcome.reason === "empty" || outcome.reason === "too-long" ? undefined : question;
   return <NoAnswerPanel outcome={outcome} question={echo} />;

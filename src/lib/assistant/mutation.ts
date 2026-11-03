@@ -11,8 +11,6 @@ export interface GateMutation {
   categoriesOff?: readonly PrefilterHit["category"][];
   /** Homoglyph, spacing, leetspeak and typo clean-up before the pre-filter. */
   normaliseOff?: boolean;
-  /** Refusing questions whose answer is a planned or estimated figure. */
-  plannedCheckOff?: boolean;
   /** Checking composed answers for untraced numbers and citations. */
   postcheckOff?: boolean;
   /** Running the refusal pre-filter over composed answer text. */

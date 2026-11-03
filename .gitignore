@@ -46,3 +46,6 @@ next-env.d.ts
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# assistant log of unanswered questions (written locally by the demo)
+/data/unanswered.jsonl

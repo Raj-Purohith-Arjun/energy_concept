@@ -1,181 +1,176 @@
-# EnergyX Trust Layer — project rules for Claude Code
+# EnergyX Trust Layer — project rules
 
-Read this file before writing any code. It is the contract for this repo.
-If a request conflicts with a rule here, say so before you build.
+Read before writing code. This is the contract. If a request conflicts with it,
+say so before building.
 
-**This file replaced an earlier version that described a concept redesign of
-energyx.com. That project is cancelled.** EnergyX shipped a new Next.js site in
-early October 2026. Building a competing redesign of work their CMO just shipped
-is the wrong move. Do not build hero sections, scroll stories, globes, splat
-viewers or mirrored page structures. If you find references to those, they are stale.
+**Replaces the previous version.** That one described four routes and a
+question-answering assistant. The scope has changed — see §1.
 
 ---
 
-## 1. What this is
+## 1. What changed, and why
 
-A private, password-protected technical demo built by Raj Purohith Arjun for the
-AI Engineer interview at EnergyX. It is shown to Teague Egan (CEO), Kellee Khalil
-(CMO) and Luke Gustafson (design/3D). It is **not** an official EnergyX communication
-and it is **not** a redesign of their site.
+On 2026-10-19 this demo was sent to EnergyX. On 2026-10-28 the feedback came
+back: **the CMO typed investor questions and got no result.**
 
-### The argument it makes
+Diagnosis:
 
-EnergyX has 40,000+ retail shareholders, an active Reg A+ raise and an IPO ahead.
-Three things are true of their public information today, all measured:
+1. The refusal gate declines nearly every investor question by design — IPO,
+   returns, advice, valuation, guarantees, comparisons, buying shares, and
+   also targets and estimates. That last one was too strict.
+2. Retrieval requires every concept to match across ~44 facts. Most natural
+   phrasings return "no sourced answer".
+3. Likely expectation mismatch: she runs a Brand Studio prototype. Her mental
+   model of an AI tool is "type intent, get a draft". She may have asked it to
+   *write* something, which it cannot do.
 
-1. **It contradicts itself.** Their own pages have shown different patent counts.
-   (Verify current state before relying on this; if the conflict was fixed in the
-   rebuild, use whatever conflicts do exist, or drop the claim.)
-2. **It is too heavy to reach people.** Lighthouse mobile, Slow 4G, Oct 8 2026:
-   homepage Performance 55, LCP 5.9s, 32.9 MB total — 27.7 MB of it a hero video
-   served from a Box shared link. `/black-giant/` Performance 50, LCP 7.5s,
-   48.3 MB total — a single 39.9 MB autoplaying video that is itself the LCP element,
-   plus a second 7.9 MB video on the same page.
-3. **It is invisible to AI.** No `llms.txt`, no `ai-catalog.json`, no WebMCP tools
-   registered. Lighthouse 13.5 scores `/black-giant/` 1/2 on Agentic Browsing.
-   Retail investors increasingly research by asking a model.
-
-The demo fixes all three with one idea: make EnergyX's public information
-consistent, cited, fast and machine-readable.
-
-### Tone rule about Luke
-
-The videos are Luke's work and he is the internal advocate for this candidate.
-The problem is never the content or the production value — it is that no delivery
-pipeline sits between his output and the browser. Never phrase it any other way,
-in code comments, copy, or the demo script.
+**The lesson, which governs everything below: a guardrail that declines without
+making it obvious that it chose to decline is indistinguishable from a broken
+system.** The refusals were correct. The product still failed. Both are true.
+Never write "working as intended" in copy, comments or correspondence.
 
 ---
 
-## 2. Non-negotiable rules
+## 2. Non-negotiable rules (unchanged)
 
 1. **No typed numbers.** Every business claim renders through `<Fact id="..." />`
-   reading `content/facts.json`. `scripts/lint-facts.ts` fails the build on
-   violations. Allowlist: years, ISO dates, list numbering, CSS and Tailwind
-   values, version strings, street addresses, copyright years.
-2. **No new claims.** Facts come from EnergyX's own public pages, each with a
-   source URL and access date. `approvedAt` is `null` on every fact — Raj is not
-   EnergyX and cannot approve their numbers. The UI says so.
-3. **Precise nouns.** Eni *stake*, Army *conditional lease*, Compass *non-binding
-   MOU*, Lonestar *demonstration plant*. Never upgrade an MOU to a partnership.
-4. **Forward-looking figures are chipped and footnoted.** `kind: planned | estimate`
-   gets an amber chip and an automatic forward-looking footnote on that page.
-5. **Labeled as an unaffiliated demo, everywhere.** Non-dismissible banner, "(demo)"
-   in every title, `X-Robots-Tag: noindex, nofollow`, robots disallow, basic auth on
-   everything, production fail-closed. No invest flow, no forms collecting personal
-   data, no analytics or tracking pixels. Do not reproduce EnergyX's Reg A legal
-   text — Raj is not the issuer; the notice is in his own words.
-6. **Performance budgets enforced in CI.** See §5. This demo argues about speed;
-   it cannot be slow.
-7. **No secrets in client code.** Nothing sensitive behind `NEXT_PUBLIC_`.
+   from `content/facts.json`. `scripts/lint-facts.ts` fails the build.
+2. **No new claims.** Facts come from EnergyX's own public pages with a source
+   URL and access date. `approvedAt` is `null` on every EnergyX fact.
+3. **Precise nouns.** Eni *stake*, Army *conditional lease*, Compass
+   *non-binding MOU*, Lonestar *demonstration plant*. Never upgrade one.
+4. **Forward-looking figures are chipped and footnoted** — but see §3, they are
+   now answered rather than refused.
+5. **Labeled as an unaffiliated demo everywhere.** Banner, "(demo)" in titles,
+   noindex, robots disallow, basic auth, production fail-closed. No invest flow,
+   no forms collecting personal data, no analytics. Never reproduce EnergyX's
+   legal or offering text.
+6. **Performance budgets enforced.** §6.
+7. **No secrets in client code.** API keys server-side only, never `NEXT_PUBLIC_`.
 
 ---
 
-## 3. Stack
+## 3. The assistant: what it does now
 
-Next.js 16.4 App Router, TypeScript strict, pnpm, Tailwind, static at build time,
-content as JSON + MDX validated with Zod, Vercel hosting. Tests: Vitest,
-Playwright + axe, Lighthouse CI.
+### Two modes, one registry
 
-Do not add dependencies without asking. No component library, no state manager,
-no CSS-in-JS, no animation library unless a specific route needs one and it is
-justified first.
+- **Answer** — a question about EnergyX's published information.
+- **Draft** — a request to write something from those same facts.
 
----
+An intent router decides which. When it is unsure, it says so and offers both.
 
-## 4. Architecture rules
+### Never a dead end
 
-- Server components by default. `"use client"` only for the mobile menu and the
-  assistant's chat input. Anything else, flag it first.
-- All copy comes from `/content` via `src/lib/content.ts`. Never hardcode copy.
-- `next/image` with honest `sizes`. Only an above-fold poster gets `priority`.
-- Animate `transform` and `opacity` only. Respect `prefers-reduced-motion`.
-- Accessibility: semantic HTML, visible focus, alt text, 44px tap targets.
-  axe must show zero serious/critical — the demo criticises their contrast failures,
-  so it cannot have its own.
-- Components under ~150 lines.
+Every response states what it understood, what it matched, and what it did.
+Three outcomes, all of which must read as deliberate:
 
-### Routes
+- **Answered** — with sources, and what it matched on.
+- **Declined** — "I won't answer this", the reason in plain words, and a named
+  handoff to EnergyX Investor Relations. Never a bare apology.
+- **Not covered** — "I don't have a sourced answer for that", plus the nearest
+  facts it does have, as clickable examples.
 
-```
-/                  what this is + the assistant
-/facts             the registry, with auto-generated conflicts table
-/black-giant       ONE page rebuilt properly — the performance proof
-/findings          audit numbers, before/after, what AI models say about EnergyX
-/evals             the assistant's eval suite and mutation testing, generated at build
-```
+A blank or near-blank response is a bug, not a safe default.
 
-Five routes. Not a site. Resist adding more. (`/evals` added Oct 19 2026 by
-Raj's explicit override.)
+### Targets and estimates are ANSWERED, not refused
 
----
+`kind: planned | estimate` renders the figure with the amber chip and the
+forward-looking footnote: *"Black Giant's planned capacity is 53Ktpa LCE — a
+target, not current production."* This is more useful and still compliant.
 
-## 5. Performance budgets (CI-enforced, mobile lab)
+Refusal is reserved for genuine speculation — asking what *will* happen, what a
+figure *will* be, or what something is worth — not for repeating a published plan.
 
-Lighthouse performance ≥ 95 · LCP ≤ 2.0s · CLS ≤ 0.05 · TBT ≤ 150ms ·
-first-load JS ≤ 150 KB compressed · any page ≤ 3 MB total.
+### Retrieval
 
-Tighter than a normal project on purpose: the argument is that their pages are
-50 and 55, so this one being 92 would be embarrassing. If an effect blows a
-budget, the effect gets simplified. Never the budget.
+Partial and synonym matching. When confidence is low, return the nearest facts
+with an honest label rather than nothing.
+
+### Unanswered questions are logged
+
+Every question that returns "not covered" is recorded. That log is a content
+roadmap, not a debug file — see §5.
 
 ---
 
-## 6. Build order
+## 4. Drafting mode
 
-**Phase A — the registry (do first, everything depends on it)**
-1. `src/lib/schemas.ts`, `src/lib/content.ts`, `content/facts.json`,
-   `<Fact/>`, `scripts/lint-facts.ts` + unit tests.
-2. `/facts` route: every fact with source, date, kind chip, approval state, and a
-   conflicts table generated from the registry.
+**Formats: a LinkedIn post and a web page section. Nothing else.**
 
-**Phase B — the answer layer (the centrepiece)**
-3. An assistant that answers questions using **only** facts in the registry, cites
-   the source page for each, and says plainly when it doesn't know.
-4. **Refusal behaviour, which is the actual demo.** Forward-looking questions
-   ("when is the IPO", "what return will I get", "will this go up") get a visible,
-   explained decline and a handoff to IR — not a hedge, not a guess. Build the
-   classifier and the refusal copy before polishing the happy path.
-5. The three-tier framing in the UI: public (answerable here), gated (requires
-   identity — EnergyX already does this with DocSend), private (human only).
+**Do NOT build investor email or investor update drafting.** Drafting investor
+communications during an active Reg A raise is the one thing that could read as
+reckless. Saying "I deliberately did not build that" is stronger than the feature.
 
-**Phase C — AI discoverability**
-6. `llms.txt`, structured data, consistent facts. `/findings` shows before/after
-   screenshots of what ChatGPT and Claude say about EnergyX.
+Rules, all enforced, not requested:
 
-**Phase D — the performance proof**
-7. `/black-giant` rebuilt: poster image as LCP, video `preload="none"` attached
-   after load, correctly sized images, no render-blocking CSS. Measure on the same
-   emulated device as the audit and put both numbers on `/findings`.
+- Every figure comes from the registry. The model cannot introduce a number.
+- Planned and estimate figures carry their chip and footnote in the draft.
+- The same pre-filter runs over the composed draft text. A draft containing
+  forward-looking or promotional language is rejected and the reason shown.
+- Brand rules are checked, not hoped for: approved terminology, precise nouns,
+  banned promotional phrases.
+- Output is 90% there and editable, per the CMO's own stated standard. The
+  system does not publish anything.
 
-**Stretch, only if Phases A–D are done and green**
-8. The AI publish flow (`pnpm new:press`): release text → structured draft → Zod →
-   validators → branch → PR → preview → human merge. The model writes structured
-   data, never code, and can never introduce a number absent from the registry;
-   unknown numbers go to `newClaims[]` for a human. Needs a working `gh` CLI.
+**One rejection must be demonstrable on screen** — a draft that overstates,
+caught, with what was wrong and what shipped instead.
 
 ---
 
-## 7. Cut order
+## 5. The gap report
 
-Drop from the top when time runs short:
+A page listing the questions the assistant could not answer, grouped by subject.
 
-1. The publish flow (stretch anyway)
-2. The three-tier UI framing — keep it as a talking point instead
-3. `/black-giant` full rebuild — a hero-only rebuild still proves the number
-4. Before/after AI screenshots — keep `llms.txt` itself
+Framed for a marketing lead, not an engineer: *these are the questions people
+asked that EnergyX's public pages do not answer.* It is a content backlog.
 
-**Never cut:** the facts registry, the conflicts table, the assistant's refusal
-behaviour, the measured performance numbers, the compliance guardrails, the
-backup screen recording.
+Seeded from the demo's own logs. No invented questions, ever.
 
 ---
 
-## 8. Deadline
+## 6. Performance budgets (unchanged, CI-enforced, mobile)
 
-Decisions land mid-week of Oct 13 2026. **Ship and send by Monday Oct 12.**
-Something smaller in their hands before the decision beats something better after it.
-When in doubt, cut scope, not the send date.
+Lighthouse ≥ 95 · LCP ≤ 2.0 s · CLS ≤ 0.05 · TBT ≤ 150 ms ·
+first-load JS ≤ 150 KB compressed · any page ≤ 3 MB.
+
+Measured numbers as of 2026-10-19, US West, Lighthouse 13.5.0 mobile:
+this build's `/black-giant/` scored 95, LCP 2.1 s, 930 kB transferred.
+EnergyX's scored 50, LCP 7.5 s, 50.6 MB — of which 49.0 MB is two video files,
+leaving 1.6 MB for everything else.
+
+---
+
+## 7. Build order (five days)
+
+**Day 1 — fix what the CMO hit**
+1. Verify the live site actually works. Reproduce before theorising.
+2. No dead ends (§3).
+3. Answer planned and estimate figures instead of refusing them.
+4. Looser retrieval with a nearest-facts fallback.
+5. Log unanswered questions.
+
+**Days 2–3 — drafting mode (§4)**
+6. Intent router, question vs draft.
+7. LinkedIn post and web page section.
+8. Brand rules enforced; one visible rejection.
+
+**Day 4**
+9. The gap report (§5).
+10. Brand rules added to the eval suite — same machinery as the refusal cases.
+
+**Day 5**
+11. Re-measure, re-run evals, two-minute screen recording, short written note.
+
+---
+
+## 8. Cut order
+
+1. Web page section (keep the LinkedIn post)
+2. The gap report page (keep the log)
+3. Brand rules in the eval suite (keep them enforced at generation)
+
+**Never cut:** the no-dead-ends fix, answering planned figures, the visible
+rejection in drafting mode, the compliance guardrails, the screen recording.
 
 ---
 
@@ -183,13 +178,30 @@ When in doubt, cut scope, not the send date.
 
 - Type a number into a component or MDX body.
 - Add a dependency without asking.
-- Invent EnergyX facts, partnerships, dates or figures. Leave `TODO(content)` and say so.
-- Generate fake photographs of EnergyX facilities, equipment or people.
-- Reproduce EnergyX's legal, Reg A or offering text.
-- Make the assistant answer a forward-looking or investment-advice question, even
-  partially, even hedged. The refusal is the product.
-- Weaken the banner, the noindex headers, the basic auth or the production fail-closed.
+- Invent EnergyX facts, partnerships, dates or figures. Leave `TODO(content)`.
+- Build investor email or investor update drafting (§4).
+- Let the assistant answer a genuinely speculative question, even hedged.
+- Return a blank or unexplained response in any mode.
+- Weaken the banner, noindex, basic auth or production fail-closed.
 - Raise a performance budget to make a build pass.
-- Point any load test at energyx.com.
-- Build merchandise, shop or product-design features. Out of role, and it steps on
-  Luke's work.
+- Write "working as intended" anywhere a reader could see it.
+- Build merchandise, shop or product-design features.
+
+---
+
+## 10. Audience
+
+Teague Egan (CEO) — travelling until 2026-11-11. Thinks in capital velocity
+and narrative. Wants a number he can feel.
+
+Kellee Khalil (CMO) — built her own Brand Studio prototype with Claude. Measures
+engineering by shipped business outcomes, not technical complexity. Her stated
+standard is 90% done, then human review. Her stated fear is depending on an
+engineer for every change. She is the one who tested this and got nothing.
+
+Luke Gustafson (design/3D) — advocate. Owns the video and visual work. The
+delivery pipeline is the problem, never his footage. Never phrase it otherwise.
+
+Write every page for a reader who will skim it for fifteen seconds: verdict
+first, detail collapsed behind it, plain English with the technical term in
+parentheses after.

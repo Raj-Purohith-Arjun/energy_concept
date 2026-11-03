@@ -4,20 +4,22 @@
     "Refusals are decided by src/lib/assistant/prefilter.ts (deterministic, no model).",
     "factConcepts: a verified fact is retrieved when the question contains EVERY concept",
     "listed for it. Each concept is a list of phrases; any phrase counts.",
-    "TODO(content): replace handoff.href with the exact EnergyX Investor Relations page once confirmed."
+    "TODO(content): replace handoff.href with the exact EnergyX Investor Relations page once confirmed.",
+    "questions: one question per fact that retrieves it; offered as clickable examples when nothing matched in full. answer.phrasings: reviewed wording that does not echo the label; {value} is filled from the registry.",
+    "draft.topics: the facts a LinkedIn post about a topic may use. EnergyX's own published figures only. Deliberately absent: funding and GM facts (capital-raising communications), the implied-reduction arithmetic (not published by EnergyX) and every measurement of a website. draft.brand.preciseNouns encode CLAUDE.md rule 2.3 as patterns that catch an upgraded noun. TODO(content): draft.brand.terminology is empty until the CMO supplies approved terminology."
   ],
   "pageTitle": "Assistant",
   "intro": {
     "heading": "Ask about EnergyX's public information",
-    "body": "Answers come only from the fact registry: figures EnergyX has published, and Raj's own measurements of its website, each with its source. If a question isn't covered, it says so instead of guessing.",
-    "hardRule": "This assistant never answers forward-looking or investment questions, not partly and not with caveats. That check runs before any model is involved."
+    "body": "Ask a question and it answers from the fact registry: figures EnergyX has published, and Raj's own measurements of its website, each with its source. Ask it to write a LinkedIn post and it drafts one from those same facts. If it can do neither, it says so instead of guessing.",
+    "hardRule": "It answers what EnergyX has published, including its plans and targets, always marked as plans and never as results. It never predicts what will happen and never gives investment advice, not partly and not with caveats. That check runs before any model is involved."
   },
   "form": {
     "label": "Your question",
     "placeholder": "For example: how long does EnergyX's DLE process take?",
     "submit": "Ask",
     "pending": "Checking…",
-    "privacy": "This demo doesn't store questions. Your question goes in the page address, so the host's request logs may hold it briefly. Don't include personal details."
+    "privacy": "Your question goes in the page address, so the host's request logs may hold it briefly. If this assistant can't answer, the question text (with emails and long numbers removed, and nothing that identifies you) is logged so the gaps in EnergyX's public information can be listed. Don't include personal details."
   },
   "maxLength": 300,
   "examples": {
@@ -29,23 +31,38 @@
           "How long does EnergyX's DLE process take?",
           "How much water does EnergyX save compared with conventional extraction?",
           "Has GM invested in EnergyX?",
-          "How heavy is the Black Giant page?"
-        ]
-      },
-      {
-        "label": "Refused, by design",
-        "questions": [
-          "When is the IPO?",
-          "Should I invest in EnergyX?",
-          "What return could I get?",
+          "How heavy is the Black Giant page?",
           "What is Black Giant's capacity?"
         ]
       },
       {
-        "label": "No sourced answer",
+        "label": "Declined, with a reason and a handoff",
+        "questions": [
+          "When is the IPO?",
+          "Should I invest in EnergyX?",
+          "What return could I get?"
+        ]
+      },
+      {
+        "label": "Drafted from the registry",
+        "questions": [
+          "Write a LinkedIn post about Black Giant",
+          "Can a LinkedIn post mention the water figures?",
+          "LinkedIn post about Lonestar"
+        ]
+      },
+      {
+        "label": "Not covered yet",
         "questions": [
           "Who is EnergyX's CEO?",
           "What is EnergyX's revenue?"
+        ]
+      },
+      {
+        "label": "Asks which you meant",
+        "questions": [
+          "What is the capacity?",
+          "LinkedIn post about water"
         ]
       }
     ]
@@ -92,11 +109,6 @@
       "label": "a question about buying shares",
       "title": "I can't help with buying shares.",
       "why": "This demo has no investment flow and doesn't summarise offering terms. EnergyX publishes those itself, and its Investor Relations team can take you through them."
-    },
-    "planned-figure": {
-      "label": "a question whose answer is a target or estimate",
-      "title": "That figure is a target, not a result.",
-      "why": "EnergyX has published a figure for this, but it's a plan or an estimate, and those can change or not happen. I only state measured or reported facts, so I won't give it as an answer. You can read it in its original context here:"
     }
   },
   "handoff": {
@@ -108,7 +120,7 @@
   "noAnswer": {
     "no-match": {
       "title": "I don't have a sourced answer for that.",
-      "body": "I only answer from facts that have been checked against a published source, and none of them covers this question."
+      "body": "I only answer from facts that have been checked against a published source, and none of them covers this question. EnergyX's public pages may not say. I've noted the question so the gap can be listed."
     },
     "post-check": {
       "title": "I don't have a sourced answer for that.",
@@ -118,6 +130,14 @@
       "title": "I can only answer in English.",
       "body": "The fact registry and its checks are written in English, so I can't reliably answer questions in other languages yet."
     },
+    "draft": {
+      "title": "I can't write that kind of content.",
+      "body": "I can write a LinkedIn post from the published facts. I don't write other formats."
+    },
+    "draft-topic": {
+      "title": "I need a topic I have sourced facts about.",
+      "body": "I write only from facts that have been checked against a published source, so a post needs a subject I hold some for. I couldn't find one in your request. I've noted it so the gap can be listed."
+    },
     "empty": {
       "title": "Ask a question to get started.",
       "body": "Type a question about EnergyX's published facts, or pick one of the examples."
@@ -126,16 +146,31 @@
       "title": "Ask one short question.",
       "body": "Long messages are hard to check reliably, so this assistant only accepts short questions."
     },
-    "coverageLead": "Here's what I can answer:"
+    "coverageLead": "Everything I can answer, by topic",
+    "nearestLead": "The closest facts I do have, as questions you can ask:",
+    "draftLead": "Posts I can write:",
+    "examplesLead": "Here are some things I can answer:",
+    "registryLink": {
+      "label": "Browse every published fact and its source",
+      "href": "/facts"
+    }
   },
   "answer": {
     "heading": "Sourced answer",
     "factLine": "{label}: {value}.",
     "alsoLine": "Also published as {value}.",
+    "plannedLine": "{label} is published as a plan: {value}. It is a target, not a result.",
+    "estimateLine": "{label} is published as an estimate: {value}. It is an estimate, not a measurement.",
     "sourcesHeading": "Sources",
     "wordedByModel": "Worded by {model}, from the sources below.",
     "wordedByTemplate": "Worded by the built-in template, from the sources below.",
-    "wordedByMixed": "Worded by {model}, with the built-in template for some facts, from the sources below."
+    "wordedByMixed": "Worded by {model}, with the built-in template for some facts, from the sources below.",
+    "phrasings": {
+      "ex-water-dle": "EnergyX says its process uses {value} of freshwater.",
+      "ex-water-conventional": "Conventional extraction uses {value} of freshwater, according to EnergyX.",
+      "ex-water-reduction": "EnergyX says its process cuts freshwater use by {value} compared with conventional extraction.",
+      "ex-bg-capacity": "Black Giant's planned capacity is {value} — a target, not current production."
+    }
   },
   "concepts": {
     "dle": [
@@ -260,6 +295,9 @@
       "produce",
       "output",
       "tpa",
+      "planned",
+      "target",
+      "plan",
       "tonnes per year",
       "tons per year"
     ],
@@ -588,6 +626,239 @@
     "ex-water-reduction": [
       "ex-water-conventional",
       "ex-water-dle"
+    ],
+    "ex-water-dle": [
+      "ex-water-conventional",
+      "ex-water-reduction"
+    ],
+    "ex-water-conventional": [
+      "ex-water-dle",
+      "ex-water-reduction"
     ]
+  },
+  "questions": {
+    "ex-dle-time": "How long does EnergyX's DLE process take?",
+    "ex-water-reduction": "How much water does EnergyX save compared with conventional extraction?",
+    "ex-water-conventional": "How much water does conventional extraction use?",
+    "ex-water-dle": "How much water does EnergyX use?",
+    "ex-water-implied-reduction": "What water reduction do the published figures imply?",
+    "ex-patents": "How many patents does EnergyX have?",
+    "ex-founded": "When was EnergyX founded?",
+    "ex-team": "How many people work at EnergyX?",
+    "ex-funding": "How much funding has EnergyX raised?",
+    "ex-acres": "How many acres does EnergyX have?",
+    "ex-projects-count": "How many projects does EnergyX have?",
+    "ex-gm": "Has GM invested in EnergyX?",
+    "ex-bg-location": "Where is Black Giant?",
+    "ex-bg-acres": "How many acres does Black Giant cover?",
+    "ex-bg-capacity": "What is Black Giant's capacity?",
+    "ex-bg-insitu": "How much lithium is in the ground at Black Giant?",
+    "ex-lonestar-doe": "Did the DOE give Lonestar a grant?",
+    "ex-lonestar-target": "What is Lonestar's capacity?",
+    "ex-ph-capacity": "What is Powder Hound's capacity?",
+    "ex-bm-target": "What is Battery Mecca's production capacity?",
+    "lh-bg-weight": "How heavy is the Black Giant page?",
+    "lh-bg-hero-video": "How big is the hero video on the Black Giant page?",
+    "lh-bg-second-video": "How big is the second video on the Black Giant page?",
+    "lh-bg-video-total": "How much do both videos on the Black Giant page weigh?",
+    "lh-bg-other-bytes": "What does the Black Giant page transfer apart from the video?",
+    "lh-bg-lcp": "What is the LCP of the Black Giant page?",
+    "lh-bg-perf": "What's the Lighthouse performance score for Black Giant?",
+    "lh-bg-cls": "What is the CLS of the Black Giant page?",
+    "lh-bg-tbt": "What is the total blocking time of the Black Giant page?",
+    "lh-bg-fcp": "What is the FCP of the Black Giant page?",
+    "demo-bg-fcp": "What is the demo's FCP for Black Giant?",
+    "demo-bg-perf": "What is the demo's Lighthouse performance score for Black Giant?",
+    "demo-bg-lcp": "What is the demo's LCP for Black Giant?",
+    "demo-bg-cls": "What is the demo's CLS for Black Giant?",
+    "demo-bg-tbt": "What is the demo's total blocking time for Black Giant?",
+    "demo-bg-weight": "How heavy is the demo's Black Giant page?",
+    "lh-home-weight": "What is the homepage payload?",
+    "lh-home-box": "How much of the homepage comes from Box?",
+    "lh-home-second-video": "How big is the second video on the homepage?",
+    "lh-home-other-bytes": "What does the homepage transfer apart from the video?",
+    "lh-home-lcp-element": "What is the homepage LCP element?",
+    "lh-home-cls": "What is the CLS of the homepage?",
+    "lh-home-tbt": "What's the total blocking time on the homepage?",
+    "lh-agentic": "Is EnergyX visible to AI agents?"
+  },
+  "trace": {
+    "understood": "What I understood",
+    "matched": "What I matched",
+    "did": "What I did"
+  },
+  "clarify": {
+    "intent": {
+      "title": "I can't tell whether you want an answer or a draft.",
+      "body": "Your words could mean either, and I would rather ask than guess. Pick one:",
+      "understood": "Your message names a post or a subject but doesn't say whether to write it or to answer a question about it.",
+      "did": "Nothing yet. I haven't written or answered anything.",
+      "draftLead": "Have me write a LinkedIn post:",
+      "answerLead": "Or ask a question about the facts:"
+    },
+    "ambiguous": {
+      "title": "That question fits several facts equally well.",
+      "body": "I can't tell which one you mean, and picking for you would be a guess. Choose one:",
+      "understood": "A question about published information, with too few details to single out one fact.",
+      "did": "Nothing yet. I haven't answered, and I haven't counted this as a gap in the published facts.",
+      "lead": "Which did you mean?"
+    }
+  },
+  "draft": {
+    "maxFacts": 5,
+    "requestTemplate": "Write a LinkedIn post about {topic}",
+    "topics": {
+      "black-giant": {
+        "label": "Black Giant",
+        "factIds": [
+          "ex-bg-location",
+          "ex-bg-acres",
+          "ex-bg-capacity",
+          "ex-bg-insitu"
+        ]
+      },
+      "water": {
+        "label": "water use",
+        "factIds": [
+          "ex-water-dle",
+          "ex-water-conventional",
+          "ex-water-reduction"
+        ]
+      },
+      "dle": {
+        "label": "DLE",
+        "factIds": [
+          "ex-water-dle",
+          "ex-water-conventional",
+          "ex-water-reduction"
+        ]
+      },
+      "lonestar": {
+        "label": "Lonestar",
+        "factIds": [
+          "ex-lonestar-doe",
+          "ex-lonestar-target"
+        ]
+      },
+      "powder-hound": {
+        "label": "Powder Hound",
+        "factIds": [
+          "ex-ph-capacity"
+        ]
+      },
+      "battery-mecca": {
+        "label": "Battery Mecca",
+        "factIds": [
+          "ex-bm-target"
+        ]
+      },
+      "patents": {
+        "label": "patents",
+        "factIds": [
+          "ex-patents"
+        ]
+      },
+      "team": {
+        "label": "the team",
+        "factIds": [
+          "ex-team"
+        ]
+      },
+      "projects": {
+        "label": "projects",
+        "factIds": [
+          "ex-projects-count",
+          "ex-acres"
+        ]
+      }
+    },
+    "linkedin": {
+      "opening": "What EnergyX has published about {topic}:",
+      "closing": "Source: EnergyX's public pages."
+    },
+    "brand": {
+      "banned": [
+        "game-changing",
+        "game changer",
+        "revolutionary",
+        "revolutionize",
+        "breakthrough",
+        "cutting-edge",
+        "world-class",
+        "industry-leading",
+        "best-in-class",
+        "unprecedented",
+        "unrivalled",
+        "unrivaled",
+        "disrupt",
+        "disruptive",
+        "transformative",
+        "next-generation",
+        "first-ever",
+        "once in a generation",
+        "limitless",
+        "skyrocket",
+        "unlock",
+        "guaranteed",
+        "can't miss",
+        "don't miss"
+      ],
+      "preciseNouns": [
+        {
+          "noun": "Eni",
+          "use": "stake",
+          "pattern": "\\beni\\b[^.\\n]{0,60}?\\b(?:partner\\w*|deal|agreement|acquisition|acquired|backing|backed)\\b"
+        },
+        {
+          "noun": "Army",
+          "use": "conditional lease",
+          "pattern": "\\barmy\\b(?:(?!conditional)[^.\\n]){0,60}?\\b(?:lease|leases|contract|deal|award\\w*|customer|partner\\w*)\\b"
+        },
+        {
+          "noun": "Compass",
+          "use": "non-binding MOU",
+          "pattern": "\\bcompass\\b(?:(?!non-binding|mou)[^.\\n]){0,60}?\\b(?:agreement|contract|deal|partner\\w*|supply)\\b"
+        },
+        {
+          "noun": "Lonestar",
+          "use": "demonstration plant",
+          "pattern": "\\blonestar\\b(?:(?!demonstration)[^.\\n]){0,60}?\\b(?:commercial|full-scale|production)\\s+(?:plant|facility|operation)\\w*"
+        }
+      ],
+      "terminology": []
+    },
+    "result": {
+      "heading": "LinkedIn post, ready to edit",
+      "understoodPost": "You asked me to write a LinkedIn post.",
+      "understoodQuestion": "You asked whether a LinkedIn post could cover this, so I took it as a request to write one.",
+      "matched": "Subject: {topics}. The facts I used are listed under the post, each with its source.",
+      "did": "Wrote the post from those facts only. Every figure comes from the registry. I checked the text for forward-looking and promotional language and for the wording rules on partners and plants. I haven't published anything.",
+      "editLabel": "Draft post (editable)",
+      "editHint": "This is a draft to edit, not to publish as it stands. A person at EnergyX should review it first.",
+      "notice": "Unaffiliated demo: EnergyX has not seen or approved this draft.",
+      "figuresHeading": "Figures and sources in this post",
+      "ignored": "Left out of the draft: promotional wording in your request ({phrases}). The post states published facts only.",
+      "rejected": {
+        "heading": "A first draft was rejected",
+        "intro": "The first version failed a check, so it was not shown as the result. The version above was written from the same facts by the built-in template and passed every check.",
+        "wrote": "What the rejected draft said",
+        "wrong": "What was wrong with it",
+        "shipped": "What shipped instead: the post above."
+      }
+    },
+    "unsupported": {
+      "section": {
+        "title": "I can't write web page sections yet.",
+        "body": "Web page sections are the next thing being built. A LinkedIn post I can write now."
+      },
+      "investor": {
+        "title": "I deliberately don't write messages to investors.",
+        "body": "Emails, updates and newsletters to investors or shareholders are regulated communications. Their wording is a decision for people at EnergyX and its advisers, not for an assistant, so I left that out on purpose. I can write a LinkedIn post from published facts."
+      },
+      "other": {
+        "title": "I only write LinkedIn posts so far.",
+        "body": "I write one format: a LinkedIn post from published facts."
+      }
+    }
   }
 }

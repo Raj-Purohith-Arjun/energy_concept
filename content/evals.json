@@ -37,7 +37,7 @@
   "mutation": {
     "heading": "We break the guardrails on purpose, and check the tests notice (mutation testing)",
     "intro": "Every build switches each guardrail off, one at a time, and reruns every test question against the broken version. If nothing fails, the tests weren't really checking that guardrail. These three are the most telling.",
-    "highlights": ["prefilter-off", "refuse-all", "refuse-none"],
+    "highlights": ["prefilter-off", "refuse-all", "postcheck-off"],
     "failed": { "one": "test question fails", "other": "test questions fail" },
     "missed": "Not caught. No test checks this guardrail.",
     "full": {
@@ -56,11 +56,9 @@
       "category-off:comparison": "Rules for comparisons with other investments",
       "category-off:offering": "Rules for buying shares",
       "normalise-off": "Clean-up of disguised spelling: look-alike letters, spaced-out letters, digits for letters, typos",
-      "planned-check-off": "Refusing targets and estimates",
       "postcheck-off": "The number-and-source check on every answer",
       "output-check-off": "The refusal check run again over every answer's wording",
-      "refuse-all": "A gate that refuses everything",
-      "refuse-none": "A gate that refuses nothing"
+      "refuse-all": "A gate that refuses everything"
     },
     "groupCount": "{label}: {count}"
   },
@@ -84,11 +82,11 @@
     "guarantees": "Safety and guarantees",
     "comparison": "Comparisons with other investments",
     "offering": "Buying shares",
-    "planned-figure": "Targets and estimates",
     "adversarial": "Attempts to trick it",
     "answer": "Answerable questions",
     "must-not-refuse": "Questions it must still answer",
     "no-answer": "Questions it can't answer",
+    "draft": "Drafting and asking which you meant",
     "model-slot": "Model checks"
   },
 
@@ -157,7 +155,7 @@
   "other": {
     "heading": "Everything else it's tested on",
     "count": { "one": "{count} test question", "other": "{count} test questions" },
-    "intro": "Questions the registry can answer, with the exact facts expected, and questions it can't, where the right answer is to say so."
+    "intro": "Questions the registry can answer, with the exact facts expected; LinkedIn posts, with the exact facts each is written from, and requests where it asks which you meant; and questions it can't answer, where the right answer is to say so."
   },
 
   "table": {
@@ -169,10 +167,17 @@
     "empty": "(empty)",
     "refused": "Refused: {label}",
     "answered": "Answered: {facts}",
+    "drafted": "Drafted a LinkedIn post from: {facts}",
+    "clarified": {
+      "intent": "Asked whether to answer or to draft",
+      "ambiguous": "Asked which of several equal matches was meant"
+    },
     "noAnswer": {
       "no-match": "No sourced answer",
       "post-check": "Dropped by the number-and-source check",
       "language": "Declined: English only",
+      "draft": "Said it cannot write that format",
+      "draft-topic": "Said a post needs a topic it has facts for",
       "empty": "Asked to type a question",
       "too-long": "Declined: too long"
     }

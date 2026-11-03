@@ -8,7 +8,7 @@ import { variants } from "./normalize";
 // is cheap, a wrongful answer is the one outcome this project can't have.
 
 export interface PrefilterHit {
-  category: Exclude<RefusalCategory, "planned-figure">;
+  category: RefusalCategory;
   trigger: string;
 }
 
@@ -103,7 +103,9 @@ const RULES: Rule[] = [
   // --- Future timing --------------------------------------------------------
   re("future-timing", /\b(?:will|shall|gonna|going to|won'?t)\b(?! (?:you|u|ya)\b)/),
   re("future-timing", /\bwhen(?:'s| is| are| will| does| do| should| can| could| might)\b|\bwhat (?:year|date|month|quarter) (?:will|is|does|do|are)\b|\bhow (?:long|soon) (?:until|till|til|before|will)\b/),
-  re("future-timing", /\b(?:expect\w*|anticipat\w*|projected|projections?|projects? to|forecast\w*|outlook|guidance|targets?|targeting|planned|plans? (?:to|for)|roadmap|timeline|eta|upcoming|soon|eventually|future|someday|some day|predict\w*|prognos\w*|speculat\w*|likely to|likelihood|probability|odds)\b/),
+  // "planned", "target" and "plans for" are absent on purpose: asking for a plan
+  // EnergyX has published is answered (chipped and footnoted), not refused.
+  re("future-timing", /\b(?:expect\w*|anticipat\w*|projected|projections?|projects? to|forecast\w*|outlook|guidance|roadmap|timeline|eta|upcoming|soon|eventually|future|someday|some day|predict\w*|prognos\w*|speculat\w*|likely to|likelihood|probability|odds)\b/),
   re("future-timing", /\bnext (?:year|quarter|month|week|decade|phase|round|step|stage|milestone)\b|\bfrom now\b|\b(?:years?|months?) from\b|\bcoming (?:years?|months?|quarters?)\b|\bin (?:a|one|two|three|four|five|six|seven|eight|nine|ten|\d+|a few|few|several|some|the coming) (?:years?|months?|decades?|quarters?)\b/),
   re("future-timing", /\bby (?:the )?(?:end of )?(?:(?:19|20)\d{2}|next|this year)\b/),
   re("future-timing", /\b(?:start|begin|commence|first|commercial|full)\w* (?:production|operations?|output)\b|\bcome online\b|\bgo(?:es|ing)? live\b|\bbe(?:come)? operational\b|\bbe completed\b|\bbreak\w* ground\b|\bfirst lithium\b|\bramp\w* up\b/),

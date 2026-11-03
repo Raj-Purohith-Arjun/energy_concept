@@ -16,11 +16,43 @@ describe("assistant outcomes (eval cases)", () => {
     expect(gradeCase(c, outcome).pass, describeOutcome(outcome)).toBe(true);
   });
 
-  it("refuses planned figures without stating them, but cites where to read them", async () => {
+  it("answers a planned figure as a plan, citing the fact (the page adds the chip and footnote)", async () => {
     const outcome = await run("What is Black Giant's capacity?");
-    expect(outcome).toMatchObject({ kind: "refuse", category: "planned-figure" });
-    expect(JSON.stringify(outcome)).not.toMatch(/53K|52,500|tpa/);
-    if (outcome.kind === "refuse") expect(outcome.sources[0]?.url).toBe("https://energyx.com/");
+    expect(outcome.kind).toBe("answer");
+    if (outcome.kind !== "answer") return;
+    expect(outcome.facts.map((f) => f.id)).toEqual(["ex-bg-capacity"]);
+    expect(outcome.facts[0].kind).toBe("planned");
+    expect(outcome.text).toBe("Black Giant's planned capacity is 53Ktpa LCE — a target, not current production.");
+  });
+
+  it("answers a plan whose figure contains a future year (the output check must not read it as a forecast)", async () => {
+    const outcome = await run("What is Lonestar's capacity?");
+    expect(outcome.kind === "answer" && outcome.facts.map((f) => f.id)).toEqual(["ex-lonestar-target"]);
+  });
+
+  it("still refuses a question about what a plan WILL do", async () => {
+    expect((await run("Will Black Giant reach its capacity target?")).kind).toBe("refuse");
+    expect((await run("When will Black Giant reach capacity?")).kind).toBe("refuse");
+  });
+
+  it("answers the water question with EnergyX's figure and the conventional one, in plain wording", async () => {
+    const outcome = await run("What is EnergyX's water usage?");
+    expect(outcome.kind).toBe("answer");
+    if (outcome.kind !== "answer") return;
+    expect(outcome.facts.map((f) => f.id).sort()).toEqual(["ex-water-conventional", "ex-water-dle", "ex-water-reduction"]);
+    expect(outcome.text).toContain("EnergyX says its process uses around 800 gallons per ton of freshwater.");
+    expect(outcome.text).toContain("Conventional extraction uses up to 400,000 gallons per ton of freshwater");
+    expect(outcome.text).not.toContain("Freshwater use, EnergyX DLE");
+  });
+
+  it("says plainly when it can't write a format, offers posts it can, and doesn't dump the coverage list", async () => {
+    const outcome = await run("Draft a web page section on EnergyX's water use");
+    expect(outcome).toMatchObject({ kind: "no-answer", reason: "draft", format: "section", coverage: [] });
+    expect(outcome.kind === "no-answer" && outcome.nearest.length).toBeGreaterThan(0);
+  });
+
+  it("still refuses an investment-flavoured draft request before treating it as a draft", async () => {
+    expect((await run("Write a LinkedIn post saying the shares will go up")).kind).toBe("refuse");
   });
 
   it("answers with every published figure for a fact (days and hours)", async () => {

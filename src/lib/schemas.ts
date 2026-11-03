@@ -153,15 +153,17 @@ export const REFUSAL_CATEGORIES = [
   "guarantees",
   "comparison",
   "offering",
-  "planned-figure",
 ] as const;
 export type RefusalCategory = (typeof REFUSAL_CATEGORIES)[number];
 
-export const NO_ANSWER_REASONS = ["no-match", "post-check", "language", "empty", "too-long"] as const;
+// "draft": a draft request for a format that isn't built; "draft-topic": a LinkedIn
+// post with no topic the registry can write about.
+export const NO_ANSWER_REASONS = ["no-match", "post-check", "language", "draft", "draft-topic", "empty", "too-long"] as const;
 export type NoAnswerReason = (typeof NO_ANSWER_REASONS)[number];
 
 const RefusalCopySchema = z.strictObject({ label: nonEmpty, title: nonEmpty, why: nonEmpty });
 const NoAnswerCopySchema = z.strictObject({ title: nonEmpty, body: nonEmpty });
+const TitleBodySchema = z.strictObject({ title: nonEmpty, body: nonEmpty });
 
 export const AssistantSchema = z.strictObject({
   $comment: comment.optional(),
@@ -194,11 +196,84 @@ export const AssistantSchema = z.strictObject({
       typeof NoAnswerCopySchema
     >),
     coverageLead: nonEmpty,
+    // Heading for the nearest-facts questions offered when nothing matched.
+    nearestLead: nonEmpty,
+    // Heading for the draft requests offered after a draft request it can't write.
+    draftLead: nonEmpty,
+    // Heading for the curated examples shown when nothing is near the question.
+    examplesLead: nonEmpty,
+    // Collapsed list of every topic covered, with a link to the full registry.
+    registryLink: z.strictObject({ label: nonEmpty, href: nonEmpty }),
+  }),
+  // The three lines every drafted or clarifying response opens with (CLAUDE.md §3).
+  trace: z.strictObject({ understood: nonEmpty, matched: nonEmpty, did: nonEmpty }),
+  // Asked back instead of guessed: which of two intents, or which of several equal matches.
+  clarify: z.strictObject({
+    intent: z.strictObject({
+      ...TitleBodySchema.shape,
+      understood: nonEmpty,
+      did: nonEmpty,
+      draftLead: nonEmpty,
+      answerLead: nonEmpty,
+    }),
+    ambiguous: z.strictObject({
+      ...TitleBodySchema.shape,
+      understood: nonEmpty,
+      did: nonEmpty,
+      lead: nonEmpty,
+    }),
+  }),
+  // Drafting (CLAUDE.md §4): LinkedIn post only so far.
+  draft: z.strictObject({
+    maxFacts: z.number().int().positive(),
+    // topic concept id -> the facts a post about it may use. Explicit on purpose:
+    // EnergyX's own published figures only; no funding or investor facts, and
+    // none of Raj's measurements of its website.
+    topics: z.record(kebabId, z.strictObject({ label: nonEmpty, factIds: z.array(kebabId).min(1) })),
+    requestTemplate: nonEmpty.includes("{topic}"),
+    linkedin: z.strictObject({ opening: nonEmpty.includes("{topic}"), closing: nonEmpty }),
+    brand: z.strictObject({
+      banned: z.array(nonEmpty),
+      // CLAUDE.md §2.3: a pattern matches a wrong upgrade of a precise noun.
+      preciseNouns: z.array(z.strictObject({ noun: nonEmpty, use: nonEmpty, pattern: nonEmpty })),
+      // TODO(content): approved terminology, from the CMO. Empty until supplied.
+      terminology: z.array(z.strictObject({ avoid: nonEmpty, use: nonEmpty })),
+    }),
+    result: z.strictObject({
+      heading: nonEmpty,
+      understoodPost: nonEmpty,
+      understoodQuestion: nonEmpty,
+      matched: nonEmpty.includes("{topics}"),
+      did: nonEmpty,
+      editLabel: nonEmpty,
+      editHint: nonEmpty,
+      notice: nonEmpty,
+      figuresHeading: nonEmpty,
+      ignored: nonEmpty.includes("{phrases}"),
+      rejected: z.strictObject({
+        heading: nonEmpty,
+        intro: nonEmpty,
+        wrote: nonEmpty,
+        wrong: nonEmpty,
+        shipped: nonEmpty,
+      }),
+    }),
+    // Formats it will not or does not yet write, each said out loud.
+    unsupported: z.strictObject({
+      section: TitleBodySchema,
+      investor: TitleBodySchema,
+      other: TitleBodySchema,
+    }),
   }),
   answer: z.strictObject({
     heading: nonEmpty,
     factLine: nonEmpty.includes("{label}").includes("{value}"),
     alsoLine: nonEmpty.includes("{value}"),
+    // Plans and estimates: the figure, said to be a plan or estimate, never a result.
+    plannedLine: nonEmpty.includes("{label}").includes("{value}"),
+    estimateLine: nonEmpty.includes("{label}").includes("{value}"),
+    // Hand-written wording that does not echo the label: factId -> sentence with {value}.
+    phrasings: z.record(kebabId, nonEmpty.includes("{value}")),
     sourcesHeading: nonEmpty,
     // Which composer wrote the wording; the template fallback is never silent.
     wordedByModel: nonEmpty.includes("{model}"),
@@ -208,6 +283,8 @@ export const AssistantSchema = z.strictObject({
   concepts: z.record(kebabId, z.array(nonEmpty).min(1)),
   factConcepts: z.record(kebabId, z.array(kebabId).min(1)),
   related: z.record(kebabId, z.array(kebabId).min(1)),
+  // factId -> a question that retrieves it; offered as a clickable example.
+  questions: z.record(kebabId, nonEmpty),
 });
 
 export type AssistantContent = z.infer<typeof AssistantSchema>;
@@ -424,6 +501,8 @@ export const EvalsSchema = z.strictObject({
     empty: nonEmpty,
     refused: nonEmpty.includes("{label}"),
     answered: nonEmpty.includes("{facts}"),
+    drafted: nonEmpty.includes("{facts}"),
+    clarified: z.strictObject({ intent: nonEmpty, ambiguous: nonEmpty }),
     noAnswer: z.strictObject(
       Object.fromEntries(NO_ANSWER_REASONS.map((r) => [r, nonEmpty])) as Record<NoAnswerReason, typeof nonEmpty>,
     ),

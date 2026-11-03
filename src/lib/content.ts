@@ -129,6 +129,9 @@ export function validateAssistant(
       if (!registry.has(id)) problems.push(`related: unknown fact id "${id}"`);
     }
   }
+  for (const factId of [...Object.keys(assistant.questions), ...Object.keys(assistant.answer.phrasings)]) {
+    if (!registry.has(factId)) problems.push(`questions/phrasings: unknown fact id "${factId}"`);
+  }
   if (problems.length > 0) throw new ContentError(`${file} is invalid:\n${problems.join("\n")}`);
   return assistant;
 }

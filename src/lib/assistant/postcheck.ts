@@ -1,4 +1,4 @@
-import type { Fact } from "@/lib/schemas";
+import { isForwardLooking, type Fact } from "@/lib/schemas";
 import type { ComposedAnswer } from "./compose";
 
 // Step 5: every number in a composed answer must appear in the retrieved
@@ -53,4 +53,15 @@ export function postcheck(answer: ComposedAnswer, facts: Fact[]): PostcheckResul
   if (badWords.length > 0) return { ok: false, reason: `untraced number words: ${badWords.join(", ")}` };
 
   return { ok: true };
+}
+
+// A plan's own figure ("50Ktpa LiOH by 2030") is published text, and the
+// pre-filter would read its year as a forecast. Remove exactly those strings,
+// from plans and estimates only, before the check; every other word is still
+// checked, and postcheck has already tied every number to a retrieved fact.
+export function withoutPublishedPlans(text: string, facts: Fact[]): string {
+  return facts
+    .filter(isForwardLooking)
+    .flatMap((f) => [f.value, ...f.alsoPublishedAs.map((a) => a.value)])
+    .reduce((out, value) => out.split(value).join(" "), text);
 }

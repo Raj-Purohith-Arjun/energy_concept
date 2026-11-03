@@ -26,7 +26,7 @@ export const metadata: Metadata = {
 export default async function EvalsPage() {
   const page = getEvals();
   const report = await evalReport();
-  const other = report.results.filter((g) => g.case.group === "answer" || g.case.group === "no-answer");
+  const other = report.results.filter((g) => g.case.group === "answer" || g.case.group === "draft" || g.case.group === "no-answer");
   return (
     <div className="mx-auto w-full max-w-5xl px-4 py-12 lg:px-8">
       <h1 className="text-3xl font-semibold tracking-tight">{page.heading}</h1>
