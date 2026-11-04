@@ -1,11 +1,21 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
 import { DraftPanel } from "@/components/assistant/Panels";
-import { basisContext, composePosts, mergePostStores, postFacts, postInstructions, postPrompt } from "@/lib/assistant/compose-posts";
+import {
+  basisContext,
+  composeOnly,
+  composePosts,
+  mergePostStores,
+  onlyTopic,
+  postFacts,
+  postInstructions,
+  postPrompt,
+} from "@/lib/assistant/compose-posts";
 import {
   checkPostStore,
   getPostStore,
   PostStoreSchema,
+  type PostStore,
   renderPost,
   storedDraftComposer,
   type PostParts,
@@ -180,6 +190,60 @@ describe("compose:posts batch", () => {
     expect(Object.keys(merged.posts)).toEqual(["black-giant"]);
     expect(merged.failed).toEqual({});
     expect(merged.rejections).toHaveLength(1);
+  });
+});
+
+describe("--only <topic>", () => {
+  const topics = assistant.draft.voice.postTopics;
+
+  it("rejects an unknown or missing topic with the list of valid ones", () => {
+    expect(() => onlyTopic(["--only", "weather"], topics)).toThrow(/Unknown topic "weather".*black-giant/);
+    expect(() => onlyTopic(["--only"], topics)).toThrow(/needs a topic/);
+    expect(() => onlyTopic(["--only", "--retry-failed"], topics)).toThrow(/needs a topic/);
+    expect(onlyTopic(["--only", "lonestar"], topics)).toBe("lonestar");
+    expect(onlyTopic([], topics)).toBeNull();
+  });
+
+  it("rewrites one topic and leaves every other post and the whole rejection log as they were", async () => {
+    // Two stored posts and a log entry; only black-giant is written again, by a stub (no network).
+    const bad = await compose({ ...BLACK_GIANT, hook: "It is a major project in {fact:ex-bg-location}." });
+    const lonestar = await compose(
+      {
+        hook: "EnergyX describes a grant of {fact:ex-lonestar-doe} for Lonestar.",
+        paragraphs: ["The company states a planned capacity of {fact:ex-lonestar-target}."],
+      },
+      ["lonestar"],
+    );
+    expect(Object.keys(lonestar.posts)).toEqual(["lonestar"]);
+    const previous: PostStore = {
+      model: "test-model",
+      generatedAt: "2026-11-03T00:00:00.000Z",
+      posts: lonestar.posts,
+      failed: {},
+      rejections: bad.rejections,
+    };
+    const before = JSON.stringify(previous);
+    const fetchStub = vi.fn<typeof fetch>(async () => reply(BLACK_GIANT));
+    const { store } = await composeOnly(previous, "black-giant", facts, assistant, forwardLooking, { ...settings, sleep, now: NOW, fetch: fetchStub });
+    expect(fetchStub).toHaveBeenCalledTimes(1);
+    expect(Object.keys(store.posts).sort()).toEqual(["black-giant", "lonestar"]);
+    expect(JSON.stringify(store.posts.lonestar)).toBe(JSON.stringify(previous.posts.lonestar));
+    expect(store.failed).toEqual(previous.failed);
+    expect(store.rejections).toEqual(previous.rejections); // nothing new rejected, nothing lost
+    expect(JSON.stringify(previous)).toBe(before); // the input is not mutated
+  });
+
+  it("keeps the log and adds the new rejection when the rewritten topic is refused again", async () => {
+    const previous = await compose(BLACK_GIANT);
+    const { store } = await composeOnly(previous, "black-giant", facts, assistant, forwardLooking, {
+      ...settings,
+      sleep,
+      now: NOW,
+      fetch: vi.fn<typeof fetch>(async () => reply({ ...BLACK_GIANT, hook: "It is a major project in {fact:ex-bg-location}." })),
+    });
+    expect(store.posts["black-giant"]).toBeUndefined(); // the template serves
+    expect(store.failed["black-giant"].reason).toMatch(/^rejected/);
+    expect(store.rejections.length).toBeGreaterThan(previous.rejections.length);
   });
 });
 

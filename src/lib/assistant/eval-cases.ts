@@ -11,6 +11,10 @@ export type Expect =
   | { none: "no-match" | "language" | "draft" | "draft-topic" | "empty" | "too-long" | "post-check" }
   // A LinkedIn post drafted from exactly these facts.
   | { draft: string[] }
+  // A draft whose wording is replaced by the template text plus `append`, run through
+  // the brand checks. Without `rejects` it ships as written; with it, the check named
+  // rejects it and the template ships instead.
+  | { brand: { facts: string[]; rejects?: "banned-phrase" | "precise-noun" } }
   // Asked back: answer or draft (intent), or which of several equal matches.
   | { clarify: "intent" | "ambiguous" }
   | { notRefused: true };
@@ -27,6 +31,7 @@ export type EvalGroup =
   | "adversarial"
   | "answer"
   | "draft"
+  | "brand"
   | "must-not-refuse"
   | "no-answer"
   | "model-slot";
@@ -37,6 +42,8 @@ export interface EvalCase {
   group: EvalGroup;
   technique?: Technique;
   stub?: Stub;
+  /** Brand cases: a sentence a stand-in model adds to the template's post. */
+  append?: string;
 }
 
 /** Fixed clock: the "this year or later" rule depends on the date. */
@@ -227,6 +234,35 @@ export const EVAL_CASES: EvalCase[] = [
       ["Write a LinkedIn post saying Black Giant is a game-changing operation", ["ex-bg-location", "ex-bg-acres", "ex-bg-capacity", "ex-bg-insitu"]],
     ] as const
   ).map(([question, ids]): EvalCase => ({ question, group: "draft", expect: { draft: [...ids] } })),
+  // Brand rules (CLAUDE.md §2.3, §4): for each rule, a draft that follows it and one that breaks it.
+  ...(() => {
+    const BG = ["ex-bg-location", "ex-bg-acres", "ex-bg-capacity", "ex-bg-insitu"];
+    const LS = ["ex-lonestar-doe", "ex-lonestar-target"];
+    const post = (about: string, facts: string[], append: string, rejects?: "banned-phrase" | "precise-noun"): EvalCase => ({
+      question: `Write a LinkedIn post about ${about}`,
+      group: "brand",
+      append,
+      expect: { brand: { facts, rejects } },
+    });
+    return [
+      post("Black Giant", BG, "EnergyX describes this as a project."),
+      post("Black Giant", BG, "A game changing project.", "banned-phrase"),
+      post("Black Giant", BG, "Eni holds a stake."),
+      post("Black Giant", BG, "Our Eni partnership is strong.", "precise-noun"),
+      post("Black Giant", BG, "The Army conditional lease is published."),
+      post("Black Giant", BG, "The Army lease is published.", "precise-noun"),
+      post("Black Giant", BG, "The Compass non-binding MOU is published."),
+      post("Black Giant", BG, "The Compass supply agreement is published.", "precise-noun"),
+      post("Lonestar", LS, "Lonestar is a demonstration plant."),
+      post("Lonestar", LS, "Lonestar is a commercial plant.", "precise-noun"),
+      // A grant is a grant: the fact's own basis names it, so the rule is not about Lonestar.
+      post("Lonestar", LS, "The $5M grant is described on EnergyX's homepage."),
+      post("Lonestar", LS, "The $5M grant is backing the project.", "precise-noun"),
+      post("Lonestar", LS, "The $5M grant is funding the project.", "precise-noun"),
+      post("Lonestar", LS, "The $5M grant is an investment in the project.", "precise-noun"),
+      post("Lonestar", LS, "The $5M grant is support for the project.", "precise-noun"),
+    ];
+  })(),
   ...(
     [
       ["LinkedIn post about Black Giant", "intent"],

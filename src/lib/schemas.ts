@@ -244,6 +244,8 @@ export const AssistantSchema = z.strictObject({
       banned: z.array(nonEmpty),
       // CLAUDE.md §2.3: a pattern matches a wrong upgrade of a precise noun.
       preciseNouns: z.array(z.strictObject({ noun: nonEmpty, use: nonEmpty, pattern: nonEmpty })),
+      // A fact whose basis names this noun ("grant") may not be described with the `banned` words in its own sentence.
+      grant: z.strictObject({ noun: nonEmpty, banned: z.array(nonEmpty).min(1) }),
       // TODO(content): approved terminology, from the CMO. Empty until supplied.
       terminology: z.array(z.strictObject({ avoid: nonEmpty, use: nonEmpty })),
     }),

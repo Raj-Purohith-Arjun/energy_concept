@@ -2,7 +2,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import { NoAnswerPanel } from "@/components/assistant/Panels";
 import type { DraftComposer } from "@/lib/assistant/draft";
-import { templateDraftComposer } from "@/lib/assistant/draft";
+import { checkDraft, templateDraftComposer } from "@/lib/assistant/draft";
 import { EVAL_NOW } from "@/lib/assistant/eval-cases";
 import { routeIntent } from "@/lib/assistant/intent";
 import { ask, type AssistantOutcome } from "@/lib/assistant/pipeline";
@@ -231,6 +231,26 @@ describe("what a post may be written from", () => {
     for (const n of assistant.draft.brand.preciseNouns) {
       expect(new RegExp(n.pattern, "u").test(correct[n.noun]), n.noun).toBe(false);
     }
+  });
+});
+
+describe("a grant is a grant (keyed off the fact's basis, not its id)", () => {
+  const brand = getAssistant().draft.brand;
+  const ctx = { brand, forwardLooking: getSite().forwardLooking, now: EVAL_NOW };
+  const base = getAllFacts().find((f) => f.id === "ex-lonestar-doe")!;
+  // Same shape, different id and wording: the rule must follow the word "grant" in the basis.
+  const other = { ...base, id: "x-other", label: "Other award", value: "$9M", alsoPublishedAs: [] };
+  const plain = { ...other, id: "x-plain", basis: "A one-off payment described on the page." };
+  const check = (fact: typeof base, text: string) =>
+    checkDraft({ text, citations: [fact.id], wordedBy: ["t"] }, [fact], ctx).filter((p) => p.rule === "precise-noun");
+
+  it("flags a banned word in the sentence carrying a grant's figure", () => {
+    expect(check(other, "Other award: $9M. The $9M is backing the work.")).toHaveLength(1);
+    expect(check(other, "The $9M was funded by a grant.")).toHaveLength(1);
+  });
+  it("leaves the word alone in another sentence, or for a fact that isn't a grant", () => {
+    expect(check(other, "Other award: $9M.\nWe support the team.")).toEqual([]);
+    expect(check(plain, "The $9M is backing the work.")).toEqual([]);
   });
 });
 

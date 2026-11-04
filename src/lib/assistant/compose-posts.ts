@@ -86,6 +86,29 @@ export function mergePostStores(previous: PostStore, rerun: PostStore): PostStor
   };
 }
 
+/** The value after `--only`, checked against the topics a post can be written for; null if the flag is absent. */
+export function onlyTopic(argv: string[], validTopics: string[]): string | null {
+  const at = argv.indexOf("--only");
+  if (at === -1) return null;
+  const topic = argv[at + 1];
+  if (!topic || topic.startsWith("--")) throw new Error(`--only needs a topic. Topics: ${validTopics.join(", ")}`);
+  if (!validTopics.includes(topic)) throw new Error(`Unknown topic "${topic}" for --only. Topics: ${validTopics.join(", ")}`);
+  return topic;
+}
+
+/** Writes one topic again and merges it into `previous`: other posts and the whole rejection log are kept as they are. */
+export async function composeOnly(
+  previous: PostStore,
+  topicId: string,
+  facts: Fact[],
+  assistant: AssistantContent,
+  forwardLooking: ForwardLookingCopy,
+  options: ComposePostsOptions,
+): Promise<{ store: PostStore; run: PostStore }> {
+  const run = await composePosts(facts, assistant, forwardLooking, { ...options, topicIds: [topicId] });
+  return { store: mergePostStores(previous, run), run };
+}
+
 export async function composePosts(
   facts: Fact[],
   assistant: AssistantContent,

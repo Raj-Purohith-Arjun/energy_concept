@@ -796,6 +796,7 @@
         "Do not use adjectives of scale or quality (major, huge, leading, key, significant). No questions, no calls to action, no hashtags, no emoji.",
         "Do not say what will, may, could or is expected to happen.",
         "Do not name partners, customers, investors, competitors or any company other than EnergyX.",
+        "When a fact's basis calls it a grant, the post must use the word \"grant\" for it and no synonym (not backing, funding, investment or support).",
         "Worked example, water:\nConventional lithium extraction uses {fact:ex-water-conventional}.\n\nEnergyX publishes {fact:ex-water-dle} for its own process — a reduction the company states as {fact:ex-water-reduction}.",
         "Worked example, Black Giant:\nEnergyX's Black Giant project sits at {fact:ex-bg-location}, across {fact:ex-bg-acres}.\n\nThe company has published a planned capacity of {fact:ex-bg-capacity}† and an in-situ resource estimate of {fact:ex-bg-insitu}†."
       ]
@@ -855,6 +856,10 @@
           "pattern": "\\blonestar\\b(?:(?!demonstration)[^.\\n]){0,60}?\\b(?:commercial|full-scale|production)\\s+(?:plant|facility|operation)\\w*"
         }
       ],
+      "grant": {
+        "noun": "grant",
+        "banned": ["backing", "funding", "investment", "support"]
+      },
       "terminology": []
     },
     "result": {

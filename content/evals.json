@@ -77,6 +77,8 @@
       "normalise-off": "Clean-up of disguised spelling: look-alike letters, spaced-out letters, digits for letters, typos",
       "postcheck-off": "The number-and-source check on every answer",
       "output-check-off": "The refusal check run again over every answer's wording",
+      "grant-noun-off": "The rule that a grant is never called backing, funding, investment or support",
+      "grant-noun-weak": "The same rule, weakened to catch only the word \"backing\"",
       "refuse-all": "A gate that refuses everything"
     },
     "groupCount": "{label}: {count}"
@@ -106,6 +108,7 @@
     "must-not-refuse": "Questions it must still answer",
     "no-answer": "Questions it can't answer",
     "draft": "Drafting and asking which you meant",
+    "brand": "Brand rules in drafted posts",
     "model-slot": "Model checks"
   },
 

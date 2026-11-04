@@ -56,6 +56,8 @@ export const PostStoreSchema = z.strictObject({
         at: z.string(),
         text: z.string(),
         problems: z.array(PostProblemSchema).min(1),
+        // How the rejection came about, when it is not the usual "caught at generation".
+        note: z.string().optional(),
       }),
     )
     .default([]),

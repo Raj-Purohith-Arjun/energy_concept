@@ -7,11 +7,13 @@
 //   pnpm compose:posts                  write every topic (replaces the posts)
 //   pnpm compose:posts --retry-failed   re-send only topics that failed or were
 //                                       refused; keeps reviewed posts
+//   pnpm compose:posts --only <topic>   write one topic again; every other post and
+//                                       the whole rejection log stay as they are
 // Either way the rejection log is kept: it is evidence, never discarded.
 import { readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import { composePosts, mergePostStores } from "../src/lib/assistant/compose-posts";
-import { PostStoreSchema } from "../src/lib/assistant/composed-posts";
+import { composeOnly, composePosts, mergePostStores, onlyTopic } from "../src/lib/assistant/compose-posts";
+import { PostStoreSchema, type PostStore } from "../src/lib/assistant/composed-posts";
 import { settingsFromEnv } from "../src/lib/assistant/compose-facts";
 import { getAllFacts, getAssistant, getSite } from "../src/lib/content";
 
@@ -36,15 +38,21 @@ async function main(): Promise<number> {
   }
   const assistant = getAssistant();
   const retryFailed = process.argv.includes("--retry-failed");
+  const only = onlyTopic(process.argv, assistant.draft.voice.postTopics);
+  if (only && retryFailed) throw new Error("Use --only or --retry-failed, not both.");
   const previous = PostStoreSchema.parse(JSON.parse(readFileSync(OUT, "utf8")));
   const topicIds = retryFailed ? assistant.draft.voice.postTopics.filter((id) => id in previous.failed) : undefined;
-  console.log(`Composing ${retryFailed ? `${topicIds?.length ?? 0} failed topics` : "every topic"} with ${settings.model}...`);
-  const run = await composePosts(getAllFacts(), assistant, getSite().forwardLooking, {
-    ...settings,
-    topicIds,
-    log: (line) => console.log(`  ${line}`),
-  });
-  const store = retryFailed ? mergePostStores(previous, run) : { ...run, rejections: [...previous.rejections, ...run.rejections] };
+  console.log(`Composing ${only ? `only ${only}` : retryFailed ? `${topicIds?.length ?? 0} failed topics` : "every topic"} with ${settings.model}...`);
+  const options = { ...settings, log: (line: string) => console.log(`  ${line}`) };
+  const forwardLooking = getSite().forwardLooking;
+  let run: PostStore;
+  let store: PostStore;
+  if (only) {
+    ({ run, store } = await composeOnly(previous, only, getAllFacts(), assistant, forwardLooking, options));
+  } else {
+    run = await composePosts(getAllFacts(), assistant, forwardLooking, { ...options, topicIds });
+    store = retryFailed ? mergePostStores(previous, run) : { ...run, rejections: [...previous.rejections, ...run.rejections] };
+  }
   writeFileSync(OUT, `${JSON.stringify({ $comment: COMMENT, ...store }, null, 2)}\n`);
 
   const ok = Object.values(run.posts);

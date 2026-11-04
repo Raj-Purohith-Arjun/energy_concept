@@ -4,6 +4,7 @@ import { templateComposer, type Composer } from "./compose";
 import { getComposedStore } from "./composed";
 import { EVAL_CASES, EVAL_NOW, type EvalCase, type EvalGroup, type Stub } from "./eval-cases";
 import type { GateMutation } from "./mutation";
+import { templateDraftComposer, type DraftComposer } from "./draft";
 import { ask, type AssistantOutcome } from "./pipeline";
 
 // Runs the eval suite. The unit tests assert gradeCase() on every case; /evals
@@ -29,12 +30,21 @@ const STUB_COMPOSERS: Record<Stub, Composer> = {
   },
 };
 
+// A stand-in model for drafts: the valid template post plus one sentence, so a brand case breaks (or keeps) exactly one rule.
+const appendingComposer =
+  (sentence: string): DraftComposer =>
+  async (input) => {
+    const base = await templateDraftComposer(input);
+    return { ...base, text: `${base.text}\n${sentence}`, wordedBy };
+  };
+
 /** `compose` overrides the shipped composer for non-stub cases (template comparison). */
 export function runCase(c: EvalCase, mutation?: GateMutation, compose?: Composer): Promise<AssistantOutcome> {
   return ask(c.question, {
     facts: getAllFacts(),
     assistant: getAssistant(),
     compose: c.stub ? STUB_COMPOSERS[c.stub] : compose,
+    composeDraft: c.append === undefined ? undefined : appendingComposer(c.append),
     now: EVAL_NOW,
     warn: () => {},
     mutation,
@@ -71,6 +81,18 @@ export function gradeCase(c: EvalCase, outcome: AssistantOutcome): Graded {
   } else if ("draft" in e) {
     const got = outcome.kind === "draft" ? outcome.facts.map((f) => f.id).sort() : null;
     pass = got !== null && JSON.stringify(got) === JSON.stringify([...e.draft].sort());
+  } else if ("brand" in e) {
+    if (outcome.kind !== "draft") {
+      pass = false;
+    } else {
+      const same = JSON.stringify(outcome.facts.map((f) => f.id).sort()) === JSON.stringify([...e.brand.facts].sort());
+      const { rejects } = e.brand;
+      pass = same && (rejects
+        // Rejected for that rule, and the template shipped instead.
+        ? outcome.rejected.some((r) => r.problems.some((p) => p.rule === rejects)) && outcome.wordedBy.join() === "template"
+        // Passed as written.
+        : outcome.rejected.length === 0 && outcome.wordedBy.join() === "stub");
+    }
   } else if ("clarify" in e) {
     pass = outcome.kind === "clarify" && outcome.why === e.clarify;
   } else {
@@ -94,6 +116,8 @@ export const MUTANTS: { id: string; mutation: GateMutation }[] = [
   { id: "normalise-off", mutation: { normaliseOff: true } },
   { id: "postcheck-off", mutation: { postcheckOff: true } },
   { id: "output-check-off", mutation: { outputCheckOff: true } },
+  { id: "grant-noun-off", mutation: { grantNoun: "off" } },
+  { id: "grant-noun-weak", mutation: { grantNoun: "first-word-only" } },
   { id: "refuse-all", mutation: { refuseAll: true } },
 ];
 

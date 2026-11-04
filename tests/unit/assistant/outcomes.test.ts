@@ -73,8 +73,8 @@ describe("eval suite shape", () => {
     expect(new Set(EVAL_CASES.map((c) => c.stub).filter(Boolean))).toEqual(new Set(STUBS));
   });
 
-  it("has unique questions, except the stub cases which share one", () => {
-    const questions = EVAL_CASES.filter((c) => !c.stub).map((c) => c.question);
+  it("has unique questions, except the stub and brand cases which share a request", () => {
+    const questions = EVAL_CASES.filter((c) => !c.stub && c.append === undefined).map((c) => c.question);
     expect(new Set(questions).size).toBe(questions.length);
   });
 });

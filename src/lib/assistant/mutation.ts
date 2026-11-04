@@ -15,6 +15,8 @@ export interface GateMutation {
   postcheckOff?: boolean;
   /** Running the refusal pre-filter over composed answer text. */
   outputCheckOff?: boolean;
+  /** The grant-noun draft check: removed ("off"), or weakened to catch only the first banned word. */
+  grantNoun?: "off" | "first-word-only";
   /** Replace the gate with one that refuses every question. */
   refuseAll?: boolean;
 }

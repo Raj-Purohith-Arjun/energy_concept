@@ -105,6 +105,37 @@ function brandProblems(text: string, brand: AssistantContent["draft"]["brand"]):
   ];
 }
 
+// "backing" -> backing|backed, "support" -> support|supports|supported|supporting.
+function wordForms(word: string): RegExp {
+  const w = escapeRegExp(baseNormalize(word));
+  const forms = word.endsWith("ing") ? `${escapeRegExp(baseNormalize(word.slice(0, -3)))}(?:ing|ed)` : `${w}(?:s|ed|ing)?`;
+  return regex(`(?<![\\p{L}\\p{N}])${forms}(?![\\p{L}\\p{N}])`, "u");
+}
+
+/**
+ * CLAUDE.md §2.3: a grant is a grant. The noun comes from the fact's own basis, not
+ * from a fact id: any cited fact whose basis says "grant" may not be described as
+ * backing, funding, investment or support in the sentence that carries its figure.
+ */
+function grantProblems(text: string, cited: Fact[], brand: AssistantContent["draft"]["brand"], mode: GateMutation["grantNoun"]): DraftProblem[] {
+  if (mode === "off") return [];
+  const { noun, banned } = brand.grant;
+  const words = mode === "first-word-only" ? banned.slice(0, 1) : banned;
+  const nounRe = regex(`(?<![\\p{L}\\p{N}])${escapeRegExp(noun)}s?(?![\\p{L}\\p{N}])`, "iu");
+  // Sentence boundaries, not the "." inside "9.8M".
+  const units = text.split(/\n|(?<=[.!?])\s+/).map((u) => baseNormalize(u));
+  const problems: DraftProblem[] = [];
+  for (const fact of cited.filter((f) => nounRe.test(f.basis))) {
+    const mine = [fact.label, fact.value, ...fact.alsoPublishedAs.map((a) => a.value)].map((s) => baseNormalize(s));
+    for (const unit of units.filter((u) => mine.some((m) => u.includes(m)))) {
+      for (const word of words.filter((w) => wordForms(w).test(unit))) {
+        problems.push({ rule: "precise-noun", detail: `"${fact.label}" is a ${noun}; don't call it "${word}"` });
+      }
+    }
+  }
+  return problems;
+}
+
 export interface DraftCheckContext {
   brand: AssistantContent["draft"]["brand"];
   forwardLooking: ForwardLookingCopy;
@@ -145,6 +176,7 @@ export function checkDraft(composed: ComposedAnswer, facts: Fact[], ctx: DraftCh
   }
 
   problems.push(...brandProblems(composed.text, ctx.brand));
+  problems.push(...grantProblems(composed.text, facts.filter((f) => composed.citations.includes(f.id)), ctx.brand, mutation.grantNoun));
   return problems;
 }
 

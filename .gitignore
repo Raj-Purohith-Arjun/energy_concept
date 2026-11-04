@@ -49,3 +49,4 @@ next-env.d.ts
 
 # assistant log of unanswered questions (written locally by the demo)
 /data/unanswered.jsonl
+/data/composed-posts.backup-*.json

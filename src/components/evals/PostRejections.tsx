@@ -16,8 +16,11 @@ export async function PostRejections() {
     getPostStore().rejections.map(async (rej) => {
       const topic = assistant.draft.topics[rej.topicId];
       const pool = topic ? draftPool([rej.topicId], facts, assistant).slice(0, assistant.draft.maxFacts) : [];
+      // What readers get for this topic today: a stored post that passes every check, else the template.
+      const served = getPostStore().accepted.get(rej.topicId)?.text;
       const shipped =
-        pool.length > 0
+        served ??
+        (pool.length > 0
           ? (
               await templateDraftComposer({
                 facts: pool,
@@ -27,7 +30,7 @@ export async function PostRejections() {
                 forwardLooking: getSite().forwardLooking,
               })
             ).text
-          : "";
+          : "");
       return { ...rej, label: topic?.label ?? rej.topicId, shipped };
     }),
   );
@@ -49,6 +52,7 @@ export async function PostRejections() {
           <article key={`${row.topicId}-${row.at}-${row.text}`} data-post-rejection={row.topicId} className="border-l-4 border-current/30 pl-4">
             <h3 className="font-semibold">{row.label}</h3>
             <p className="text-sm opacity-80">{fill(r.writtenBy, { model: row.model })}</p>
+            {row.note && <p className="mt-2 max-w-3xl text-sm font-semibold leading-6">{row.note}</p>}
             <dl className="mt-2 grid gap-2 text-sm leading-6 sm:grid-cols-[12rem_1fr]">
               <dt className="font-semibold">{r.columns.wrote}</dt>
               <dd>
