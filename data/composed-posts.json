@@ -153,19 +153,11 @@
   },
   "failed": {
     "lonestar": {
-      "reason": "HTTP 503",
+      "reason": "rejected: \"Lonestar DOE grant\" is a grant; don't call it \"backing\"",
       "attempts": [
         {
-          "status": "503",
-          "ms": 1203
-        },
-        {
-          "status": "503",
-          "ms": 2476
-        },
-        {
-          "status": "503",
-          "ms": 2650
+          "status": "200",
+          "ms": 15282
         }
       ]
     }
@@ -219,6 +211,18 @@
         }
       ],
       "note": "This post was in the stored file and was caught by a check added after it was stored (the grant-noun rule), not at generation."
+    },
+    {
+      "topicId": "lonestar",
+      "model": "gemini-3.5-flash",
+      "at": "2026-11-04T03:24:06.537Z",
+      "text": "EnergyX describes its Lonestar project stage in Texarkana, Texas.\n\nEnergyX describes a grant of $5M backing the Lonestar project in the Smackover region.\n\nThe company publishes a planned capacity target of 50Ktpa LiOH by 2030† for lithium hydroxide.\n\nSource: EnergyX's public pages.\n\n† Planned and estimated figures describe goals or projections. They may change, or may not happen. Each one links to the page it was taken from.",
+      "problems": [
+        {
+          "rule": "precise-noun",
+          "detail": "\"Lonestar DOE grant\" is a grant; don't call it \"backing\""
+        }
+      ]
     }
   ]
 }
