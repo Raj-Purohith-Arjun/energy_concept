@@ -440,6 +440,51 @@
       "fcp",
       "first contentful paint",
       "first paint"
+    ],
+    "javascript": [
+      "javascript",
+      "first-load js",
+      "first load js",
+      "script size",
+      "script weight",
+      "js bundle",
+      "bundle"
+    ],
+    "facts-page": [
+      "facts page"
+    ],
+    "findings-page": [
+      "findings page"
+    ],
+    "gaps-page": [
+      "gaps page"
+    ],
+    "evals-page": [
+      "evals page"
+    ],
+    "framework": [
+      "react",
+      "next.js",
+      "nextjs",
+      "framework",
+      "app router"
+    ],
+    "own-code": [
+      "own code",
+      "app code",
+      "our code",
+      "site's code"
+    ],
+    "extra": [
+      "extra",
+      "additional",
+      "only the black giant page loads"
+    ],
+    "budget": [
+      "budget",
+      "headroom",
+      "spare",
+      "margin"
     ]
   },
   "factConcepts": {
@@ -605,6 +650,58 @@
       "black-giant",
       "payload"
     ],
+    "demo-js-home": [
+      "demo",
+      "homepage",
+      "javascript"
+    ],
+    "demo-js-black-giant": [
+      "demo",
+      "black-giant",
+      "javascript"
+    ],
+    "demo-js-facts": [
+      "demo",
+      "facts-page",
+      "javascript"
+    ],
+    "demo-js-findings": [
+      "demo",
+      "findings-page",
+      "javascript"
+    ],
+    "demo-js-gaps": [
+      "demo",
+      "gaps-page",
+      "javascript"
+    ],
+    "demo-js-evals": [
+      "demo",
+      "evals-page",
+      "javascript"
+    ],
+    "demo-js-framework-share": [
+      "demo",
+      "javascript",
+      "framework"
+    ],
+    "demo-js-own-chunk-share": [
+      "demo",
+      "javascript",
+      "own-code"
+    ],
+    "demo-js-bg-only-chunk": [
+      "demo",
+      "black-giant",
+      "javascript",
+      "extra"
+    ],
+    "demo-js-bg-headroom": [
+      "demo",
+      "black-giant",
+      "javascript",
+      "budget"
+    ],
     "lh-home-second-video": [
       "homepage",
       "video",
@@ -675,6 +772,16 @@
     "demo-bg-cls": "What is the demo's CLS for Black Giant?",
     "demo-bg-tbt": "What is the demo's total blocking time for Black Giant?",
     "demo-bg-weight": "How heavy is the demo's Black Giant page?",
+    "demo-js-home": "How much JavaScript does the demo's home page load?",
+    "demo-js-black-giant": "How much JavaScript does the demo's Black Giant page load?",
+    "demo-js-facts": "How much JavaScript does the demo's facts page load?",
+    "demo-js-findings": "How much JavaScript does the demo's findings page load?",
+    "demo-js-gaps": "How much JavaScript does the demo's gaps page load?",
+    "demo-js-evals": "How much JavaScript does the demo's evals page load?",
+    "demo-js-framework-share": "How much of the demo's JavaScript is the React framework?",
+    "demo-js-own-chunk-share": "How much of the demo's JavaScript is its own code?",
+    "demo-js-bg-only-chunk": "How much extra JavaScript does the demo's Black Giant page load?",
+    "demo-js-bg-headroom": "How much JavaScript budget headroom does the demo's Black Giant page have?",
     "lh-home-weight": "What is the homepage payload?",
     "lh-home-box": "How much of the homepage comes from Box?",
     "lh-home-second-video": "How big is the second video on the homepage?",

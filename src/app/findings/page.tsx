@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { BeforeAfter } from "@/components/findings/BeforeAfter";
+import { BundleWeight } from "@/components/findings/BundleWeight";
 import { Caveats } from "@/components/findings/Caveats";
 import { FirstWeek } from "@/components/findings/FirstWeek";
 import { LoadTimeline } from "@/components/findings/LoadTimeline";
@@ -31,6 +32,7 @@ export default function FindingsPage() {
       <LoadTimeline />
       <PayloadBreakdown />
       <BeforeAfter />
+      <BundleWeight />
       <Caveats />
       <RegistryFindings />
       <FirstWeek />

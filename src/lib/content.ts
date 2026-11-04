@@ -217,6 +217,10 @@ export function validateFindings(
       }
     }
   }
+  for (const route of findings.bundle.routes) {
+    const fact = check(route.fact, `bundle "${route.label}"`);
+    if (fact && fact.numeric === undefined) problems.push(`bundle fact "${route.fact}" needs a numeric`);
+  }
   for (const row of findings.comparison.rows) {
     for (const ref of [row.before, row.after]) if (!isTodo(ref)) check(ref, `comparison "${row.label}"`);
   }

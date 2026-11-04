@@ -391,6 +391,20 @@ export const FindingsSchema = z.strictObject({
     rows: z.array(z.strictObject({ label: nonEmpty, before: factRef, after: factRef })).min(1),
     method: nonEmpty,
   }),
+  // Local measurements of this demo's first-load JavaScript, kept apart from
+  // the deployed Lighthouse figures above. Figures are {fact:} tokens or ids.
+  bundle: z.strictObject({
+    heading: nonEmpty,
+    verdict: nonEmpty,
+    method: nonEmpty,
+    routesLabel: nonEmpty,
+    routes: z.array(z.strictObject({ label: nonEmpty, fact: kebabId })).min(1),
+    detailSummary: nonEmpty,
+    detail: z.array(nonEmpty).min(1),
+    // The per-route list shows values only; the shared basis is printed once.
+    basisHeading: nonEmpty,
+    factsLink: nonEmpty,
+  }),
   caveats: z.strictObject({ heading: nonEmpty, count: countLabel, points: z.array(nonEmpty).min(1) }),
   registry: z.strictObject({
     heading: nonEmpty,

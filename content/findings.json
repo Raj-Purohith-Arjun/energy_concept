@@ -88,6 +88,29 @@
     "method": "Both columns use the same settings: Lighthouse 13.5.0, mobile, emulated Moto G Power on Slow 4G throttling, first visit. Each figure links to its report."
   },
 
+  "bundle": {
+    "heading": "How much JavaScript this demo ships",
+    "verdict": "Every page of this demo loads about the same amount of JavaScript: {fact:demo-js-home} on the home page and {fact:demo-js-black-giant} on the Black Giant page, the heaviest. Both are inside the project's first-load budget. The Black Giant page has {fact:demo-js-bg-headroom} to spare.",
+    "method": "These are local measurements: a production build served on a laptop with next start. They are not measurements of the deployed site. The October Lighthouse figures for energyx.com and for this site, used elsewhere on this page, are separate measurements of deployed pages, made with a different tool.",
+    "routesLabel": "First-load JavaScript by page, compressed",
+    "routes": [
+      { "label": "Home page", "fact": "demo-js-home" },
+      { "label": "Black Giant page", "fact": "demo-js-black-giant" },
+      { "label": "Facts", "fact": "demo-js-facts" },
+      { "label": "Findings", "fact": "demo-js-findings" },
+      { "label": "Gaps", "fact": "demo-js-gaps" },
+      { "label": "Evals", "fact": "demo-js-evals" }
+    ],
+    "detailSummary": "How it was measured, what is in it, and what we left alone",
+    "basisHeading": "How the figures in the list were measured",
+    "factsLink": "Source and approval state for each figure are on the facts page.",
+    "detail": [
+      "About {fact:demo-js-framework-share} of it is React DOM and the Next.js app-router client: the framework every page needs before any of this site's own code runs. The one script that is purely this site's own code is about {fact:demo-js-own-chunk-share}. That is a floor, not a total: the mobile menu and the hero video share files with framework code and were not separated out. Files were attributed by the library they contain, not module by module.",
+      "The Black Giant page loads one script the other pages do not, {fact:demo-js-bg-only-chunk}. It holds next/image and the hero video player. How the two split was not measured.",
+      "We considered replacing next/image with a plain image tag to remove it, and declined. The Black Giant page is inside the budget, and its image is the largest-contentful-paint element, the part that decides how fast the page feels. Changing how it loads would put that measured load time at risk to recover bytes the budget does not ask for. The margin is thin, so this is revisited if the page grows."
+    ]
+  },
+
   "caveats": {
     "heading": "What these numbers do not show",
     "count": { "one": "{count} caveat", "other": "{count} caveats" },
