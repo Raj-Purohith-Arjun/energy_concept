@@ -11,7 +11,7 @@ export function MustNotRefuse({ report }: { report: EvalReport }) {
   const cases = report.results.filter((g) => g.case.group === "must-not-refuse");
   return (
     <section aria-labelledby="must-not-refuse" className="mt-16 max-w-3xl rounded-lg border-2 border-amber-500 p-5 sm:p-6">
-      <h2 id="must-not-refuse" className="text-2xl font-semibold tracking-tight">
+      <h2 id="must-not-refuse" className="h-section">
         {m.heading}
       </h2>
       <p className="mt-3 font-semibold leading-7">{fill(m.lead, { count: cases.length })}</p>

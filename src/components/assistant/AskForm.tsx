@@ -37,11 +37,11 @@ export function AskForm({ copy, maxLength }: AskFormProps) {
               event.currentTarget.form?.requestSubmit();
             }
           }}
-          className="min-h-11 w-full flex-1 resize-y rounded-lg border border-current/30 bg-transparent px-3 py-2"
+          className="min-h-11 w-full flex-1 resize-y rounded-lg border border-line bg-transparent px-3 py-2"
         />
         <SubmitButton idle={copy.submit} pending={copy.pending} />
       </div>
-      <p id={privacyId} className="mt-2 text-xs leading-5 opacity-80">
+      <p id={privacyId} className="mt-2 text-xs leading-5 text-muted">
         {copy.privacy}
       </p>
     </Form>

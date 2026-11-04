@@ -10,7 +10,7 @@ import { HeroVideo } from "./HeroVideo";
 export function Hero() {
   const { heading, lead, poster: posterCopy, placeholderLabel, video } = getBlackGiant();
   return (
-    <section className="relative isolate h-[60svh] max-h-[44rem] min-h-80 overflow-hidden bg-neutral-950 text-white">
+    <section className="relative isolate h-[52svh] max-h-[44rem] min-h-80 sm:h-[60svh] overflow-hidden bg-neutral-950 text-white">
       <Image
         src={poster}
         alt={posterCopy.alt}
@@ -26,7 +26,7 @@ export function Hero() {
         {placeholderLabel}
       </p>
       <div className="relative z-10 mx-auto flex h-full max-w-5xl flex-col justify-end px-4 pb-16 lg:px-8">
-        <h1 className="text-4xl font-semibold tracking-tight sm:text-6xl">{heading}</h1>
+        <h1 className="text-3xl font-semibold tracking-tight sm:text-6xl">{heading}</h1>
         <p className="mt-3 max-w-2xl leading-7 text-white/90">{lead}</p>
       </div>
     </section>

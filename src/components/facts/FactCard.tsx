@@ -20,14 +20,14 @@ export function FactCard({ fact }: { fact: Fact }) {
   // The figure the source page states leads; an inferred one follows, labelled.
   const [lead, ...others] = orderedFigures(fact);
   return (
-    <article aria-labelledby={headingId} className="rounded-lg border border-current/15 p-5">
-      <h3 id={headingId} className="text-sm font-medium opacity-80">
+    <article aria-labelledby={headingId} className="rounded-lg border border-line p-5">
+      <h3 id={headingId} className="text-sm font-medium text-muted">
         {fact.label}
       </h3>
       <p className="mt-1 text-2xl">
         <FigureValue fact={fact} figure={lead} />
         {others.map((figure) => (
-          <span key={figure.value} className="ml-3 text-base opacity-80">
+          <span key={figure.value} className="ml-3 text-base text-muted">
             {ui.alsoPublished} <FigureValue fact={fact} figure={figure} />
             {figure.basisSource === "inferred" && ` (${ui.inferred})`}
           </span>

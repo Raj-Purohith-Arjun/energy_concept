@@ -13,7 +13,7 @@ export function EvalVerdict({ report }: { report: EvalReport }) {
     { value: rate, label: v.passRate },
   ];
   return (
-    <section aria-labelledby="eval-verdict" className="mt-16 rounded-lg border-2 border-current/25 p-5 sm:p-6">
+    <section aria-labelledby="eval-verdict" className="mt-16 rounded-lg border-2 border-line p-5 sm:p-6">
       <h2 id="eval-verdict" className="text-sm font-semibold uppercase tracking-wide">
         {v.heading}
       </h2>

@@ -30,8 +30,8 @@ export default async function EvalsPage() {
   const other = report.results.filter((g) => g.case.group === "answer" || g.case.group === "draft" || g.case.group === "no-answer");
   return (
     <div className="mx-auto w-full max-w-5xl px-4 py-12 lg:px-8">
-      <h1 className="text-3xl font-semibold tracking-tight">{page.heading}</h1>
-      <p className="mt-3 max-w-3xl leading-7">{page.intro}</p>
+      <h1 className="h-page">{page.heading}</h1>
+      <p className="verdict-lead mt-3 max-w-3xl">{page.intro}</p>
       <TryIt report={report} />
       <Rejections />
       <PostRejections />
@@ -44,7 +44,7 @@ export default async function EvalsPage() {
       <ModelSlot report={report} />
       <Composer report={report} />
       <Collapsible headingId="other-cases" heading={page.other.heading} note={plural(other.length, page.other.count)}>
-        <p className="mt-3 max-w-3xl leading-7">{page.other.intro}</p>
+        <p className="verdict-lead mt-3 max-w-3xl">{page.other.intro}</p>
         <CaseTable rows={other} />
       </Collapsible>
     </div>

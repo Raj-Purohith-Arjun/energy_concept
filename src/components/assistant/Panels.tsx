@@ -22,7 +22,7 @@ export function wordedByLine(wordedBy: string[]): string {
 
 function YouAsked({ question }: { question: string }) {
   return (
-    <p className="text-sm opacity-80">
+    <p className="text-sm text-muted">
       {getAssistant().youAsked}: <q>{question}</q>
     </p>
   );
@@ -97,7 +97,7 @@ export function NoAnswerPanel({ outcome, question }: { outcome: Of<"no-answer">;
   const suggestions = nearby.length > 0 ? nearby : curated;
   const lead = draftReason ? noAnswer.draftLead : nearby.length > 0 ? noAnswer.nearestLead : noAnswer.examplesLead;
   return (
-    <article aria-labelledby="assistant-result" className="rounded-lg border border-current/20 p-5 leading-7">
+    <article aria-labelledby="assistant-result" className="rounded-lg border border-line p-5 leading-7">
       {question && <YouAsked question={question} />}
       <h2 id="assistant-result" className="mt-1 text-xl font-semibold">
         {copy.title}
@@ -175,7 +175,7 @@ function Citation({ fact }: { fact: Fact }) {
   // The stated figure leads; an inferred one follows with its own basis.
   const [lead, ...others] = orderedFigures(fact);
   return (
-    <li className="rounded-lg border border-current/15 p-4 text-sm leading-6">
+    <li className="rounded-lg border border-line p-4 text-sm leading-6">
       <p className="font-medium">{fact.label}</p>
       <p className="text-lg">
         <FigureValue fact={fact} figure={lead} />
@@ -185,7 +185,7 @@ function Citation({ fact }: { fact: Fact }) {
         <BasisText basis={lead.basis} basisSource={lead.basisSource} />
       </p>
       {others.map((figure) => (
-        <p key={figure.value + figure.url} className="mt-2 border-l-2 border-current/20 pl-3">
+        <p key={figure.value + figure.url} className="mt-2 border-l-2 border-line pl-3">
           <span className="font-semibold">{ui.alsoPublished}: </span>
           <FigureValue fact={fact} figure={figure} />
           {" — "}
@@ -193,7 +193,7 @@ function Citation({ fact }: { fact: Fact }) {
           <SourceLink url={figure.url} title={figure.title} />
         </p>
       ))}
-      <p className="mt-2 opacity-80">
+      <p className="mt-2 text-muted">
         {ui.kinds[fact.kind]} · {fact.owner} · <SourceLink url={fact.source.url} title={fact.source.title} /> ·{" "}
         {ui.accessed} <IsoDate iso={fact.source.accessed} /> · <ApprovalState approvedAt={fact.approvedAt} />
       </p>
@@ -204,7 +204,7 @@ function Citation({ fact }: { fact: Fact }) {
 export function AnswerPanel({ outcome, question }: { outcome: Of<"answer">; question: string }) {
   const { answer } = getAssistant();
   return (
-    <article aria-labelledby="assistant-result" className="rounded-lg border border-current/20 p-5 leading-7">
+    <article aria-labelledby="assistant-result" className="rounded-lg border border-line p-5 leading-7">
       <YouAsked question={question} />
       <h2 id="assistant-result" className="mt-1 text-xl font-semibold">
         {answer.heading}
@@ -217,7 +217,7 @@ export function AnswerPanel({ outcome, question }: { outcome: Of<"answer">; ques
       <p className="mt-3 text-sm" data-worded-by={outcome.wordedBy.join(" ")}>
         {wordedByLine(outcome.wordedBy)}
       </p>
-      <h3 className="mt-5 text-sm font-semibold tracking-wide uppercase opacity-80">{answer.sourcesHeading}</h3>
+      <h3 className="mt-5 text-sm font-semibold tracking-wide uppercase text-muted">{answer.sourcesHeading}</h3>
       <ul className="mt-2 grid gap-3">
         {outcome.facts.map((fact) => (
           <Citation key={fact.id} fact={fact} />
@@ -232,7 +232,7 @@ export function DraftPanel({ outcome, question }: { outcome: Of<"draft">; questi
   const { result } = draft;
   const { rejected } = result;
   return (
-    <article aria-labelledby="assistant-result" className="rounded-lg border border-current/20 p-5 leading-7">
+    <article aria-labelledby="assistant-result" className="rounded-lg border border-line p-5 leading-7">
       <YouAsked question={question} />
       <h2 id="assistant-result" className="mt-1 text-xl font-semibold">
         {result.heading}
@@ -257,7 +257,7 @@ export function DraftPanel({ outcome, question }: { outcome: Of<"draft">; questi
         id="draft-text"
         defaultValue={outcome.text}
         rows={outcome.text.split("\n").length + 1}
-        className="mt-1 w-full rounded-lg border border-current/30 p-3 leading-7"
+        className="mt-1 w-full rounded-lg border border-line p-3 leading-7"
       />
       <p className="mt-1 text-sm">{result.editHint}</p>
       <p className="mt-1 text-sm font-semibold">{result.notice}</p>
@@ -277,7 +277,7 @@ export function DraftPanel({ outcome, question }: { outcome: Of<"draft">; questi
       </details>
       {outcome.rejected.length > 0 && (
         <details open className="mt-5 rounded-lg border-2 border-amber-500 bg-amber-50 p-4 text-amber-950">
-          <summary className="cursor-pointer font-semibold">{rejected.heading}</summary>
+          <summary className="inline-flex min-h-11 cursor-pointer items-center font-semibold">{rejected.heading}</summary>
           <p className="mt-2">{rejected.intro}</p>
           {outcome.rejected.map((r) => (
             <div key={r.text} className="mt-3">

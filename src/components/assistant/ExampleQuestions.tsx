@@ -12,7 +12,7 @@ export function ExampleQuestions() {
       <div className="mt-4 grid gap-6 sm:grid-cols-3">
         {groups.map((group) => (
           <div key={group.label}>
-            <h3 className="text-sm font-semibold opacity-80">{group.label}</h3>
+            <h3 className="text-sm font-semibold text-muted">{group.label}</h3>
             <ul className="mt-2">
               {group.questions.map((q) => (
                 <li key={q}>

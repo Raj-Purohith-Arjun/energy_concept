@@ -27,7 +27,7 @@ export function Refusals({ report }: { report: EvalReport }) {
       <p className="mt-2 max-w-3xl font-semibold leading-7">{r.expected}</p>
       <div className="mt-6 grid gap-6">
         {rows.map(({ category, cases }) => (
-          <article key={category} aria-labelledby={`refusal-${category}`} className="border-l-4 border-current/30 pl-4">
+          <article key={category} aria-labelledby={`refusal-${category}`} className="border-l-4 border-line pl-4">
             <h3 id={`refusal-${category}`} className="font-semibold">
               {groupLabel(category)} <span className="font-normal">· {plural(cases.length, r.count)}</span>
             </h3>

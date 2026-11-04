@@ -18,7 +18,7 @@ export function LoadTimeline() {
 
   return (
     <section aria-labelledby="load-timeline" className="lt mt-16">
-      <h2 id="load-timeline" className="text-2xl font-semibold tracking-tight">
+      <h2 id="load-timeline" className="h-section">
         {t.heading}
       </h2>
       <p className="mt-3 max-w-3xl leading-7">{t.intro}</p>

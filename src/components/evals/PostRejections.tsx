@@ -37,7 +37,7 @@ export async function PostRejections() {
 
   return (
     <section aria-labelledby="post-rejections" className="mt-16 rounded-lg border-2 border-red-700 p-5 sm:p-6 dark:border-red-400">
-      <h2 id="post-rejections" className="text-2xl font-semibold tracking-tight">
+      <h2 id="post-rejections" className="h-section">
         {r.heading}
       </h2>
       {model && <p className="mt-3 max-w-3xl font-semibold leading-7">{fill(r.composer, { model })}</p>}
@@ -49,9 +49,9 @@ export async function PostRejections() {
       <p className="mt-1 max-w-3xl leading-7">{r.limitation.body}</p>
       <div className="mt-6 grid gap-6">
         {rows.map((row) => (
-          <article key={`${row.topicId}-${row.at}-${row.text}`} data-post-rejection={row.topicId} className="border-l-4 border-current/30 pl-4">
+          <article key={`${row.topicId}-${row.at}-${row.text}`} data-post-rejection={row.topicId} className="border-l-4 border-line pl-4">
             <h3 className="font-semibold">{row.label}</h3>
-            <p className="text-sm opacity-80">{fill(r.writtenBy, { model: row.model })}</p>
+            <p className="text-sm text-muted">{fill(r.writtenBy, { model: row.model })}</p>
             {row.note && <p className="mt-2 max-w-3xl text-sm font-semibold leading-6">{row.note}</p>}
             <dl className="mt-2 grid gap-2 text-sm leading-6 sm:grid-cols-[12rem_1fr]">
               <dt className="font-semibold">{r.columns.wrote}</dt>

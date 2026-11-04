@@ -24,13 +24,13 @@ export function Mutations({ report }: { report: EvalReport }) {
 
   return (
     <section aria-labelledby="mutation" className="mt-16">
-      <h2 id="mutation" className="text-2xl font-semibold tracking-tight">
+      <h2 id="mutation" className="h-section">
         {m.heading}
       </h2>
       <p className="mt-3 max-w-3xl leading-7">{m.intro}</p>
       <ul className="mt-6 grid gap-4 sm:grid-cols-3">
         {highlights.map((mutant) => (
-          <li key={mutant.id} data-mutant={mutant.id} className="rounded-lg border-2 border-current/30 p-4">
+          <li key={mutant.id} data-mutant={mutant.id} className="rounded-lg border-2 border-line p-4">
             <p className="font-semibold">{labelFor(m.labels, mutant.id, FILE)}</p>
             <p className="mt-2 text-4xl font-semibold tabular-nums">{mutant.failed}</p>
             <p className="text-sm">{mutant.failed === 0 ? m.missed : plural(mutant.failed, m.failed)}</p>
@@ -49,7 +49,7 @@ export function Mutations({ report }: { report: EvalReport }) {
           </thead>
           <tbody>
             {report.mutants.map((mutant) => (
-              <tr key={mutant.id} data-mutant-row={mutant.id} className="border-b border-current/15 align-top">
+              <tr key={mutant.id} data-mutant-row={mutant.id} className="border-b border-line align-top">
                 <th scope="row" className="py-3 pr-3 font-normal">
                   {labelFor(m.labels, mutant.id, FILE)}
                   <span className="mt-1 block text-sm sm:hidden">{where(mutant)}</span>

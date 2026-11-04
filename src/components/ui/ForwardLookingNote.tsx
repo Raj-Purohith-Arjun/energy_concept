@@ -6,7 +6,7 @@ import { getSite } from "@/lib/content";
 export function ForwardLookingNote() {
   const { marker, note } = getSite().forwardLooking;
   return (
-    <div className="fl-footnote mx-auto w-full max-w-5xl border-t border-current/15 px-4 py-6 text-sm lg:px-8">
+    <div className="fl-footnote mx-auto w-full max-w-5xl border-t border-line px-4 py-6 text-sm lg:px-8">
       <p>
         <span aria-hidden="true">{marker} </span>
         {note}

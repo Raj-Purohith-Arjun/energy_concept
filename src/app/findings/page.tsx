@@ -20,7 +20,7 @@ export default function FindingsPage() {
   const page = getFindings();
   return (
     <div className="mx-auto w-full max-w-5xl px-4 py-12 lg:px-8">
-      <h1 className="text-3xl font-semibold tracking-tight">{page.heading}</h1>
+      <h1 className="h-page">{page.heading}</h1>
       <Verdict />
       <p className="mt-6 max-w-3xl leading-7">{page.intro}</p>
       <p className="mt-3">

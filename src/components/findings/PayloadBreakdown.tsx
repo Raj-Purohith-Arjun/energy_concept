@@ -12,7 +12,7 @@ const shade = (video: boolean) => (video ? "bg-current" : "bg-current/35");
 function PayloadRow({ page, scale, totalLabel }: { page: PayloadPage; scale: number; totalLabel: string }) {
   const measured = !isTodo(page.total);
   return (
-    <li className="border-t border-current/15 pt-4">
+    <li className="border-t border-line pt-4">
       <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
         <h3 className="font-semibold">{page.label}</h3>
         <p>
@@ -60,7 +60,7 @@ export function PayloadBreakdown() {
   const scale = Math.max(...payload.pages.filter((p) => !isTodo(p.total)).map((p) => kib(p.total)));
   return (
     <section aria-labelledby="payload" className="mt-12">
-      <h2 id="payload" className="text-2xl font-semibold tracking-tight">
+      <h2 id="payload" className="h-section">
         {payload.heading}
       </h2>
       {payload.body.map((text) => (

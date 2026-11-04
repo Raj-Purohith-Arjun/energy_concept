@@ -29,11 +29,11 @@ export function GapsReport({ gaps, facts, copy }: { gaps: GapsFile; facts: Fact[
 
   return (
     <div className="mx-auto w-full max-w-5xl px-4 py-12 lg:px-8">
-      <h1 className="text-3xl font-semibold tracking-tight">{copy.heading}</h1>
-      <p className="mt-3 max-w-3xl leading-7">{copy.framing}</p>
+      <h1 className="h-page">{copy.heading}</h1>
+      <p className="verdict-lead mt-3 max-w-3xl">{copy.framing}</p>
 
       {gaps.gaps.length === 0 ? (
-        <section aria-labelledby="gaps-empty" data-gaps-empty="" className="mt-10 rounded-lg border border-current/20 p-5">
+        <section aria-labelledby="gaps-empty" data-gaps-empty="" className="mt-10 rounded-lg border border-line p-5">
           <h2 id="gaps-empty" className="text-xl font-semibold">
             {copy.empty.heading}
           </h2>
@@ -48,18 +48,18 @@ export function GapsReport({ gaps, facts, copy }: { gaps: GapsFile; facts: Fact[
           </p>
           <div className="mt-8 grid gap-4">
             {[...groups].map(([subject, rows]) => (
-              <details key={subject} data-gap-subject={subject} className="rounded-lg border border-current/20 p-5">
-                <summary className="cursor-pointer text-lg font-semibold">
-                  {subjectLabel(subject, copy)} <span className="font-normal opacity-80">· {plural(rows.length, copy.questions)}</span>
+              <details key={subject} data-gap-subject={subject} className="rounded-lg border border-line p-5">
+                <summary className="flex min-h-11 cursor-pointer flex-wrap items-center gap-x-2 text-lg font-semibold">
+                  {subjectLabel(subject, copy)} <span className="font-normal text-muted">· {plural(rows.length, copy.questions)}</span>
                 </summary>
                 <div className="mt-4 grid gap-6">
                   {rows.map((row) => (
-                    <article key={row.question} data-gap="" className="border-l-4 border-current/30 pl-4">
+                    <article key={row.question} data-gap="" className="border-l-4 border-line pl-4">
                       <dl className="grid gap-2 text-sm leading-6 sm:grid-cols-[12rem_1fr]">
                         <dt className="font-semibold">{copy.columns.asked}</dt>
                         <dd className="[overflow-wrap:anywhere]">
                           <q>{row.question}</q>
-                          {row.count > 1 && <span className="opacity-80"> · {plural(row.count, copy.times)}</span>}
+                          {row.count > 1 && <span className="text-muted"> · {plural(row.count, copy.times)}</span>}
                         </dd>
                         <dt className="font-semibold">{copy.columns.nearest}</dt>
                         <dd>

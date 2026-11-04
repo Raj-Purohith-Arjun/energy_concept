@@ -17,7 +17,7 @@ interface FigureProps {
 function Figure({ value, basis, basisSource, url, title, accessed }: FigureProps) {
   const ui = getSite().factUi;
   return (
-    <li className="flex flex-col gap-3 rounded-lg border border-current/15 p-5 text-sm leading-6">
+    <li className="flex flex-col gap-3 rounded-lg border border-line p-5 text-sm leading-6">
       <p className="text-2xl">{value}</p>
       <p>
         <span className="font-semibold">{ui.basis}: </span>
@@ -59,7 +59,7 @@ export function SameSubject({ facts }: { facts: Fact[] }) {
   const copy = getSite().factsPage.sameSubject;
   return (
     <section aria-labelledby="same-subject" className="mt-16">
-      <h2 id="same-subject" className="text-2xl font-semibold tracking-tight">
+      <h2 id="same-subject" className="h-section">
         {copy.heading}
       </h2>
       <p className="mt-3 max-w-3xl leading-7">{copy.body}</p>

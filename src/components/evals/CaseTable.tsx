@@ -19,7 +19,7 @@ export function CaseTable({ rows, label }: { rows: Graded[]; label?: (g: Graded)
       </thead>
       <tbody>
         {rows.map((row, i) => (
-          <tr key={i} className="border-b border-current/15 align-top">
+          <tr key={i} className="border-b border-line align-top">
             <td className="py-2 pr-3 [overflow-wrap:anywhere]">
               {label ? label(row) : <QuestionLink question={row.case.question} />}
             </td>

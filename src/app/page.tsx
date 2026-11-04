@@ -13,8 +13,8 @@ export default function Home({ searchParams }: PageProps<"/">) {
   const { intro, form, maxLength } = getAssistant();
   return (
     <div className="mx-auto w-full max-w-3xl px-4 py-12 lg:px-8">
-      <h1 className="text-3xl font-semibold tracking-tight">{intro.heading}</h1>
-      <p className="mt-3 leading-7">{intro.body}</p>
+      <h1 className="h-page">{intro.heading}</h1>
+      <p className="verdict-lead mt-3">{intro.body}</p>
       <p className="mt-5 rounded-lg border-l-4 border-amber-500 bg-amber-50 px-4 py-3 font-semibold leading-7 text-amber-950">
         {intro.hardRule}
       </p>

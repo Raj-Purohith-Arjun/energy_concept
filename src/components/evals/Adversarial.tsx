@@ -22,7 +22,7 @@ export function Adversarial({ report }: { report: EvalReport }) {
           const ofKind = cases.filter((g) => g.case.technique === technique);
           const example = ofKind[0];
           return (
-            <article key={technique} aria-labelledby={`technique-${technique}`} className="border-l-4 border-current/30 pl-4">
+            <article key={technique} aria-labelledby={`technique-${technique}`} className="border-l-4 border-line pl-4">
               <h3 id={`technique-${technique}`} className="font-semibold">
                 {t.name} <span className="font-normal">· {plural(ofKind.length, a.count)}</span>
               </h3>

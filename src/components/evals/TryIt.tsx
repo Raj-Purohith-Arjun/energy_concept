@@ -14,7 +14,7 @@ export function TryIt({ report }: { report: EvalReport }) {
   });
   return (
     <section aria-labelledby="try-it" className="mt-8">
-      <h2 id="try-it" className="text-2xl font-semibold tracking-tight">
+      <h2 id="try-it" className="h-section">
         {t.heading}
       </h2>
       <p className="mt-2 max-w-3xl leading-7">{t.intro}</p>
@@ -23,7 +23,7 @@ export function TryIt({ report }: { report: EvalReport }) {
           <li key={item.question}>
             <a
               href={askHref(item.question)}
-              className="flex h-full min-h-11 flex-col rounded-lg border-2 border-current/30 p-4 hover:border-current"
+              className="flex h-full min-h-11 flex-col rounded-lg border-2 border-line p-4 hover:border-current"
             >
               <span className="text-lg font-semibold underline underline-offset-4">{questionText(item.question)}</span>
               <span className="mt-1 text-sm">{item.note}</span>

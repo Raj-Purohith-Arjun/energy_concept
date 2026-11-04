@@ -6,13 +6,13 @@ export function KeyFacts() {
   const { factsHeading, factIds, registryLink } = getBlackGiant();
   return (
     <section aria-labelledby="key-facts" className="mx-auto w-full max-w-5xl px-4 py-12 lg:px-8">
-      <h2 id="key-facts" className="text-2xl font-semibold tracking-tight">
+      <h2 id="key-facts" className="h-section">
         {factsHeading}
       </h2>
       <dl className="mt-6 grid gap-6 sm:grid-cols-2">
         {factIds.map((id) => (
-          <div key={id} className="border-t border-current/15 pt-4">
-            <dt className="text-sm opacity-80">{getFact(id).label}</dt>
+          <div key={id} className="border-t border-line pt-4">
+            <dt className="text-sm text-muted">{getFact(id).label}</dt>
             <dd className="mt-1 text-xl">
               <Fact id={id} />
             </dd>
@@ -32,7 +32,7 @@ export function DeliveryNotes() {
   const { heading, points } = getBlackGiant().delivery;
   return (
     <section aria-labelledby="delivery" className="mx-auto w-full max-w-5xl px-4 pb-12 lg:px-8">
-      <h2 id="delivery" className="text-2xl font-semibold tracking-tight">
+      <h2 id="delivery" className="h-section">
         {heading}
       </h2>
       <ul className="mt-4 grid max-w-3xl list-disc gap-3 pl-5 leading-7">

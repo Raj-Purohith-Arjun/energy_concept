@@ -30,16 +30,16 @@ export async function Rejections() {
 
   return (
     <section aria-labelledby="rejections" className="mt-16 rounded-lg border-2 border-red-700 p-5 sm:p-6 dark:border-red-400">
-      <h2 id="rejections" className="text-2xl font-semibold tracking-tight">
+      <h2 id="rejections" className="h-section">
         {r.heading}
       </h2>
       <p className="mt-3 max-w-3xl leading-7">{rows.length > 0 ? r.intro : r.none}</p>
       {allOmissions && <p className="mt-3 max-w-3xl font-semibold leading-7">{r.allOmissions}</p>}
       <div className="mt-6 grid gap-6">
         {rows.map((row) => (
-          <article key={`${row.factId}-${row.text}`} data-rejection={row.factId} className="border-l-4 border-current/30 pl-4">
+          <article key={`${row.factId}-${row.text}`} data-rejection={row.factId} className="border-l-4 border-line pl-4">
             <h3 className="font-semibold">{row.label}</h3>
-            <p className="text-sm opacity-80">{fill(r.writtenBy, { model: row.model })}</p>
+            <p className="text-sm text-muted">{fill(r.writtenBy, { model: row.model })}</p>
             <dl className="mt-2 grid gap-2 text-sm leading-6 sm:grid-cols-[12rem_1fr]">
               <dt className="font-semibold">{r.columns.wrote}</dt>
               <dd className="[overflow-wrap:anywhere]">

@@ -7,7 +7,7 @@ import { getFindings } from "@/lib/content";
 export function Verdict() {
   const { verdict, comparison } = getFindings();
   return (
-    <section aria-labelledby="verdict" className="mt-6 rounded-lg border-2 border-current/25 p-5 sm:p-6">
+    <section aria-labelledby="verdict" className="mt-6 rounded-lg border-2 border-line p-5 sm:p-6">
       <h2 id="verdict" className="text-sm font-semibold uppercase tracking-wide">
         {verdict.heading}
       </h2>

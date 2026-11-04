@@ -17,11 +17,11 @@ export default function FactsPage() {
 
   return (
     <div className="mx-auto w-full max-w-5xl px-4 py-12 lg:px-8">
-      <h1 className="text-3xl font-semibold tracking-tight">{page.heading}</h1>
-      <p className="mt-3 max-w-3xl leading-7">{page.intro}</p>
+      <h1 className="h-page">{page.heading}</h1>
+      <p className="verdict-lead mt-3 max-w-3xl">{page.intro}</p>
 
       <section aria-labelledby="registry" className="mt-12">
-        <h2 id="registry" className="text-2xl font-semibold tracking-tight">
+        <h2 id="registry" className="h-section">
           {page.registryHeading}
         </h2>
         <div className="mt-6 grid gap-4 md:grid-cols-2">

@@ -17,7 +17,7 @@ export function Collapsible({ headingId, heading, note, className = "", children
     <section aria-labelledby={headingId} className={`mt-12 ${className}`}>
       <details>
         <summary className="flex min-h-11 cursor-pointer flex-wrap items-baseline gap-x-3 py-2">
-          <h2 id={headingId} className="text-2xl font-semibold tracking-tight">
+          <h2 id={headingId} className="h-section">
             {heading}
           </h2>
           <span className="text-sm">{note}</span>
