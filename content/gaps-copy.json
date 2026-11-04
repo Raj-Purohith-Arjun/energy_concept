@@ -1,0 +1,18 @@
+{
+  "$comment": "Copy for /gaps. Numbers on that page are counted from content/gaps.json, never typed here.",
+  "title": "Open questions",
+  "heading": "Questions EnergyX's public pages do not answer",
+  "framing": "These are questions people asked this demo that EnergyX's public pages do not answer. Read it as a content backlog: each row is a page or a paragraph that does not exist yet.",
+  "verdict": "{questions} across {subjects}.",
+  "questions": { "one": "{count} question", "other": "{count} questions" },
+  "subjects": { "one": "{count} subject", "other": "{count} subjects" },
+  "empty": {
+    "heading": "No unanswered questions have been recorded yet",
+    "body": "Every question the assistant answers with \"I don't have a sourced answer for that\" is logged, then exported to this page after a person reviews it. When one is, it appears here grouped by subject, with the nearest facts we do have. Nothing on this page is invented to fill the space."
+  },
+  "unmatchedSubject": "No subject recognised",
+  "columns": { "asked": "Asked as", "nearest": "Nearest facts we do have", "suggested": "Suggested page to cover this" },
+  "noNearest": "None. Nothing in the fact registry is close to this question.",
+  "times": { "one": "Asked {count} time", "other": "Asked {count} times" },
+  "suggestedPlaceholder": "TODO(content)"
+}

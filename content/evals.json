@@ -31,7 +31,8 @@
     "columns": { "wrote": "What the model wrote", "why": "Why it was stopped", "shipped": "What readers see instead" },
     "omitted": "Left out {missing}, which EnergyX also publishes for this figure.",
     "other": "Failed a check: {reason}",
-    "times": "Written and rejected {count} times."
+    "times": "Written and rejected {count} times.",
+    "writtenBy": "Written by {model}."
   },
 
   "postRejections": {
@@ -44,6 +45,7 @@
       "body": "The model is never shown a figure's value, only its label, its kind (published, planned or estimate) and the registry's reviewed basis sentence with any number masked. It writes {fact:ID} tokens, and the registry fills in each value when the post is built. Any digit or number word the model types itself is a rejection, so a figure in a post can only have come from the registry."
     },
     "composer": "The posts shipped on this site were written by {model}.",
+    "writtenBy": "Written by {model}.",
     "sources": "Figures come from registry tokens. Place names and context come from the reviewed basis text in the registry. Both are committed and human-reviewed; neither is invented.",
     "limitation": {
       "heading": "What these checks do not catch",

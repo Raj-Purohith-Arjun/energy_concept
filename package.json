@@ -13,7 +13,8 @@
     "test:e2e": "playwright test",
     "check": "pnpm typecheck && pnpm lint && pnpm lint:facts && pnpm test",
     "compose:facts": "tsx scripts/compose-facts.ts",
-    "compose:posts": "tsx scripts/compose-posts.ts"
+    "compose:posts": "tsx scripts/compose-posts.ts",
+    "export:gaps": "tsx scripts/export-gaps.ts"
   },
   "dependencies": {
     "next": "16.4.1",

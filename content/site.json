@@ -28,6 +28,10 @@
     {
       "label": "Guardrails",
       "href": "/evals/"
+    },
+    {
+      "label": "Gaps",
+      "href": "/gaps/"
     }
   ],
   "menu": {
@@ -67,6 +71,7 @@
     "approved": "Approved",
     "verified": "Verified",
     "unverified": "Unverified",
+    "alsoPublished": "Also published as",
     "kinds": {
       "actual": "Actual",
       "planned": "Planned",

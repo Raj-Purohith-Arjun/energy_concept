@@ -6,7 +6,8 @@ import type { AssistantOutcome } from "@/lib/assistant/pipeline";
 import { plural } from "@/lib/plural";
 import type { Fact } from "@/lib/schemas";
 import { ApprovalState, BasisText, IsoDate, SourceLink } from "@/components/ui/FactParts";
-import { FactValue } from "@/components/ui/FactValue";
+import { FigureValue } from "@/components/facts/FigureValue";
+import { orderedFigures } from "@/lib/figures";
 
 type Of<K extends AssistantOutcome["kind"]> = Extract<AssistantOutcome, { kind: K }>;
 
@@ -171,21 +172,25 @@ export function ClarifyPanel({ outcome, question }: { outcome: Of<"clarify">; qu
 
 function Citation({ fact }: { fact: Fact }) {
   const ui = getSite().factUi;
+  // The stated figure leads; an inferred one follows with its own basis.
+  const [lead, ...others] = orderedFigures(fact);
   return (
     <li className="rounded-lg border border-current/15 p-4 text-sm leading-6">
       <p className="font-medium">{fact.label}</p>
       <p className="text-lg">
-        <FactValue fact={fact} />
+        <FigureValue fact={fact} figure={lead} />
       </p>
       <p className="mt-1">
         <span className="font-semibold">{ui.basis}: </span>
-        <BasisText basis={fact.basis} basisSource={fact.basisSource} />
+        <BasisText basis={lead.basis} basisSource={lead.basisSource} />
       </p>
-      {fact.alsoPublishedAs.map((alt) => (
-        <p key={alt.value + alt.url} className="mt-2 border-l-2 border-current/20 pl-3">
-          <span className="font-semibold tabular-nums">{alt.value}</span>
+      {others.map((figure) => (
+        <p key={figure.value + figure.url} className="mt-2 border-l-2 border-current/20 pl-3">
+          <span className="font-semibold">{ui.alsoPublished}: </span>
+          <FigureValue fact={fact} figure={figure} />
           {" — "}
-          <BasisText basis={alt.basis} basisSource={alt.basisSource} /> <SourceLink url={alt.url} />
+          <BasisText basis={figure.basis} basisSource={figure.basisSource} />{" "}
+          <SourceLink url={figure.url} title={figure.title} />
         </p>
       ))}
       <p className="mt-2 opacity-80">

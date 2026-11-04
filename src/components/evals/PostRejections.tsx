@@ -48,6 +48,7 @@ export async function PostRejections() {
         {rows.map((row) => (
           <article key={`${row.topicId}-${row.at}-${row.text}`} data-post-rejection={row.topicId} className="border-l-4 border-current/30 pl-4">
             <h3 className="font-semibold">{row.label}</h3>
+            <p className="text-sm opacity-80">{fill(r.writtenBy, { model: row.model })}</p>
             <dl className="mt-2 grid gap-2 text-sm leading-6 sm:grid-cols-[12rem_1fr]">
               <dt className="font-semibold">{r.columns.wrote}</dt>
               <dd>

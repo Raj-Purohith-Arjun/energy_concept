@@ -114,6 +114,8 @@ export const SiteSchema = z.strictObject({
     approved: nonEmpty,
     verified: nonEmpty,
     unverified: nonEmpty,
+    // Label for the figure(s) shown after the lead figure when a fact is published more than one way.
+    alsoPublished: nonEmpty,
     kinds: z.strictObject({
       actual: nonEmpty,
       planned: nonEmpty,
@@ -442,6 +444,7 @@ export const EvalsSchema = z.strictObject({
     omitted: nonEmpty.includes("{missing}"),
     other: nonEmpty.includes("{reason}"),
     times: nonEmpty.includes("{count}"),
+    writtenBy: nonEmpty.includes("{model}"),
   }),
   // Whole LinkedIn posts the model wrote at build time and the checks refused.
   postRejections: z.strictObject({
@@ -454,6 +457,7 @@ export const EvalsSchema = z.strictObject({
     limitation: z.strictObject({ heading: nonEmpty, body: nonEmpty }),
     // Which model wrote the stored posts, and where words that are not figures come from.
     composer: nonEmpty.includes("{model}"),
+    writtenBy: nonEmpty.includes("{model}"),
     sources: nonEmpty,
   }),
   mutation: z.strictObject({
@@ -530,6 +534,58 @@ export const EvalsSchema = z.strictObject({
 });
 
 export type EvalsContent = z.infer<typeof EvalsSchema>;
+
+// ---------------------------------------------------------------------------
+// Gap report (CLAUDE.md section 5): content/gaps.json is a committed,
+// hand-reviewed snapshot written by `pnpm export:gaps`; content/gaps-copy.json
+// is the page copy.
+// ---------------------------------------------------------------------------
+
+export const GAP_REASONS = ["no-match", "post-check", "language"] as const;
+export type GapReason = (typeof GAP_REASONS)[number];
+
+export const GapRowSchema = z.strictObject({
+  question: nonEmpty,
+  // A concept key from assistant.json, or "unmatched" when no concept was recognised.
+  subject: nonEmpty,
+  count: z.number().int().min(1),
+  firstAt: z.iso.datetime(),
+  lastAt: z.iso.datetime(),
+  reason: z.enum(GAP_REASONS),
+  // Fact ids; labels are resolved from the registry when the page renders.
+  nearest: z.array(nonEmpty),
+});
+
+export const GapsFileSchema = z.strictObject({
+  $comment: comment.optional(),
+  generatedAt: z.iso.datetime().nullable(),
+  source: z.strictObject({
+    linesRead: z.number().int().min(0),
+    kept: z.number().int().min(0),
+    skipped: z.record(z.string(), z.number().int().min(0)),
+    malformed: z.number().int().min(0),
+  }),
+  gaps: z.array(GapRowSchema),
+});
+export type GapsFile = z.infer<typeof GapsFileSchema>;
+export type GapRow = z.infer<typeof GapRowSchema>;
+
+export const GapsCopySchema = z.strictObject({
+  $comment: comment.optional(),
+  title: nonEmpty,
+  heading: nonEmpty,
+  framing: nonEmpty,
+  verdict: nonEmpty.includes("{questions}").includes("{subjects}"),
+  questions: countLabel,
+  subjects: countLabel,
+  empty: z.strictObject({ heading: nonEmpty, body: nonEmpty }),
+  unmatchedSubject: nonEmpty,
+  columns: z.strictObject({ asked: nonEmpty, nearest: nonEmpty, suggested: nonEmpty }),
+  noNearest: nonEmpty,
+  times: countLabel,
+  suggestedPlaceholder: nonEmpty,
+});
+export type GapsCopy = z.infer<typeof GapsCopySchema>;
 
 export type PayloadPage = z.infer<typeof PayloadPageSchema>;
 export type FindingsContent = z.infer<typeof FindingsSchema>;

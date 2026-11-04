@@ -1,0 +1,23 @@
+{
+  "$comment": "Written by `pnpm export:gaps` from data/unanswered.jsonl, then reviewed by hand before commit. Never generated at build time.",
+  "generatedAt": "2026-11-04T02:43:03.367Z",
+  "source": {
+    "linesRead": 3,
+    "kept": 2,
+    "skipped": {
+      "draft": 1
+    },
+    "malformed": 0
+  },
+  "gaps": [
+    {
+      "question": "Who is EnergyX's CEO?",
+      "subject": "unmatched",
+      "count": 2,
+      "firstAt": "2026-11-03T03:34:52.232Z",
+      "lastAt": "2026-11-03T03:36:35.885Z",
+      "reason": "no-match",
+      "nearest": []
+    }
+  ]
+}

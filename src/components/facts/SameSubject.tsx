@@ -2,7 +2,8 @@ import type { ReactNode } from "react";
 import { getSite, type Fact } from "@/lib/content";
 import type { BasisSource } from "@/lib/schemas";
 import { BasisText, IsoDate, SourceLink } from "@/components/ui/FactParts";
-import { FactValue } from "@/components/ui/FactValue";
+import { FigureValue } from "@/components/facts/FigureValue";
+import { orderedFigures } from "@/lib/figures";
 
 interface FigureProps {
   value: ReactNode;
@@ -37,22 +38,15 @@ function Figure({ value, basis, basisSource, url, title, accessed }: FigureProps
 export function PublishedFigures({ fact }: { fact: Fact }) {
   return (
     <ul className="mt-4 grid gap-4 md:grid-cols-[repeat(auto-fit,minmax(15rem,1fr))]">
-      <Figure
-        value={<FactValue fact={fact} />}
-        basis={fact.basis}
-        basisSource={fact.basisSource}
-        url={fact.source.url}
-        title={fact.source.title}
-        accessed={fact.source.accessed}
-      />
-      {fact.alsoPublishedAs.map((alt) => (
+      {orderedFigures(fact).map((figure) => (
         <Figure
-          key={`${alt.value}|${alt.url}`}
-          value={<span className="font-semibold tabular-nums">{alt.value}</span>}
-          basis={alt.basis}
-          basisSource={alt.basisSource}
-          url={alt.url}
-          accessed={alt.accessed}
+          key={`${figure.value}|${figure.url}`}
+          value={<FigureValue fact={fact} figure={figure} />}
+          basis={figure.basis}
+          basisSource={figure.basisSource}
+          url={figure.url}
+          title={figure.title}
+          accessed={figure.accessed}
         />
       ))}
     </ul>

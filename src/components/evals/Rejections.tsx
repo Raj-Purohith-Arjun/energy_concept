@@ -10,7 +10,7 @@ export async function Rejections() {
   const r = getEvals().rejections;
   const facts = new Map(getAllFacts().map((f) => [f.id, f]));
   // The same sentence rejected on several runs is one row with a count.
-  const grouped = new Map<string, { factId: string; text: string; reason: string; count: number }>();
+  const grouped = new Map<string, { factId: string; model: string; text: string; reason: string; count: number }>();
   for (const rej of getComposedStore().rejections) {
     const key = `${rej.factId}\u0000${rej.text}`;
     const row = grouped.get(key) ?? { ...rej, count: 0 };
@@ -39,6 +39,7 @@ export async function Rejections() {
         {rows.map((row) => (
           <article key={`${row.factId}-${row.text}`} data-rejection={row.factId} className="border-l-4 border-current/30 pl-4">
             <h3 className="font-semibold">{row.label}</h3>
+            <p className="text-sm opacity-80">{fill(r.writtenBy, { model: row.model })}</p>
             <dl className="mt-2 grid gap-2 text-sm leading-6 sm:grid-cols-[12rem_1fr]">
               <dt className="font-semibold">{r.columns.wrote}</dt>
               <dd className="[overflow-wrap:anywhere]">
