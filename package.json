@@ -14,7 +14,8 @@
     "check": "pnpm typecheck && pnpm lint && pnpm lint:facts && pnpm test",
     "compose:facts": "tsx scripts/compose-facts.ts",
     "compose:posts": "tsx scripts/compose-posts.ts",
-    "export:gaps": "tsx scripts/export-gaps.ts"
+    "export:gaps": "tsx scripts/export-gaps.ts",
+    "measure:weight": "tsx scripts/measure-weight.ts"
   },
   "dependencies": {
     "next": "16.4.1",

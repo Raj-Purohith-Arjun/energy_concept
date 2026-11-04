@@ -5,24 +5,36 @@ const PATH = "/evals/";
 const scriptSrcs = (page: Page) =>
   page.locator("script[src]").evaluateAll((els) => els.map((el) => new URL((el as HTMLScriptElement).src).pathname));
 
-test("strongest first: try it, model errors, mutation, then the pass rate; the rest collapsed", async ({ page }) => {
+test("verdict first, with the mutants-caught count; every section collapsed, post rejections first", async ({ page }) => {
   await page.goto(PATH);
   await expect(page.getByRole("heading", { level: 1, name: "Guardrails, and how they're tested (evals)" })).toBeVisible();
-  const order = ["try-it", "rejections", "mutation", "eval-verdict"];
-  const tops = await Promise.all(order.map(async (id) => (await page.locator(`#${id}`).boundingBox())!.y));
-  expect([...tops].sort((a, b) => a - b)).toEqual(tops);
-  // Three highlighted guardrails open, every one of them caught.
+  // The verdict is the only thing open above the fold, and it says so in numbers.
+  await expect(page.locator("#eval-verdict")).toBeVisible();
+  await expect(page.getByText("which on its own proves nothing")).toBeVisible();
+  const verdict = page.locator("section[aria-labelledby='eval-verdict']");
+  await expect(verdict.getByText(/switched-off guardrails caught/)).toBeVisible();
+  await expect(verdict.locator("dd")).toHaveCount(4);
+  // DOM order (the sections are collapsed, so they have no box to measure).
+  const order = ["eval-verdict", "post-rejections", "rejections", "mutation", "try-it"];
+  const positions = await page.evaluate(
+    (ids) => ids.map((id) => Array.from(document.querySelectorAll("*")).indexOf(document.getElementById(id)!)),
+    order,
+  );
+  expect(positions.every((n) => n >= 0)).toBe(true);
+  expect([...positions].sort((a, b) => a - b)).toEqual(positions);
+  // Three highlighted guardrails, every one of them caught.
   await expect(page.locator("[data-mutant]")).toHaveCount(3);
   await expect(page.getByText("Not caught")).toHaveCount(0);
-  await expect(page.getByText("which on its own proves nothing")).toBeVisible();
   // The must-not-refuse point stays visible even with its list collapsed.
   await expect(page.getByText("most test suites don't have them")).toBeVisible();
-  await expect(page.locator("details")).toHaveCount(7);
+  await expect(page.locator("details")).toHaveCount(11);
   await expect(page.locator("details[open]")).toHaveCount(0);
+  await expect(page.locator("details").first().locator(":scope > summary")).toHaveText("See a whole post the model wrote that was refused");
 });
 
 test("try-it links open the live assistant with the question asked", async ({ page }) => {
   await page.goto(PATH);
+  await page.locator("details:has(#try-it) > summary").first().click();
   const links = page.locator("section[aria-labelledby='try-it'] a");
   await expect(links).toHaveCount(3);
   await links.first().click();
@@ -101,6 +113,7 @@ test("the composer section states whether results match a template-only run", as
 
 test("real model rejections are shown with what shipped instead", async ({ page }) => {
   await page.goto(PATH);
+  await page.locator("details:has(#rejections) > summary").first().click();
   const section = page.locator("section[aria-labelledby='rejections']");
   await expect(section.getByRole("heading", { level: 2, name: "When the model got it wrong" })).toBeVisible();
   await expect(section.locator("[data-rejection]")).not.toHaveCount(0);

@@ -13,6 +13,7 @@
   "intro": {
     "heading": "Ask about EnergyX's public information",
     "body": "Ask a question and it answers from the fact registry: figures EnergyX has published, and Raj's own measurements of its website, each with its source. Ask it to write a LinkedIn post and it drafts one from those same facts. If it can do neither, it says so instead of guessing.",
+    "rulesTitle": "What it will and won't answer",
     "hardRule": "It answers what EnergyX has published, including its plans and targets, always marked as plans and never as results. It never predicts what will happen and never gives investment advice, not partly and not with caveats. That check runs before any model is involved."
   },
   "form": {

@@ -88,9 +88,16 @@
     "heading": "The pass rate, and why it isn't the point",
     "cases": "test questions",
     "categories": "of {total} kinds of refused question covered",
+    "mutants": "of {total} switched-off guardrails caught by the tests",
     "passRate": "of test questions pass",
     "allPass": "This suite passes {rate}, which on its own proves nothing: code that fails its tests never ships. What proves something is switching each guardrail off and counting what breaks, which is what the section above does.",
     "someFail": "{failed} of {total} test questions fail in this build. Code in this state should not ship; the failing ones are marked below."
+  },
+  "folds": {
+    "tryIt": "Try three questions on the live assistant",
+    "rejections": "See sentences the model got wrong",
+    "postRejections": "See a whole post the model wrote that was refused",
+    "mutation": "See the guardrails switched off, one at a time"
   },
   "model": "No model decides what gets refused. A model can only write answers, and every answer passes a number-and-source check before anyone sees it. When the model changes, these tests are how you know the guardrails still hold.",
 

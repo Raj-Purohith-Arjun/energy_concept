@@ -135,7 +135,8 @@
     "labels": {
       "kind": "Kind",
       "owner": "Owner",
-      "status": "Status"
+      "status": "Status",
+      "details": "Basis, other published figures and status"
     },
     "sameSubject": {
       "heading": "Same subject, different measures",

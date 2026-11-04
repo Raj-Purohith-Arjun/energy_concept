@@ -134,6 +134,7 @@ export const SiteSchema = z.strictObject({
       kind: nonEmpty,
       owner: nonEmpty,
       status: nonEmpty,
+      details: nonEmpty,
     }),
     sameSubject: z.strictObject({ heading: nonEmpty, body: nonEmpty }),
   }),
@@ -170,7 +171,7 @@ const TitleBodySchema = z.strictObject({ title: nonEmpty, body: nonEmpty });
 export const AssistantSchema = z.strictObject({
   $comment: comment.optional(),
   pageTitle: nonEmpty,
-  intro: z.strictObject({ heading: nonEmpty, body: nonEmpty, hardRule: nonEmpty }),
+  intro: z.strictObject({ heading: nonEmpty, body: nonEmpty, hardRule: nonEmpty, rulesTitle: nonEmpty }),
   form: z.strictObject({
     label: nonEmpty,
     placeholder: nonEmpty,
@@ -479,10 +480,12 @@ export const EvalsSchema = z.strictObject({
     heading: nonEmpty,
     cases: nonEmpty,
     categories: nonEmpty.includes("{total}"),
+    mutants: nonEmpty.includes("{total}"),
     passRate: nonEmpty,
     allPass: nonEmpty.includes("{rate}"),
     someFail: nonEmpty.includes("{failed}"),
   }),
+  folds: z.strictObject({ tryIt: nonEmpty, rejections: nonEmpty, postRejections: nonEmpty, mutation: nonEmpty }),
   model: nonEmpty,
   groups: labels,
   refusals: z.strictObject({
