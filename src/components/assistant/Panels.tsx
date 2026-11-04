@@ -3,6 +3,7 @@ import { Fragment } from "react";
 import { getAssistant, getSite } from "@/lib/content";
 import { TEMPLATE } from "@/lib/assistant/composed";
 import type { AssistantOutcome } from "@/lib/assistant/pipeline";
+import { plural } from "@/lib/plural";
 import type { Fact } from "@/lib/schemas";
 import { ApprovalState, BasisText, IsoDate, SourceLink } from "@/components/ui/FactParts";
 import { FactValue } from "@/components/ui/FactValue";
@@ -258,12 +259,17 @@ export function DraftPanel({ outcome, question }: { outcome: Of<"draft">; questi
       <p className="mt-3 text-sm" data-worded-by={outcome.wordedBy.join(" ")}>
         {wordedByLine(outcome.wordedBy)}
       </p>
-      <h3 className="mt-5 text-sm font-semibold tracking-wide uppercase opacity-80">{result.figuresHeading}</h3>
-      <ul className="mt-2 grid gap-3">
-        {outcome.facts.map((fact) => (
-          <Citation key={fact.id} fact={fact} />
-        ))}
-      </ul>
+      {/* Collapsed: the count says everything was sourced; the detail is one click away. */}
+      <details className="mt-5">
+        <summary className="inline-flex min-h-11 cursor-pointer items-center font-semibold">
+          {plural(outcome.facts.length, result.figuresSummary)}
+        </summary>
+        <ul className="mt-2 grid gap-3">
+          {outcome.facts.map((fact) => (
+            <Citation key={fact.id} fact={fact} />
+          ))}
+        </ul>
+      </details>
       {outcome.rejected.length > 0 && (
         <details open className="mt-5 rounded-lg border-2 border-amber-500 bg-amber-50 p-4 text-amber-950">
           <summary className="cursor-pointer font-semibold">{rejected.heading}</summary>

@@ -6,6 +6,7 @@ import { EvalVerdict } from "@/components/evals/EvalVerdict";
 import { ModelSlot } from "@/components/evals/ModelSlot";
 import { MustNotRefuse } from "@/components/evals/MustNotRefuse";
 import { Mutations } from "@/components/evals/Mutations";
+import { PostRejections } from "@/components/evals/PostRejections";
 import { Refusals } from "@/components/evals/Refusals";
 import { Rejections } from "@/components/evals/Rejections";
 import { TryIt } from "@/components/evals/TryIt";
@@ -33,6 +34,7 @@ export default async function EvalsPage() {
       <p className="mt-3 max-w-3xl leading-7">{page.intro}</p>
       <TryIt report={report} />
       <Rejections />
+      <PostRejections />
       <Mutations report={report} />
       <EvalVerdict report={report} />
       <p className="mt-6 max-w-3xl border-l-4 border-current pl-4 text-lg font-semibold leading-8">{page.model}</p>

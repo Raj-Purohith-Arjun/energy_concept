@@ -34,6 +34,23 @@
     "times": "Written and rejected {count} times."
   },
 
+  "postRejections": {
+    "heading": "When the model wrote a whole post and it was refused",
+    "intro": "These are LinkedIn posts the model wrote ahead of time, from the registry, that the checks stopped. Each shows what it wrote, why it was stopped, and the post readers get instead.",
+    "none": "No post the model wrote has been refused so far. Posts are written by `pnpm compose:posts`; any one the checks stop is recorded here exactly as written.",
+    "columns": { "wrote": "What the model wrote", "why": "Why it was stopped", "shipped": "What readers see instead" },
+    "mechanism": {
+      "heading": "The model cannot produce a number",
+      "body": "The model is never shown a figure's value, only its label, its kind (published, planned or estimate) and the registry's reviewed basis sentence with any number masked. It writes {fact:ID} tokens, and the registry fills in each value when the post is built. Any digit or number word the model types itself is a rejection, so a figure in a post can only have come from the registry."
+    },
+    "composer": "The posts shipped on this site were written by {model}.",
+    "sources": "Figures come from registry tokens. Place names and context come from the reviewed basis text in the registry. Both are committed and human-reviewed; neither is invented.",
+    "limitation": {
+      "heading": "What these checks do not catch",
+      "body": "The checks guarantee every figure, not every implication. A post could imply that a plant is operating without using a banned word, a forecast or a number. That is why a person at EnergyX reviews every draft before anything is published."
+    }
+  },
+
   "mutation": {
     "heading": "We break the guardrails on purpose, and check the tests notice (mutation testing)",
     "intro": "Every build switches each guardrail off, one at a time, and reruns every test question against the broken version. If nothing fails, the tests weren't really checking that guardrail. These three are the most telling.",

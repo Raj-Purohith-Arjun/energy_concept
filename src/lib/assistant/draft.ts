@@ -20,6 +20,8 @@ export interface DraftInput {
   facts: Fact[];
   /** Labels of the topics the facts were picked for. */
   topics: string[];
+  /** Set only when the request covers one whole topic (not a narrowed subset): a stored post may stand in. */
+  topicId?: string;
   draft: AssistantContent["draft"];
   answer: AssistantContent["answer"];
   forwardLooking: ForwardLookingCopy;
@@ -53,7 +55,7 @@ export const templateDraftComposer: DraftComposer = async ({ facts, topics, draf
 // ---------------------------------------------------------------------------
 
 export interface DraftProblem {
-  rule: "sources" | "forward-looking" | "pre-filter" | "banned-phrase" | "precise-noun" | "terminology";
+  rule: "sources" | "forward-looking" | "pre-filter" | "banned-phrase" | "precise-noun" | "terminology" | "figures" | "structure";
   detail: string;
 }
 
@@ -208,7 +210,15 @@ export async function buildDraft(req: DraftRequest): Promise<DraftResult> {
   const chosen = (narrowed.length > 0 ? narrowed : pool).slice(0, assistant.draft.maxFacts);
   const topics = topicIds.map((id) => assistant.draft.topics[id].label);
 
-  const input: DraftInput = { facts: chosen, topics, draft: assistant.draft, answer: assistant.answer, forwardLooking: req.forwardLooking };
+  const wholeTopic = topicIds.length === 1 && narrowed.length === 0;
+  const input: DraftInput = {
+    facts: chosen,
+    topics,
+    topicId: wholeTopic ? topicIds[0] : undefined,
+    draft: assistant.draft,
+    answer: assistant.answer,
+    forwardLooking: req.forwardLooking,
+  };
   const ctx: DraftCheckContext = { brand: assistant.draft.brand, forwardLooking: req.forwardLooking, now, mutation: req.mutation };
   const rejected: RejectedDraft[] = [];
 

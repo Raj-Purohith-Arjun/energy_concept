@@ -6,7 +6,8 @@
     "listed for it. Each concept is a list of phrases; any phrase counts.",
     "TODO(content): replace handoff.href with the exact EnergyX Investor Relations page once confirmed.",
     "questions: one question per fact that retrieves it; offered as clickable examples when nothing matched in full. answer.phrasings: reviewed wording that does not echo the label; {value} is filled from the registry.",
-    "draft.topics: the facts a LinkedIn post about a topic may use. EnergyX's own published figures only. Deliberately absent: funding and GM facts (capital-raising communications), the implied-reduction arithmetic (not published by EnergyX) and every measurement of a website. draft.brand.preciseNouns encode CLAUDE.md rule 2.3 as patterns that catch an upgraded noun. TODO(content): draft.brand.terminology is empty until the CMO supplies approved terminology."
+    "draft.topics: the facts a LinkedIn post about a topic may use. EnergyX's own published figures only. Deliberately absent: funding and GM facts (capital-raising communications), the implied-reduction arithmetic (not published by EnergyX) and every measurement of a website. draft.brand.preciseNouns encode CLAUDE.md rule 2.3 as patterns that catch an upgraded noun. TODO(content): draft.brand.terminology is empty until the CMO supplies approved terminology.",
+    "draft.voice: rules given to the model by `pnpm compose:posts` for whole LinkedIn posts (data/composed-posts.json). The model sees fact labels and kinds, never values; figures enter only as tokens the build replaces from the registry."
   ],
   "pageTitle": "Assistant",
   "intro": {
@@ -728,6 +729,7 @@
       "dle": {
         "label": "DLE",
         "factIds": [
+          "ex-dle-time",
           "ex-water-dle",
           "ex-water-conventional",
           "ex-water-reduction"
@@ -776,6 +778,28 @@
       "opening": "What EnergyX has published about {topic}:",
       "closing": "Source: EnergyX's public pages."
     },
+    "voice": {
+      "postTopics": [
+        "black-giant",
+        "lonestar",
+        "water",
+        "dle"
+      ],
+      "rules": [
+        "EVERY fact given to you must appear in the post as its {fact:ID} token. A post missing even one token is rejected. Write no digits.",
+        "Write a LinkedIn post as a hook and one to three short paragraphs. The closing line and any footnote are added for you; do not write them.",
+        "The opening may be a contrast between two cited figures, or a concrete detail: a place, a scale, a stage. It makes no claim and uses no uncited number.",
+        "Do not begin more than one sentence in the post with \"EnergyX publishes\".",
+        "The paragraphs connect the facts to each other only by saying what EnergyX publishes, says or describes. Never say what the facts mean for the market, the climate, customers or investors.",
+        "Never type a number, a unit, a date or a number written as a word. Wherever a figure belongs, write that fact's token exactly as given, for example {fact:ex-bg-capacity}. Use every token at least once.",
+        "A fact marked planned is a plan or target, and one marked estimate is an estimate. Say so in plain words. Never describe either as achieved, built, producing or delivered.",
+        "Do not use adjectives of scale or quality (major, huge, leading, key, significant). No questions, no calls to action, no hashtags, no emoji.",
+        "Do not say what will, may, could or is expected to happen.",
+        "Do not name partners, customers, investors, competitors or any company other than EnergyX.",
+        "Worked example, water:\nConventional lithium extraction uses {fact:ex-water-conventional}.\n\nEnergyX publishes {fact:ex-water-dle} for its own process — a reduction the company states as {fact:ex-water-reduction}.",
+        "Worked example, Black Giant:\nEnergyX's Black Giant project sits at {fact:ex-bg-location}, across {fact:ex-bg-acres}.\n\nThe company has published a planned capacity of {fact:ex-bg-capacity}† and an in-situ resource estimate of {fact:ex-bg-insitu}†."
+      ]
+    },
     "brand": {
       "banned": [
         "game-changing",
@@ -801,7 +825,13 @@
         "unlock",
         "guaranteed",
         "can't miss",
-        "don't miss"
+        "don't miss",
+        "major",
+        "huge",
+        "massive",
+        "leading",
+        "significant",
+        "key"
       ],
       "preciseNouns": [
         {
@@ -836,7 +866,10 @@
       "editLabel": "Draft post (editable)",
       "editHint": "This is a draft to edit, not to publish as it stands. A person at EnergyX should review it first.",
       "notice": "Unaffiliated demo: EnergyX has not seen or approved this draft.",
-      "figuresHeading": "Figures and sources in this post",
+      "figuresSummary": {
+        "one": "{count} figure, all sourced",
+        "other": "{count} figures, all sourced"
+      },
       "ignored": "Left out of the draft: promotional wording in your request ({phrases}). The post states published facts only.",
       "rejected": {
         "heading": "A first draft was rejected",

@@ -8,6 +8,7 @@ import {
 } from "@/lib/schemas";
 import { templateComposer, type ComposedAnswer, type Composer } from "./compose";
 import { composeAnswer } from "./composed";
+import { composeDraft } from "./composed-posts";
 import type { GateMutation } from "./mutation";
 import { baseNormalize, hasNonLatinLetters } from "./normalize";
 import { postcheck, withoutPublishedPlans } from "./postcheck";
@@ -15,7 +16,6 @@ import { prefilter } from "./prefilter";
 import {
   buildDraft,
   draftTopicIds,
-  templateDraftComposer,
   topicSuggestions,
   type DraftComposer,
   type ForwardLookingCopy,
@@ -65,7 +65,7 @@ export interface AskDeps {
   facts: Fact[];
   assistant: AssistantContent;
   compose?: Composer;
-  /** Wording for LinkedIn drafts; the default is the built-in template. */
+  /** Wording for LinkedIn drafts; the default serves stored posts, with the built-in template as fallback. */
   composeDraft?: DraftComposer;
   /** Marker and footnote for planned figures; defaults to the site's. */
   forwardLooking?: ForwardLookingCopy;
@@ -151,7 +151,7 @@ async function runPipeline(input: unknown, deps: AskDeps): Promise<AssistantOutc
       facts,
       assistant,
       forwardLooking,
-      compose: deps.composeDraft ?? templateDraftComposer,
+      compose: deps.composeDraft ?? composeDraft,
       now,
       mutation,
       warn,

@@ -232,6 +232,12 @@ export const AssistantSchema = z.strictObject({
     topics: z.record(kebabId, z.strictObject({ label: nonEmpty, factIds: z.array(kebabId).min(1) })),
     requestTemplate: nonEmpty.includes("{topic}"),
     linkedin: z.strictObject({ opening: nonEmpty.includes("{topic}"), closing: nonEmpty }),
+    // `pnpm compose:posts`: whole posts written ahead of time, one per topic. The
+    // rules are what the model is told; the checks enforce them regardless.
+    voice: z.strictObject({
+      postTopics: z.array(kebabId).min(1),
+      rules: z.array(nonEmpty).min(1),
+    }),
     brand: z.strictObject({
       banned: z.array(nonEmpty),
       // CLAUDE.md §2.3: a pattern matches a wrong upgrade of a precise noun.
@@ -248,7 +254,8 @@ export const AssistantSchema = z.strictObject({
       editLabel: nonEmpty,
       editHint: nonEmpty,
       notice: nonEmpty,
-      figuresHeading: nonEmpty,
+      // Collapsed sources block under the post: "4 figures, all sourced".
+      figuresSummary: z.strictObject({ one: nonEmpty.includes("{count}"), other: nonEmpty.includes("{count}") }),
       ignored: nonEmpty.includes("{phrases}"),
       rejected: z.strictObject({
         heading: nonEmpty,
@@ -435,6 +442,19 @@ export const EvalsSchema = z.strictObject({
     omitted: nonEmpty.includes("{missing}"),
     other: nonEmpty.includes("{reason}"),
     times: nonEmpty.includes("{count}"),
+  }),
+  // Whole LinkedIn posts the model wrote at build time and the checks refused.
+  postRejections: z.strictObject({
+    heading: nonEmpty,
+    intro: nonEmpty,
+    none: nonEmpty,
+    columns: z.strictObject({ wrote: nonEmpty, why: nonEmpty, shipped: nonEmpty }),
+    // How the model is kept from producing a number, and what the checks cannot catch.
+    mechanism: z.strictObject({ heading: nonEmpty, body: nonEmpty }),
+    limitation: z.strictObject({ heading: nonEmpty, body: nonEmpty }),
+    // Which model wrote the stored posts, and where words that are not figures come from.
+    composer: nonEmpty.includes("{model}"),
+    sources: nonEmpty,
   }),
   mutation: z.strictObject({
     heading: nonEmpty,

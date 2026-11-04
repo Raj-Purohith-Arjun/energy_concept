@@ -1,9 +1,10 @@
 import { z } from "zod";
 import type { Fact } from "@/lib/schemas";
 
-// Gemini client for `pnpm compose:facts` ONLY. Nothing in the app calls this at
-// build or request time: the model writes one sentence per fact ahead of time,
-// those sentences are committed to data/composed.json, and the site serves them.
+// Gemini client for `pnpm compose:facts` and `pnpm compose:posts` ONLY. Nothing
+// in the app calls this at build or request time: the model writes wording ahead
+// of time, it is committed to data/composed.json and data/composed-posts.json,
+// and the site serves it.
 //
 // The model receives one fact's id, label and values, and fixed instructions.
 // Never a visitor's question, never the registry, never history or tools.
@@ -62,20 +63,19 @@ const ResponseSchema = z.object({
 
 const SentenceSchema = z.strictObject({ text: z.string().min(1), citations: z.array(z.string()) });
 
-export async function geminiSentence(fact: Fact, settings: GeminiSettings): Promise<GeminiSentence> {
+interface GeminiCall {
+  instructions: string;
+  prompt: string;
+  responseSchema: Record<string, unknown>;
+}
+
+/** One request/response round trip. Returns the model's JSON, unvalidated, and token counts. */
+async function callGemini(call: GeminiCall, settings: GeminiSettings): Promise<{ json: unknown; tokensIn: number; tokensOut: number }> {
   const { apiKey, model, fetch: doFetch = fetch, timeoutMs = 30_000 } = settings;
   const body = {
-    systemInstruction: { parts: [{ text: INSTRUCTIONS }] },
-    contents: [{ role: "user", parts: [{ text: factPrompt(fact) }] }],
-    generationConfig: {
-      responseMimeType: "application/json",
-      responseSchema: {
-        type: "OBJECT",
-        properties: { text: { type: "STRING" }, citations: { type: "ARRAY", items: { type: "STRING" } } },
-        required: ["text", "citations"],
-      },
-      temperature: 0,
-    },
+    systemInstruction: { parts: [{ text: call.instructions }] },
+    contents: [{ role: "user", parts: [{ text: call.prompt }] }],
+    generationConfig: { responseMimeType: "application/json", responseSchema: call.responseSchema, temperature: 0 },
   };
 
   let res: Response;
@@ -95,19 +95,60 @@ export async function geminiSentence(fact: Fact, settings: GeminiSettings): Prom
 
   const parsed = ResponseSchema.safeParse(await res.json().catch(() => null));
   if (!parsed.success) throw new GeminiError("unexpected response shape", "invalid");
-  let sentence: unknown;
+  let json: unknown;
   try {
-    sentence = JSON.parse(parsed.data.candidates[0].content.parts[0].text);
+    json = JSON.parse(parsed.data.candidates[0].content.parts[0].text);
   } catch {
     throw new GeminiError("model returned invalid JSON", "invalid");
   }
-  const checked = SentenceSchema.safeParse(sentence);
+  return { json, tokensIn: parsed.data.usageMetadata.promptTokenCount, tokensOut: parsed.data.usageMetadata.candidatesTokenCount };
+}
+
+export async function geminiSentence(fact: Fact, settings: GeminiSettings): Promise<GeminiSentence> {
+  const { json, tokensIn, tokensOut } = await callGemini(
+    {
+      instructions: INSTRUCTIONS,
+      prompt: factPrompt(fact),
+      responseSchema: {
+        type: "OBJECT",
+        properties: { text: { type: "STRING" }, citations: { type: "ARRAY", items: { type: "STRING" } } },
+        required: ["text", "citations"],
+      },
+    },
+    settings,
+  );
+  const checked = SentenceSchema.safeParse(json);
   if (!checked.success) throw new GeminiError("model JSON has the wrong shape", "invalid");
-  return {
-    ...checked.data,
-    tokensIn: parsed.data.usageMetadata.promptTokenCount,
-    tokensOut: parsed.data.usageMetadata.candidatesTokenCount,
-  };
+  return { ...checked.data, tokensIn, tokensOut };
+}
+
+// A whole post: a hook and a few paragraphs. The model gets the voice rules and
+// the topic's facts by label and kind, never by value (see compose-posts.ts).
+const PostSchema = z.strictObject({ hook: z.string().min(1), paragraphs: z.array(z.string().min(1)).min(1) });
+
+export interface GeminiPost {
+  hook: string;
+  paragraphs: string[];
+  tokensIn: number;
+  tokensOut: number;
+}
+
+export async function geminiPost(instructions: string, prompt: string, settings: GeminiSettings): Promise<GeminiPost> {
+  const { json, tokensIn, tokensOut } = await callGemini(
+    {
+      instructions,
+      prompt,
+      responseSchema: {
+        type: "OBJECT",
+        properties: { hook: { type: "STRING" }, paragraphs: { type: "ARRAY", items: { type: "STRING" } } },
+        required: ["hook", "paragraphs"],
+      },
+    },
+    settings,
+  );
+  const checked = PostSchema.safeParse(json);
+  if (!checked.success) throw new GeminiError("model JSON has the wrong shape", "invalid");
+  return { ...checked.data, tokensIn, tokensOut };
 }
 
 /** Errors worth retrying: overload, rate limit, server errors, timeouts, network. */
