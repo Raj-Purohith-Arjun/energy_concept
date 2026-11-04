@@ -13,8 +13,8 @@ test("renders every section, with every table cell measured", async ({ page }) =
   }
   // Verdict above all prose: three before/after pairs, each a registry fact.
   await expect(page.locator("#verdict ~ dl [data-fact]")).toHaveCount(6);
-  // Caveats, registry findings and first week start collapsed.
-  await expect(page.locator("details")).toHaveCount(3);
+  // Bundle weight (added in 17ee5b6), caveats, registry findings and first week start collapsed.
+  await expect(page.locator("details")).toHaveCount(4);
   await expect(page.locator("details[open]")).toHaveCount(0);
   const table = page.getByRole("table");
   await expect(table.getByRole("row")).toHaveCount(6); // header + five measures

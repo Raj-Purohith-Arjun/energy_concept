@@ -286,7 +286,74 @@ html:has(dialog.mobile-menu[open]) {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .lt-play-label {
+  .lt-play-label,
+  .cc-note {
     display: none;
+  }
+}
+
+/* /evals caught claim (CaughtClaim.tsx). The control, focus ring, glyph and
+   reduced-motion hide are the .lt-* rules above. Two radios share one button, the
+   unchecked on top, and alternate keyframe names: CSS restarts an animation only
+   when its name changes, so each tap replays from the start. */
+.cc-play {
+  display: inline-grid;
+}
+
+.cc-play > label {
+  grid-area: 1 / 1;
+  background: var(--background);
+}
+
+.cc-play > label:first-child:not(:has(:checked)) {
+  z-index: 1;
+}
+
+.cc-word {
+  position: relative;
+}
+
+.cc-strike {
+  position: absolute;
+  inset: 50% 0 auto;
+  height: 2px;
+  background: currentColor;
+  transform-origin: left;
+}
+
+@keyframes cc-appear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes cc-grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .lt:has(.cc-b:checked) {
+    --cc-appear: cc-appear;
+    --cc-grow: cc-grow;
+  }
+
+  .lt:has(.lt-play:checked) .cc-w {
+    animation: var(--cc-appear, lt-appear) 1ms linear calc(var(--i) * 0.2s) both;
+  }
+
+  .lt:has(.lt-play:checked) .cc-step {
+    animation: var(--cc-appear, lt-appear) 0.4s ease-out calc(var(--i) * 2s) both;
+  }
+
+  .lt:has(.lt-play:checked) .cc-strike {
+    animation: var(--cc-grow, lt-grow) 0.4s ease-out 4s both;
   }
 }

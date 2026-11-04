@@ -463,6 +463,15 @@ export const EvalsSchema = z.strictObject({
     times: nonEmpty.includes("{count}"),
     writtenBy: nonEmpty.includes("{model}"),
   }),
+  // The one stored rejection walked through above the folds. Its other labels are postRejections.columns.
+  caughtClaim: z.strictObject({
+    heading: nonEmpty,
+    play: nonEmpty,
+    playAgain: nonEmpty,
+    replayNote: nonEmpty,
+    figuresChecked: nonEmpty,
+    provenance: nonEmpty,
+  }),
   // Whole LinkedIn posts the model wrote at build time and the checks refused.
   postRejections: z.strictObject({
     heading: nonEmpty,
@@ -471,7 +480,7 @@ export const EvalsSchema = z.strictObject({
     columns: z.strictObject({ wrote: nonEmpty, why: nonEmpty, shipped: nonEmpty }),
     // How the model is kept from producing a number, and what the checks cannot catch.
     mechanism: z.strictObject({ heading: nonEmpty, body: nonEmpty }),
-    limitation: z.strictObject({ heading: nonEmpty, body: nonEmpty }),
+    limitation: z.strictObject({ heading: nonEmpty, body: nonEmpty, notes: z.array(nonEmpty) }),
     // Which model wrote the stored posts, and where words that are not figures come from.
     composer: nonEmpty.includes("{model}"),
     writtenBy: nonEmpty.includes("{model}"),

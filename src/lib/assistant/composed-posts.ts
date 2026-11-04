@@ -3,7 +3,7 @@ import composedPostsFile from "../../../data/composed-posts.json";
 import { getAllFacts, getAssistant, getSite } from "@/lib/content";
 import { parseFactText } from "@/lib/fact-text";
 import { isForwardLooking, type AssistantContent, type Fact } from "@/lib/schemas";
-import { checkDraft, templateDraftComposer, type DraftComposer, type DraftProblem, type ForwardLookingCopy } from "./draft";
+import { checkDraft, draftPool, templateDraftComposer, type DraftComposer, type DraftProblem, type ForwardLookingCopy } from "./draft";
 import { numbersIn, numberWordsIn } from "./postcheck";
 
 // Whole LinkedIn posts, written ahead of time by `pnpm compose:posts` into
@@ -209,6 +209,24 @@ export function getPostStore(): CheckedPostStore {
     for (const [id, why] of checked.rejected) console.warn(`[composed-posts] ${id}: post rejected, using template (${why})`);
   }
   return checked;
+}
+
+/** What readers get for a topic today: a stored post that passes every check, else the template. */
+export async function shippedPostText(topicId: string): Promise<string> {
+  const served = getPostStore().accepted.get(topicId)?.text;
+  if (served) return served;
+  const assistant = getAssistant();
+  const topic = assistant.draft.topics[topicId];
+  const pool = topic ? draftPool([topicId], getAllFacts(), assistant).slice(0, assistant.draft.maxFacts) : [];
+  if (pool.length === 0) return "";
+  const composed = await templateDraftComposer({
+    facts: pool,
+    topics: [topic.label],
+    draft: assistant.draft,
+    answer: assistant.answer,
+    forwardLooking: getSite().forwardLooking,
+  });
+  return composed.text;
 }
 
 /**

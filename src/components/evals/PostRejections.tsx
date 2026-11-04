@@ -1,6 +1,5 @@
-import { getPostStore } from "@/lib/assistant/composed-posts";
-import { draftPool, templateDraftComposer } from "@/lib/assistant/draft";
-import { getAllFacts, getAssistant, getEvals, getSite } from "@/lib/content";
+import { getPostStore, shippedPostText } from "@/lib/assistant/composed-posts";
+import { getAssistant, getEvals } from "@/lib/content";
 import { fill } from "@/lib/evals-view";
 
 // Whole posts the model wrote at build time that the checks refused, from the
@@ -11,28 +10,12 @@ export async function PostRejections() {
   const r = getEvals().postRejections;
   const model = getPostStore().model;
   const assistant = getAssistant();
-  const facts = getAllFacts();
   const rows = await Promise.all(
-    getPostStore().rejections.map(async (rej) => {
-      const topic = assistant.draft.topics[rej.topicId];
-      const pool = topic ? draftPool([rej.topicId], facts, assistant).slice(0, assistant.draft.maxFacts) : [];
-      // What readers get for this topic today: a stored post that passes every check, else the template.
-      const served = getPostStore().accepted.get(rej.topicId)?.text;
-      const shipped =
-        served ??
-        (pool.length > 0
-          ? (
-              await templateDraftComposer({
-                facts: pool,
-                topics: [topic.label],
-                draft: assistant.draft,
-                answer: assistant.answer,
-                forwardLooking: getSite().forwardLooking,
-              })
-            ).text
-          : "");
-      return { ...rej, label: topic?.label ?? rej.topicId, shipped };
-    }),
+    getPostStore().rejections.map(async (rej) => ({
+      ...rej,
+      label: assistant.draft.topics[rej.topicId]?.label ?? rej.topicId,
+      shipped: await shippedPostText(rej.topicId),
+    })),
   );
 
   return (
@@ -47,6 +30,11 @@ export async function PostRejections() {
       <p className="mt-1 max-w-3xl leading-7">{r.mechanism.body}</p>
       <h3 className="mt-5 font-semibold">{r.limitation.heading}</h3>
       <p className="mt-1 max-w-3xl leading-7">{r.limitation.body}</p>
+      {r.limitation.notes.map((note) => (
+        <p key={note} className="mt-3 max-w-3xl leading-7">
+          {note}
+        </p>
+      ))}
       <div className="mt-6 grid gap-6">
         {rows.map((row) => (
           <article key={`${row.topicId}-${row.at}-${row.text}`} data-post-rejection={row.topicId} className="border-l-4 border-line pl-4">

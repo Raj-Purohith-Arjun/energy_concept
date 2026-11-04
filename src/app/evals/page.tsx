@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Adversarial } from "@/components/evals/Adversarial";
 import { CaseTable } from "@/components/evals/CaseTable";
+import { CaughtClaim } from "@/components/evals/CaughtClaim";
 import { Composer } from "@/components/evals/Composer";
 import { EvalVerdict } from "@/components/evals/EvalVerdict";
 import { Fold } from "@/components/evals/Fold";
@@ -23,8 +24,9 @@ export const metadata: Metadata = {
 // The eval suite, run at build time: every count, rate and example below comes
 // from running src/lib/assistant/eval-cases.ts through the real pipeline, once
 // as shipped and once per mutant. Verdict first (counts, including mutants
-// caught), then every section collapsed: the refused whole post first, then
-// sentences, mutation, try it. Static HTML; no client JS.
+// caught), then one caught claim walked through step by step, then every section
+// collapsed: the refused whole post first, then sentences, mutation, try it.
+// Static HTML; no client JS.
 export default async function EvalsPage() {
   const page = getEvals();
   const report = await evalReport();
@@ -34,6 +36,7 @@ export default async function EvalsPage() {
       <h1 className="h-page">{page.heading}</h1>
       <p className="verdict-lead mt-3 max-w-3xl">{page.intro}</p>
       <EvalVerdict report={report} />
+      <CaughtClaim />
       <Fold title={page.folds.postRejections}>
         <PostRejections />
       </Fold>
