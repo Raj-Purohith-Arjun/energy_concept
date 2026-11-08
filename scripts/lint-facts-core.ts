@@ -1,4 +1,5 @@
 import ts from "typescript";
+import { isTodo, type Fact } from "../src/lib/schemas";
 
 // Pure scanning logic for scripts/lint-facts.ts, kept separate so unit tests
 // can import it without running the CLI. CLAUDE.md §2.1: business claims must
@@ -226,6 +227,44 @@ export function scanTsx(file: string, source: string, knownIds: ReadonlySet<stri
   };
   visit(sf);
   return out;
+}
+
+// ---------------------------------------------------------------------------
+// Registry warnings: unverified facts and unfinished TODO(content) markers.
+// ---------------------------------------------------------------------------
+
+// This demo's own first-load JavaScript figures are measured on a local `next start`
+// build, so there is no public page to link. That is a decision, not unfinished
+// work, and it is the only TODO(content) text treated as one. Exact match, and only
+// as a fact's own source.url: any other TODO(content), or this text anywhere else,
+// is still an unfinished marker and still warns.
+export const NO_PUBLIC_URL = "TODO(content) local measurement, no public URL";
+
+function todoPaths(value: unknown, at: string): string[] {
+  if (typeof value === "string") return isTodo(value) ? [at] : [];
+  if (Array.isArray(value)) return value.flatMap((v, i) => todoPaths(v, `${at}[${i}]`));
+  if (value && typeof value === "object") {
+    return Object.entries(value).flatMap(([k, v]) => todoPaths(v, at ? `${at}.${k}` : k));
+  }
+  return [];
+}
+
+export interface RegistryReport {
+  /** Unfinished work: unverified facts and TODO(content) markers. */
+  warnings: string[];
+  /** Fact ids whose source.url is deliberately absent (local measurements). */
+  intentionalNoUrl: string[];
+}
+
+export function registryReport(facts: Fact[]): RegistryReport {
+  const intentionalNoUrl = facts.filter((f) => f.source.url === NO_PUBLIC_URL).map((f) => f.id);
+  const warnings = facts.flatMap((fact) => [
+    ...(fact.verified ? [] : [`${fact.id}: verified is false`]),
+    ...todoPaths(fact, fact.id)
+      .filter((p) => !(p === `${fact.id}.source.url` && fact.source.url === NO_PUBLIC_URL))
+      .map((p) => `${p}: TODO(content)`),
+  ]);
+  return { warnings, intentionalNoUrl };
 }
 
 // ---------------------------------------------------------------------------

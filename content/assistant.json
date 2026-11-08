@@ -34,7 +34,9 @@
           "How much water does EnergyX save compared with conventional extraction?",
           "Has GM invested in EnergyX?",
           "How heavy is the Black Giant page?",
-          "What is Black Giant's capacity?"
+          "What is Black Giant's capacity?",
+          "Who is EnergyX's CEO?",
+          "Who is EnergyX's CMO?"
         ]
       },
       {
@@ -56,7 +58,6 @@
       {
         "label": "Not covered yet",
         "questions": [
-          "Who is EnergyX's CEO?",
           "What is EnergyX's revenue?"
         ]
       },

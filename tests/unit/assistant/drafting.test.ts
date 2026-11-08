@@ -254,11 +254,11 @@ describe("a grant is a grant (keyed off the fact's basis, not its id)", () => {
   });
 });
 
-describe("Who is EnergyX's CEO?", () => {
+describe("What is EnergyX's revenue?", () => {
   it("offers clickable examples up front and keeps the coverage list collapsed", async () => {
-    const outcome = await run("Who is EnergyX's CEO?");
+    const outcome = await run("What is EnergyX's revenue?");
     if (outcome.kind !== "no-answer") throw new Error(outcome.kind);
-    const html = renderToStaticMarkup(NoAnswerPanel({ outcome, question: "Who is EnergyX's CEO?" }));
+    const html = renderToStaticMarkup(NoAnswerPanel({ outcome, question: "What is EnergyX's revenue?" }));
     const details = html.indexOf("<details");
     expect(details).toBeGreaterThan(-1);
     expect(html).not.toContain("<details open");

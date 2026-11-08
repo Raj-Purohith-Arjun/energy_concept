@@ -125,15 +125,39 @@
   "registry": {
     "heading": "What the registry found",
     "count": { "one": "{count} case", "other": "{count} cases" },
-    "intro": "Putting every published figure in one place, each with what it counts, surfaced two cases worth a look. Neither means a published figure is off. Both are about what a figure says it measures.",
+    "intro": "Putting every published figure in one place, each with what it counts, surfaced cases worth a look. None means a published figure is off. Each is about what a figure says it measures, or about one subject being described in different words on different pages.",
     "cases": [
       {
-        "heading": "Days or hours: one process, two published timings",
+        "heading": "Days or hours: one process, several published timings",
         "body": [
-          "The homepage comparison table gives the DLE processing time as {fact:ex-dle-time}. The FAQ on the same page says hours.",
-          "Both can be accurate if they measure different spans of the process. Neither says which span it measures, so a retail investor, or a model summarising the page, cannot tell them apart."
+          "The homepage comparison table gives the DLE processing time as {fact:ex-dle-time}. The FAQ on the same page says hours. Two other EnergyX pages give it as a range of hours to days and as a number of days. All four are shown below, each with where it is published.",
+          "Each can be accurate if it measures a different span of the process. None of them says where the clock starts and stops, so a retail investor, or a model summarising the pages, cannot tell them apart."
         ],
         "figures": "ex-dle-time"
+      },
+      {
+        "heading": "Funding: two pages, two totals",
+        "body": [
+          "The homepage stats band gives funding as {fact:ex-funding}. The FAQ page answers the question of how much capital EnergyX has raised with a different total, shown below.",
+          "Each can be accurate if it counts different things or runs to a different date. Neither says whether its total includes grants or strategic investment, so a retail investor, or a model summarising the pages, cannot tell them apart."
+        ],
+        "figures": "ex-funding"
+      },
+      {
+        "heading": "Conventional water use: two pages, two figures",
+        "body": [
+          "The homepage FAQ gives the freshwater used by conventional extraction as {fact:ex-water-conventional}. The sustainability page gives a different figure for brine evaporation, shown below.",
+          "Each can be accurate if it describes a different site, year or method. Neither says which it describes, so a reader, or a model summarising the pages, cannot tell them apart."
+        ],
+        "figures": "ex-water-conventional"
+      },
+      {
+        "heading": "General Motors: invested in, or engaged with?",
+        "body": [
+          "The homepage FAQ says {fact:ex-gm}. The FAQ page, in its answer about who EnergyX partners with, describes General Motors in different words, shown below.",
+          "Both can be accurate, since an investor and a partner can be the same company. Neither page gives an amount, a date or what the relationship consists of, so a retail investor, or a model summarising the pages, cannot tell the two wordings apart."
+        ],
+        "figures": "ex-gm"
       },
       {
         "heading": "Water: the claim undersells EnergyX's own figures",

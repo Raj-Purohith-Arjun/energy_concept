@@ -566,9 +566,9 @@ export const EvalsSchema = z.strictObject({
 export type EvalsContent = z.infer<typeof EvalsSchema>;
 
 // ---------------------------------------------------------------------------
-// Gap report export (CLAUDE.md section 5): content/gaps.json is a committed,
-// hand-reviewed snapshot written by `pnpm export:gaps`. The /gaps page was cut
-// (section 8, cut order 2); the log and this export remain.
+// Gap report export (CLAUDE.md section 5): content/gaps.json is the hand-reviewed
+// snapshot `pnpm export:gaps` writes when run. The /gaps page was cut (section 8,
+// cut order 2); the log and this export remain, and no site code reads the file.
 // ---------------------------------------------------------------------------
 
 export const GAP_REASONS = ["no-match", "post-check", "language"] as const;

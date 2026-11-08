@@ -61,7 +61,7 @@ describe("assistant outcomes (eval cases)", () => {
   });
 
   it("lists what it can answer when it has no sourced answer", async () => {
-    const outcome = await run("Who is EnergyX's CEO?");
+    const outcome = await run("What is EnergyX's revenue?");
     expect(outcome.kind === "no-answer" && outcome.coverage).toContain("DLE processing time");
   });
 });

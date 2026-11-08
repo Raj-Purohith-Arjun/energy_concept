@@ -119,7 +119,16 @@ caught, with what was wrong and what shipped instead.
 
 ## 5. The gap report
 
-A page listing the questions the assistant could not answer, grouped by subject.
+**The page was cut (§8, cut order 2). There is no gap page.** What shipped is
+the log and the export:
+
+- Every question answered with "not covered" is logged, with emails and long
+  numbers removed: to `data/unanswered.jsonl` locally (git-ignored) and to the
+  server log. That log is the content backlog.
+- `pnpm export:gaps` turns the log into a redacted, deduplicated,
+  subject-grouped snapshot in `content/gaps.json`. It is run by hand and read by
+  a person before anything is committed. It never runs at build time, and
+  nothing on the site reads the file.
 
 Framed for a marketing lead, not an engineer: *these are the questions people
 asked that EnergyX's public pages do not answer.* It is a content backlog.
@@ -155,7 +164,7 @@ leaving 1.6 MB for everything else.
 8. Brand rules enforced; one visible rejection.
 
 **Day 4**
-9. The gap report (§5).
+9. The gap report (§5): the page was cut (§8). The log and the export script shipped.
 10. Brand rules added to the eval suite — same machinery as the refusal cases.
 
 **Day 5**

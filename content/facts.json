@@ -9,13 +9,10 @@
     "    page fetch. They are marked verified:true so the assistant can use them,",
     "    BUT a transcription error is possible.",
     "",
-    "  >>> Raj: before the demo, open energyx.com and eyeball these six by hand:",
-    "      ex-patents, ex-funding, ex-dle-time, ex-water-reduction,",
-    "      ex-bg-capacity, ex-gm. Ten minutes. If one of them is wrong in front",
-    "      of Teague, the whole registry loses its credibility.",
-    "",
-    "  - ex-ceo and ex-cmo are verified:false. Raj checks https://energyx.com/about-us/",
-    "    by hand, then flips them. Until then the assistant cannot see them.",
+    "  - Checked by hand against the live site on 2026-11-08, each matching the page it",
+    "    cites: ex-ceo, ex-cmo, ex-patents, ex-funding, ex-dle-time, ex-water-reduction,",
+    "    ex-bg-capacity, ex-gm. Their 'accessed' dates are that day. Facts not on this",
+    "    list keep their 2026-10-08 date and have not been re-checked since.",
     "",
     "approvedAt is null on every EnergyX fact, always. Raj is not EnergyX.",
     "",
@@ -36,7 +33,7 @@
       "basis": "Figure given in the homepage comparison table, contrasted against 12 to 18 months for conventional evaporation. The table does not define what counts as the start or end of the process.",
       "basisSource": "inferred",
       "kind": "company-claim",
-      "source": { "title": "EnergyX homepage, conventional vs DLE comparison", "url": "https://energyx.com/", "accessed": "2026-10-08" },
+      "source": { "title": "EnergyX homepage, conventional vs DLE comparison", "url": "https://energyx.com/", "accessed": "2026-11-08" },
       "owner": "Engineering / Marketing",
       "approvedAt": null,
       "verified": true,
@@ -46,7 +43,21 @@
           "basis": "Stated in the FAQ section of the same homepage: direct lithium extraction reduces the conventional timeline to hours.",
           "basisSource": "stated",
           "url": "https://energyx.com/",
-          "accessed": "2026-10-08"
+          "accessed": "2026-11-08"
+        },
+        {
+          "value": "hours to days",
+          "basis": "Stated on the FAQ page, in the answer to \"What is the typical processing time for GET-Lit™?\": \"Using our GET-Lit™ DLE technology as a standalone solution, lithium extraction can be completed within hours to days, depending on site-specific factors.\" The answer does not say where the clock starts or stops.",
+          "basisSource": "stated",
+          "url": "https://energyx.com/faq/",
+          "accessed": "2026-11-08"
+        },
+        {
+          "value": "1-2 days",
+          "basis": "Shown in the Quick Facts on the lithium page, labelled \"Continuous Process\". The technology page (https://energyx.com/technology/) serves the same content. The label does not say where the clock starts or stops, so what this figure measures is this registry's reading.",
+          "basisSource": "inferred",
+          "url": "https://energyx.com/lithium/",
+          "accessed": "2026-11-08"
         }
       ],
       "note": "Both figures appear on the SAME page. This is the clearest example in the registry: one subject, two published answers, neither stating what it measures. Present it as a metadata gap, never as an error."
@@ -59,7 +70,7 @@
       "basis": "Described in the homepage FAQ as the reduction achieved versus conventional extraction. The FAQ also gives the underlying figures: up to 400,000 gallons per ton conventional, around 800 gallons per ton with DLE.",
       "basisSource": "stated",
       "kind": "company-claim",
-      "source": { "title": "EnergyX homepage FAQ", "url": "https://energyx.com/", "accessed": "2026-10-08" },
+      "source": { "title": "EnergyX homepage FAQ", "url": "https://energyx.com/", "accessed": "2026-11-08" },
       "owner": "Engineering / Marketing",
       "approvedAt": null,
       "verified": true,
@@ -77,7 +88,16 @@
       "source": { "title": "EnergyX homepage FAQ", "url": "https://energyx.com/", "accessed": "2026-10-08" },
       "owner": "Engineering",
       "approvedAt": null,
-      "verified": true
+      "verified": true,
+      "alsoPublishedAs": [
+        {
+          "value": "500K gallons water/ton lithium",
+          "basis": "Stated on the sustainability page: \"Current brine evaporation uses 500K gallons water/ton lithium in communities already dealing with water scarcity.\" The sentence gives no basis for the figure, such as the site, the year or the method it was counted by.",
+          "basisSource": "stated",
+          "url": "https://energyx.com/sustainability/",
+          "accessed": "2026-11-08"
+        }
+      ]
     },
     {
       "id": "ex-water-dle",
@@ -117,20 +137,20 @@
       "basis": "Figure in the homepage company-stats band. The homepage does not state whether this counts granted patents only, or granted plus pending applications, or which technology areas are included.",
       "basisSource": "inferred",
       "kind": "company-claim",
-      "source": { "title": "EnergyX homepage, company stats", "url": "https://energyx.com/", "accessed": "2026-10-08" },
+      "source": { "title": "EnergyX homepage, company stats", "url": "https://energyx.com/", "accessed": "2026-11-08" },
       "owner": "Legal / IP",
       "approvedAt": null,
       "verified": true,
       "alsoPublishedAs": [
         {
           "value": "150+",
-          "basis": "TODO(content) — Raj to confirm exact wording. If the blog says 'patents and applications', set basisSource to stated.",
+          "basis": "The blog post says \"Backed by more than 150 patents\" in its body and \"backed by 150+ patents\" in its Key Takeaways. It says patents; it does not say whether that counts granted patents, applications or both. An earlier basis for this figure assumed applications were included. That assumption was wrong: the post does not say so.",
           "basisSource": "inferred",
           "url": "https://energyx.com/blog/lithium-extraction-from-brine/",
-          "accessed": "2026-10-08"
+          "accessed": "2026-11-08"
         }
       ],
-      "note": "If the blog and the SEC filings do state what they count and the homepage does not, the finding is that the most-read page is the only one without a basis. Verify before claiming that."
+      "note": "Checked 2026-11-08: neither the homepage band (140+) nor the blog post (150+) says what its count includes, whether granted patents, applications or both. So the homepage is not the only page without a basis for this figure; the blog has none either. The SEC filings an earlier version of this note mentioned have not been checked."
     },
     {
       "id": "ex-founded",
@@ -166,10 +186,19 @@
       "basis": "Figure in the homepage company-stats band. The page does not state whether this is cumulative capital raised across all rounds, includes grants and strategic investment, or is equity only.",
       "basisSource": "inferred",
       "kind": "company-claim",
-      "source": { "title": "EnergyX homepage, company stats", "url": "https://energyx.com/", "accessed": "2026-10-08" },
+      "source": { "title": "EnergyX homepage, company stats", "url": "https://energyx.com/", "accessed": "2026-11-08" },
       "owner": "Finance",
       "approvedAt": null,
-      "verified": true
+      "verified": true,
+      "alsoPublishedAs": [
+        {
+          "value": "over $150M+",
+          "basis": "Stated on the FAQ page, in the answer to \"How much capital has EnergyX raised?\": \"To date, EnergyX has raised over $150M+ from institutional and retail investors.\" The answer does not say whether the total includes grants or strategic investment.",
+          "basisSource": "inferred",
+          "url": "https://energyx.com/faq/",
+          "accessed": "2026-11-08"
+        }
+      ]
     },
     {
       "id": "ex-acres",
@@ -205,34 +234,43 @@
       "basis": "Stated in the homepage FAQ as part of GM's battery supply chain strategy. The FAQ does not give an amount, a date or a stake size.",
       "basisSource": "stated",
       "kind": "company-claim",
-      "source": { "title": "EnergyX homepage FAQ", "url": "https://energyx.com/", "accessed": "2026-10-08" },
+      "source": { "title": "EnergyX homepage FAQ", "url": "https://energyx.com/", "accessed": "2026-11-08" },
       "owner": "Finance / IR",
       "approvedAt": null,
-      "verified": true
+      "verified": true,
+      "alsoPublishedAs": [
+        {
+          "value": "meaningfully engaged with a top American EV manufacturing partner General Motors (GM)",
+          "basis": "Stated on the FAQ page, in the answer to \"Who does EnergyX partner with?\": \"We meaningfully engaged with a top American EV manufacturing partner General Motors (GM), a battery component and lithium production investment partner POSCO (who is JVed with GM), an oil & gas partner Eni, and top tier EPC Worley.\" It says engaged with; it does not say invested in, and gives no amount, date or stake size.",
+          "basisSource": "stated",
+          "url": "https://energyx.com/faq/",
+          "accessed": "2026-11-08"
+        }
+      ]
     },
     {
       "id": "ex-ceo",
       "label": "EnergyX chief executive (CEO)",
       "value": "Teague Egan",
-      "basis": "Named in the Leadership section of EnergyX's About page, under the title \"Founder & CEO\". Read off the page by an automated fetch on 2026-11-08 and not yet checked by hand, so this fact stays unverified until it is.",
+      "basis": "Named in the Leadership section of EnergyX's About page, under the title \"Founder & CEO\". Checked against the live page on 2026-11-08.",
       "basisSource": "stated",
       "kind": "company-claim",
       "source": { "title": "EnergyX About, Leadership", "url": "https://energyx.com/about-us/", "accessed": "2026-11-08" },
       "owner": "Company",
       "approvedAt": null,
-      "verified": false
+      "verified": true
     },
     {
       "id": "ex-cmo",
       "label": "EnergyX chief marketing officer (CMO)",
       "value": "Kellee Khalil",
-      "basis": "Named in the Leadership section of EnergyX's About page, under the title \"Chief Marketing Officer\". Read off the page by an automated fetch on 2026-11-08 and not yet checked by hand, so this fact stays unverified until it is.",
+      "basis": "Named in the Leadership section of EnergyX's About page, under the title \"Chief Marketing Officer\". Checked against the live page on 2026-11-08.",
       "basisSource": "stated",
       "kind": "company-claim",
       "source": { "title": "EnergyX About, Leadership", "url": "https://energyx.com/about-us/", "accessed": "2026-11-08" },
       "owner": "Company",
       "approvedAt": null,
-      "verified": false
+      "verified": true
     },
 
     {
@@ -270,11 +308,11 @@
       "basis": "Given on the homepage project card as Phase I and II combined. This is a planned capacity, not current production.",
       "basisSource": "stated",
       "kind": "planned",
-      "source": { "title": "EnergyX homepage, projects", "url": "https://energyx.com/", "accessed": "2026-10-08" },
+      "source": { "title": "EnergyX homepage, projects", "url": "https://energyx.com/", "accessed": "2026-11-08" },
       "owner": "Projects",
       "approvedAt": null,
       "verified": true,
-      "note": "The Black Giant project page renders this as 52,500 (captured in the Lighthouse layout-shift audit) while the homepage rounds it to 53K. Same figure, two presentations — a rounding-consistency case, much milder than the days/hours one."
+      "note": "What the Black Giant project page (https://energyx.com/black-giant/) says, checked 2026-11-08: under Production Target it lists 7,500 tpa LCE (Phase I) in 2028 and 52,500 tpa LCE (Phase II) in 2030, then 100,000 tpa LCE (Phase III) and 150,000 tpa LCE (Phase IV), both dated TBD. Its header gives a project size of 52,500 tpa LCE, and its Browse projects card repeats 53Ktpa LCE Phase I & II. What it does not say: whether the 52,500 is cumulative or Phase II alone, or how 52,500 relates to 53K. Phase I and Phase II as listed sum to 60,000, which matches neither figure. So this registry does not treat 52,500 and 53K as one figure shown two ways."
     },
     {
       "id": "ex-bg-insitu",

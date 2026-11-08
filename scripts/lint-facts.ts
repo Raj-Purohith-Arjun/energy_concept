@@ -5,9 +5,8 @@
 import { readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
 import factsFile from "../content/facts.json";
-import { buildRegistry, type Fact } from "../src/lib/content";
-import { isTodo } from "../src/lib/schemas";
-import { formatViolation, scanJson, scanMdx, scanTsx, type Violation } from "./lint-facts-core";
+import { buildRegistry } from "../src/lib/content";
+import { formatViolation, registryReport, scanJson, scanMdx, scanTsx, type Violation } from "./lint-facts-core";
 
 const ROOT = process.cwd();
 const REGISTRY_FILE = path.join("content", "facts.json");
@@ -28,22 +27,6 @@ function walk(dir: string, accept: (file: string) => boolean): string[] {
   });
 }
 
-function todoPaths(value: unknown, at: string): string[] {
-  if (typeof value === "string") return isTodo(value) ? [at] : [];
-  if (Array.isArray(value)) return value.flatMap((v, i) => todoPaths(v, `${at}[${i}]`));
-  if (value && typeof value === "object") {
-    return Object.entries(value).flatMap(([k, v]) => todoPaths(v, at ? `${at}.${k}` : k));
-  }
-  return [];
-}
-
-function registryWarnings(facts: Fact[]): string[] {
-  return facts.flatMap((fact) => [
-    ...(fact.verified ? [] : [`${fact.id}: verified is false`]),
-    ...todoPaths(fact, fact.id).map((p) => `${p}: TODO(content)`),
-  ]);
-}
-
 function main(): number {
   const registry = buildRegistry(factsFile);
   const knownIds = new Set(registry.keys());
@@ -61,8 +44,12 @@ function main(): number {
     return scanTsx(display, source, knownIds);
   });
 
-  const warnings = registryWarnings([...registry.values()]);
+  const { warnings, intentionalNoUrl } = registryReport([...registry.values()]);
   for (const warning of warnings) console.warn(`warning: ${warning}`);
+  if (intentionalNoUrl.length > 0) {
+    // Information, not a warning: local measurements have no public page to cite.
+    console.log(`note: ${intentionalNoUrl.length} local measurements intentionally have no public source URL.`);
+  }
 
   for (const v of violations) console.error(formatViolation(v));
   if (violations.length > 0) {

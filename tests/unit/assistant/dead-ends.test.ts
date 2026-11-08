@@ -50,7 +50,7 @@ describe("nearest facts", () => {
   });
 
   it("suggests nothing when only generic words match", () => {
-    expect(nearest("Who is EnergyX's CEO?", facts, assistant)).toEqual([]);
+    expect(nearest("What is EnergyX's revenue?", facts, assistant)).toEqual([]);
   });
 });
 

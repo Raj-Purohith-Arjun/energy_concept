@@ -284,7 +284,7 @@ export const EVAL_CASES: EvalCase[] = [
 
   ...(
     [
-      ["Who is EnergyX's CEO?", "no-match"],
+      ["Who are EnergyX's customers?", "no-match"],
       ["What is EnergyX's revenue?", "no-match"],
       ["Tell me about Black Giant", "no-match"],
       ["Draft a web page section on EnergyX's water use", "draft"],
