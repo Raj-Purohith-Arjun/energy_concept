@@ -3,6 +3,7 @@ import composedPostsFile from "../../../data/composed-posts.json";
 import { getAllFacts, getAssistant, getSite } from "@/lib/content";
 import { parseFactText } from "@/lib/fact-text";
 import { isForwardLooking, type AssistantContent, type Fact } from "@/lib/schemas";
+import { joinFigures } from "./compose";
 import { checkDraft, draftPool, templateDraftComposer, type DraftComposer, type DraftProblem, type ForwardLookingCopy } from "./draft";
 import { numbersIn, numberWordsIn } from "./postcheck";
 
@@ -102,7 +103,9 @@ const REPEATED_OPENER: DraftProblem = {
 
 /** The figure as it reads in a post: the value, any other published figure, and the marker if it is a plan or estimate. */
 function figure(fact: Fact, marker: string): string {
-  const also = fact.alsoPublishedAs.map((a) => ` (also published as ${a.value})`).join("");
+  // One parenthetical listing every other figure, not one per figure.
+  const others = fact.alsoPublishedAs.map((a) => a.value);
+  const also = others.length > 0 ? ` (also published as ${joinFigures(others)})` : "";
   return `${fact.value}${also}${isForwardLooking(fact) ? marker : ""}`;
 }
 

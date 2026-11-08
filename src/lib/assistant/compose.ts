@@ -34,13 +34,20 @@ export function templateLine(fact: Fact, copy: AssistantContent["answer"]): stri
   return fill(line, { label: fact.label, value: fact.value });
 }
 
+/** Several figures as one list: commas, or semicolons if a figure itself contains a comma. */
+export function joinFigures(values: string[]): string {
+  return values.join(values.some((v) => v.includes(",")) ? "; " : ", ");
+}
+
+/** The fact's other published figures as ONE "Also published as" line (none when it has no others). */
+export function alsoLines(fact: Fact, copy: AssistantContent["answer"]): string[] {
+  if (fact.alsoPublishedAs.length === 0) return [];
+  return [fill(copy.alsoLine, { value: joinFigures(fact.alsoPublishedAs.map((alt) => alt.value)) })];
+}
+
 /** No model: one line per fact, plus its other published figures. */
 export const templateComposer: Composer = async ({ facts, copy }) => ({
-  text: facts
-    .map((fact) =>
-      [templateLine(fact, copy), ...fact.alsoPublishedAs.map((alt) => fill(copy.alsoLine, { value: alt.value }))].join(" "),
-    )
-    .join("\n"),
+  text: facts.map((fact) => [templateLine(fact, copy), ...alsoLines(fact, copy)].join(" ")).join("\n"),
   citations: facts.map((fact) => fact.id),
   wordedBy: ["template"],
 });

@@ -1,5 +1,5 @@
 import { isForwardLooking, type AssistantContent, type Fact } from "@/lib/schemas";
-import { templateLine, type ComposedAnswer } from "./compose";
+import { alsoLines, templateLine, type ComposedAnswer } from "./compose";
 import type { GateMutation } from "./mutation";
 import { baseNormalize } from "./normalize";
 import { postcheck, withoutPublishedPlans } from "./postcheck";
@@ -39,7 +39,7 @@ const joinLabels = (labels: string[]): string => labels.join(", ");
 /** No model: one bullet per fact, planned and estimated figures marked, then the footnote. */
 export const templateDraftComposer: DraftComposer = async ({ facts, topics, draft, answer, forwardLooking }) => {
   const bullets = facts.map((fact) => {
-    const line = [templateLine(fact, answer), ...fact.alsoPublishedAs.map((alt) => fill(answer.alsoLine, { value: alt.value }))].join(" ");
+    const line = [templateLine(fact, answer), ...alsoLines(fact, answer)].join(" ");
     return `• ${line}${isForwardLooking(fact) ? forwardLooking.marker : ""}`;
   });
   const footnote = facts.some(isForwardLooking) ? ["", `${forwardLooking.marker} ${forwardLooking.note}`] : [];
