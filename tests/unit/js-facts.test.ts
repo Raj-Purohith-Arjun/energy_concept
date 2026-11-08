@@ -22,7 +22,8 @@ describe("first-load JavaScript facts", () => {
 
   it("covers every measured route once", () => {
     expect(new Set(routes.map((r) => r.fact)).size).toBe(routes.length);
-    expect(routes).toHaveLength(6);
+    // Home, Black Giant, Facts, Findings, Evals. /gaps was cut (CLAUDE.md §8).
+    expect(routes).toHaveLength(5);
   });
 
   it("headroom is the budget minus the Black Giant figure, to one decimal", () => {

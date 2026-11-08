@@ -42,10 +42,21 @@ test("load timeline: end state by default, replays from blank on play", async ({
   await expect(main).toHaveCSS("opacity", "0");
 });
 
+test("load timeline: the back-navigation limitation is in view, not in a fold", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto(PATH);
+  const note = page.locator(".lt-note");
+  await expect(note).toBeVisible();
+  await expect(note).toContainText("press back to this page after playing");
+  expect(await note.evaluate((el) => el.closest("details"))).toBeNull();
+});
+
 test("load timeline: reduced motion hides play and shows end states", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto(PATH);
   await expect(page.locator(".lt-play-label")).toBeHidden();
+  // Nothing to replay, so nothing to caution about.
+  await expect(page.locator(".lt-note")).toBeHidden();
   await expect(page.locator(".lt-main").first()).toHaveCSS("opacity", "1");
   await expect(page.locator(".lt-main").first()).toHaveCSS("animation-name", "none");
 });

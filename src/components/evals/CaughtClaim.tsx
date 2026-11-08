@@ -48,7 +48,7 @@ export async function CaughtClaim() {
         </label>
       </div>
       {/* Hidden with the control under reduced motion: there is nothing to replay. */}
-      <p className="cc-note mt-3 max-w-3xl text-sm leading-6 text-muted">{c.replayNote}</p>
+      <p className="lt-note mt-3 max-w-3xl text-sm leading-6 text-muted">{c.replayNote}</p>
       <ol className="mt-6 grid max-w-3xl list-decimal gap-5 pl-5 leading-7">
         <li className="cc-step" style={at(0)}>
           <h3 className="font-semibold">{r.columns.wrote}</h3>

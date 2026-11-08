@@ -287,7 +287,7 @@ html:has(dialog.mobile-menu[open]) {
 
 @media (prefers-reduced-motion: reduce) {
   .lt-play-label,
-  .cc-note {
+  .lt-note {
     display: none;
   }
 }

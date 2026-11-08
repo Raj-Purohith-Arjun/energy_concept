@@ -9,7 +9,7 @@ import { spawn, type ChildProcess } from "node:child_process";
 import { createServer } from "node:net";
 import { chromium, type CDPSession } from "@playwright/test";
 
-const ROUTES = ["/", "/black-giant/", "/facts/", "/findings/", "/gaps/", "/evals/"];
+const ROUTES = ["/", "/black-giant/", "/facts/", "/findings/", "/evals/"];
 const JS_BUDGET = 150 * 1024;
 const PAGE_BUDGET = 3 * 1024 * 1024;
 

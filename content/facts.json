@@ -14,6 +14,9 @@
     "      ex-bg-capacity, ex-gm. Ten minutes. If one of them is wrong in front",
     "      of Teague, the whole registry loses its credibility.",
     "",
+    "  - ex-ceo and ex-cmo are verified:false. Raj checks https://energyx.com/about-us/",
+    "    by hand, then flips them. Until then the assistant cannot see them.",
+    "",
     "approvedAt is null on every EnergyX fact, always. Raj is not EnergyX.",
     "",
     "basisSource: 'stated' means the cited source itself says what the figure",
@@ -206,6 +209,30 @@
       "owner": "Finance / IR",
       "approvedAt": null,
       "verified": true
+    },
+    {
+      "id": "ex-ceo",
+      "label": "EnergyX chief executive (CEO)",
+      "value": "Teague Egan",
+      "basis": "Named in the Leadership section of EnergyX's About page, under the title \"Founder & CEO\". Read off the page by an automated fetch on 2026-11-08 and not yet checked by hand, so this fact stays unverified until it is.",
+      "basisSource": "stated",
+      "kind": "company-claim",
+      "source": { "title": "EnergyX About, Leadership", "url": "https://energyx.com/about-us/", "accessed": "2026-11-08" },
+      "owner": "Company",
+      "approvedAt": null,
+      "verified": false
+    },
+    {
+      "id": "ex-cmo",
+      "label": "EnergyX chief marketing officer (CMO)",
+      "value": "Kellee Khalil",
+      "basis": "Named in the Leadership section of EnergyX's About page, under the title \"Chief Marketing Officer\". Read off the page by an automated fetch on 2026-11-08 and not yet checked by hand, so this fact stays unverified until it is.",
+      "basisSource": "stated",
+      "kind": "company-claim",
+      "source": { "title": "EnergyX About, Leadership", "url": "https://energyx.com/about-us/", "accessed": "2026-11-08" },
+      "owner": "Company",
+      "approvedAt": null,
+      "verified": false
     },
 
     {
@@ -696,20 +723,6 @@
     {
       "id": "demo-js-findings",
       "label": "This demo's first-load JavaScript, findings page (local)",
-      "value": "142.2 KiB",
-      "numeric": 142.2,
-      "unit": "KiB (compressed)",
-      "basis": "Measured by scripts/measure-weight.ts, Playwright, 390px viewport, 2026-11-03: the compressed bytes of every script the page requests on a cold, uncached load (Chrome DevTools Protocol encodedDataLength, so response headers are included). Taken against a local `next start` of this repo's production build: a local measurement, not the deployed site, and separate from the October Lighthouse figures. The script prints its unit as KB but divides by 1024, so the figure is KiB.",
-      "basisSource": "stated",
-      "kind": "actual",
-      "source": { "title": "scripts/measure-weight.ts, local next start (no public URL)", "url": "TODO(content) local measurement, no public URL", "accessed": "2026-11-03" },
-      "owner": "Raj (own measurement)",
-      "approvedAt": null,
-      "verified": true
-    },
-    {
-      "id": "demo-js-gaps",
-      "label": "This demo's first-load JavaScript, gaps page (local)",
       "value": "142.2 KiB",
       "numeric": 142.2,
       "unit": "KiB (compressed)",

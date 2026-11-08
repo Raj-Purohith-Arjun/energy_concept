@@ -250,6 +250,17 @@
       "how many people",
       "people work"
     ],
+    "ceo": [
+      "ceo",
+      "chief executive",
+      "chief executive officer",
+      "founder"
+    ],
+    "cmo": [
+      "cmo",
+      "chief marketing officer",
+      "head of marketing"
+    ],
     "funding": [
       "funding",
       "raised",
@@ -456,9 +467,6 @@
     "findings-page": [
       "findings page"
     ],
-    "gaps-page": [
-      "gaps page"
-    ],
     "evals-page": [
       "evals page"
     ],
@@ -512,6 +520,12 @@
     ],
     "ex-team": [
       "team"
+    ],
+    "ex-ceo": [
+      "ceo"
+    ],
+    "ex-cmo": [
+      "cmo"
     ],
     "ex-funding": [
       "funding"
@@ -670,11 +684,6 @@
       "findings-page",
       "javascript"
     ],
-    "demo-js-gaps": [
-      "demo",
-      "gaps-page",
-      "javascript"
-    ],
     "demo-js-evals": [
       "demo",
       "evals-page",
@@ -744,6 +753,8 @@
     "ex-patents": "How many patents does EnergyX have?",
     "ex-founded": "When was EnergyX founded?",
     "ex-team": "How many people work at EnergyX?",
+    "ex-ceo": "Who is EnergyX's CEO?",
+    "ex-cmo": "Who is EnergyX's CMO?",
     "ex-funding": "How much funding has EnergyX raised?",
     "ex-acres": "How many acres does EnergyX have?",
     "ex-projects-count": "How many projects does EnergyX have?",
@@ -776,7 +787,6 @@
     "demo-js-black-giant": "How much JavaScript does the demo's Black Giant page load?",
     "demo-js-facts": "How much JavaScript does the demo's facts page load?",
     "demo-js-findings": "How much JavaScript does the demo's findings page load?",
-    "demo-js-gaps": "How much JavaScript does the demo's gaps page load?",
     "demo-js-evals": "How much JavaScript does the demo's evals page load?",
     "demo-js-framework-share": "How much of the demo's JavaScript is the React framework?",
     "demo-js-own-chunk-share": "How much of the demo's JavaScript is its own code?",

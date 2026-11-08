@@ -27,6 +27,8 @@ export function LoadTimeline() {
         <span aria-hidden="true" className="lt-glyph" />
         {t.play}
       </label>
+      {/* Hidden with the control under reduced motion: there is nothing to replay. */}
+      <p className="lt-note mt-3 max-w-3xl text-sm leading-6 text-muted">{t.replayNote}</p>
       <div className="mt-6 grid max-w-xl grid-cols-2 gap-4 sm:gap-8">
         {phones.map((p) => (
           <figure

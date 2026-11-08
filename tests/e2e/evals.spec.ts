@@ -50,8 +50,8 @@ test.describe("caught claim walkthrough", () => {
     await expect(section(page)).toContainText('don\'t call it "backing"');
     await expect(section(page)).toContainText("The check was added after this post was stored");
     // The back-navigation limitation is in view, not inside a fold.
-    await expect(section(page).locator(".cc-note")).toBeVisible();
-    await expect(section(page).locator(".cc-note")).toContainText("press back to this page after playing");
+    await expect(section(page).locator(".lt-note")).toBeVisible();
+    await expect(section(page).locator(".lt-note")).toContainText("press back to this page after playing");
     await expect(section(page).locator(".cc-step")).toHaveCount(4);
     for (const step of await section(page).locator(".cc-step").all()) await expect(step).toHaveCSS("opacity", "1");
     expect(await running(page)).toBe(0);
@@ -124,7 +124,7 @@ test.describe("caught claim walkthrough", () => {
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.goto(PATH);
     await expect(section(page).locator(".lt-play-label").first()).toBeHidden();
-    await expect(section(page).locator(".cc-note")).toBeHidden();
+    await expect(section(page).locator(".lt-note")).toBeHidden();
     await expect(section(page).locator(".cc-step")).toHaveCount(4);
     for (const step of await section(page).locator(".cc-step").all()) {
       await expect(step).toHaveCSS("opacity", "1");

@@ -45,7 +45,8 @@ describe("export-gaps core", () => {
   });
 
   it("files a question with no recognised concept under 'unmatched' with no nearest facts", () => {
-    const { file } = build([entry("Who is the CEO?")]);
+    // A question with no concept at all. (It was the CEO question until ex-ceo gave that a concept.)
+    const { file } = build([entry("What is EnergyX's revenue?")]);
     expect(file.gaps[0]).toMatchObject({ subject: UNMATCHED, nearest: [] });
   });
 
@@ -62,14 +63,14 @@ describe("export-gaps core", () => {
   it("sorts matched subjects first and unmatched last", () => {
     const assistant = getAssistant();
     const concept = Object.keys(assistant.concepts)[0];
-    const { file } = build([entry("Who is the CEO?"), entry(`What about ${assistant.concepts[concept][0]}?`)]);
+    const { file } = build([entry("What is EnergyX's revenue?"), entry(`What about ${assistant.concepts[concept][0]}?`)]);
     expect(file.gaps.at(-1)?.subject).toBe(UNMATCHED);
   });
 });
 
 describe("export-gaps subjects", () => {
   it("does not file a question under the company-wide energyx-process concept", () => {
-    const { file } = build([entry("Who is EnergyX's CEO?")]);
+    const { file } = build([entry("What is EnergyX's revenue?")]);
     expect(file.gaps[0].subject).toBe(UNMATCHED);
   });
 });

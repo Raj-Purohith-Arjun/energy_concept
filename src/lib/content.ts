@@ -4,8 +4,6 @@ import blackGiantFile from "../../content/black-giant.json";
 import evalsFile from "../../content/evals.json";
 import factsFile from "../../content/facts.json";
 import findingsFile from "../../content/findings.json";
-import gapsCopyFile from "../../content/gaps-copy.json";
-import gapsFile from "../../content/gaps.json";
 import siteFile from "../../content/site.json";
 import { factTokenIds, malformedFactTokens } from "./fact-text";
 import {
@@ -14,8 +12,6 @@ import {
   EvalsSchema,
   FactsFileSchema,
   FindingsSchema,
-  GapsCopySchema,
-  GapsFileSchema,
   isTodo,
   SiteSchema,
   type AssistantContent,
@@ -23,8 +19,6 @@ import {
   type EvalsContent,
   type Fact,
   type FindingsContent,
-  type GapsCopy,
-  type GapsFile,
   type Site,
 } from "./schemas";
 
@@ -264,20 +258,6 @@ let evals: EvalsContent | undefined;
 export function getEvals(): EvalsContent {
   evals ??= parseContent(EvalsSchema, evalsFile, "content/evals.json");
   return evals;
-}
-
-let gaps: GapsFile | undefined;
-
-export function getGaps(): GapsFile {
-  gaps ??= parseContent(GapsFileSchema, gapsFile, "content/gaps.json");
-  return gaps;
-}
-
-let gapsCopy: GapsCopy | undefined;
-
-export function getGapsCopy(): GapsCopy {
-  gapsCopy ??= parseContent(GapsCopySchema, gapsCopyFile, "content/gaps-copy.json");
-  return gapsCopy;
 }
 
 /** A label from a content map, failing the build when one is missing. */

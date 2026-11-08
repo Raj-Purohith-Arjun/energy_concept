@@ -25,6 +25,7 @@
     "heading": "What that wait looks like",
     "intro": "Both phones replay the measured lab timings at real speed: the first paint, then the largest element on the screen, the thing a visitor came for.",
     "play": "Play at real speed",
+    "replayNote": "Known limitation: if you press back to this page after playing, the replay can start again by itself. The page keeps its state when you leave it, and CSS cannot reset that.",
     "firstPaint": "First paint",
     "mainPaint": "Largest element painted",
     "caption": "A visualisation of the measured Lighthouse lab figures, not a recording of either page.",
@@ -98,7 +99,6 @@
       { "label": "Black Giant page", "fact": "demo-js-black-giant" },
       { "label": "Facts", "fact": "demo-js-facts" },
       { "label": "Findings", "fact": "demo-js-findings" },
-      { "label": "Gaps", "fact": "demo-js-gaps" },
       { "label": "Evals", "fact": "demo-js-evals" }
     ],
     "detailSummary": "How it was measured, what is in it, and what we left alone",

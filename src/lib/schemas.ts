@@ -371,6 +371,8 @@ export const FindingsSchema = z.strictObject({
     heading: nonEmpty,
     intro: nonEmpty,
     play: nonEmpty,
+    // Same wording as evals.json caughtClaim.replayNote; tests/unit/replay-note.test.ts keeps them equal.
+    replayNote: nonEmpty,
     firstPaint: nonEmpty,
     mainPaint: nonEmpty,
     caption: nonEmpty,
@@ -564,9 +566,9 @@ export const EvalsSchema = z.strictObject({
 export type EvalsContent = z.infer<typeof EvalsSchema>;
 
 // ---------------------------------------------------------------------------
-// Gap report (CLAUDE.md section 5): content/gaps.json is a committed,
-// hand-reviewed snapshot written by `pnpm export:gaps`; content/gaps-copy.json
-// is the page copy.
+// Gap report export (CLAUDE.md section 5): content/gaps.json is a committed,
+// hand-reviewed snapshot written by `pnpm export:gaps`. The /gaps page was cut
+// (section 8, cut order 2); the log and this export remain.
 // ---------------------------------------------------------------------------
 
 export const GAP_REASONS = ["no-match", "post-check", "language"] as const;
@@ -597,23 +599,6 @@ export const GapsFileSchema = z.strictObject({
 });
 export type GapsFile = z.infer<typeof GapsFileSchema>;
 export type GapRow = z.infer<typeof GapRowSchema>;
-
-export const GapsCopySchema = z.strictObject({
-  $comment: comment.optional(),
-  title: nonEmpty,
-  heading: nonEmpty,
-  framing: nonEmpty,
-  verdict: nonEmpty.includes("{questions}").includes("{subjects}"),
-  questions: countLabel,
-  subjects: countLabel,
-  empty: z.strictObject({ heading: nonEmpty, body: nonEmpty }),
-  unmatchedSubject: nonEmpty,
-  columns: z.strictObject({ asked: nonEmpty, nearest: nonEmpty, suggested: nonEmpty }),
-  noNearest: nonEmpty,
-  times: countLabel,
-  suggestedPlaceholder: nonEmpty,
-});
-export type GapsCopy = z.infer<typeof GapsCopySchema>;
 
 export type PayloadPage = z.infer<typeof PayloadPageSchema>;
 export type FindingsContent = z.infer<typeof FindingsSchema>;

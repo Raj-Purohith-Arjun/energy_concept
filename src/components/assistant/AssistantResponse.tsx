@@ -1,3 +1,4 @@
+import { connection } from "next/server";
 import { ask } from "@/lib/assistant/pipeline";
 import { getAssistant, getVerifiedFacts } from "@/lib/content";
 import { recordUnanswered } from "@/lib/assistant/unanswered";
@@ -12,6 +13,11 @@ export async function AssistantResponse({ searchParams }: { searchParams: Search
   const raw = Array.isArray(q) ? q[0] : q;
   if (raw === undefined) return null;
 
+  // ask() and recordUnanswered() read the current time (pipeline.ts, unanswered.ts).
+  // Reading searchParams alone is not enough: Next still treats the time as
+  // prerenderable until a request-time signal. This is inside <Suspense>, so the
+  // static shell of / is unaffected; only this response is per request.
+  await connection();
   const outcome = await ask(raw, { facts: getVerifiedFacts(), assistant: getAssistant() });
   const question = raw.trim();
 
