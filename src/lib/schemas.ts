@@ -366,6 +366,9 @@ export const FindingsSchema = z.strictObject({
   intro: nonEmpty,
   caveatsLink: nonEmpty,
   pending: nonEmpty,
+  // Verdict-first prose on why the demo looks plain, then dated notes on the
+  // 2026-11-10 re-measurement. Figures are {fact:} tokens.
+  whyPlain: z.strictObject({ heading: nonEmpty, body: nonEmpty, notesHeading: nonEmpty, notes: z.array(nonEmpty).min(1) }),
   // Two phones replaying measured First Contentful Paint -> LCP at real speed.
   timeline: z.strictObject({
     heading: nonEmpty,

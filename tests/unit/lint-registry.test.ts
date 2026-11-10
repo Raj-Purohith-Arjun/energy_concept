@@ -46,6 +46,6 @@ describe("lint:facts registry report", () => {
     const r = registryReport([...registry.values()]);
     expect(r.warnings).toEqual([]);
     expect(r.intentionalNoUrl.length).toBeGreaterThan(0);
-    for (const id of r.intentionalNoUrl) expect(id, id).toMatch(/^demo-js-/);
+    for (const id of r.intentionalNoUrl) expect(id, id).toMatch(/^demo-(?:js|css)-/);
   });
 });

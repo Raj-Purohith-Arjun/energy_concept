@@ -7,6 +7,7 @@ import { LoadTimeline } from "@/components/findings/LoadTimeline";
 import { PayloadBreakdown } from "@/components/findings/PayloadBreakdown";
 import { RegistryFindings } from "@/components/findings/RegistryFindings";
 import { Verdict } from "@/components/findings/Verdict";
+import { WhyPlain } from "@/components/findings/WhyPlain";
 import { getFindings } from "@/lib/content";
 
 export const metadata: Metadata = {
@@ -29,6 +30,7 @@ export default function FindingsPage() {
           {page.caveatsLink}
         </a>
       </p>
+      <WhyPlain />
       <LoadTimeline />
       <PayloadBreakdown />
       <BeforeAfter />

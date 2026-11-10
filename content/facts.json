@@ -14,6 +14,12 @@
     "    ex-bg-capacity, ex-gm. Their 'accessed' dates are that day. Facts not on this",
     "    list keep their 2026-10-08 date and have not been re-checked since.",
     "",
+    "  - The 'lh2-*' facts are Raj's re-measurement of 2026-11-10 (lighthouse-metrics.com, Lighthouse 13.5.0,",
+    "    mobile preset, US West, one run per page). The October lh-* and demo-* figures are kept, with",
+    "    their own dates. Bytes were NOT re-measured on 2026-11-10: every weight figure is from October.",
+    "    The check pages are account-scoped, so each lh2-* source is the saved report PDF in",
+    "    public/evidence/lighthouse-2026-11-10/, served from this demo behind its basic auth.",
+    "",
     "approvedAt is null on every EnergyX fact, always. Raj is not EnergyX.",
     "",
     "basisSource: 'stated' means the cited source itself says what the figure",
@@ -392,7 +398,7 @@
       "value": "50.6 MB",
       "numeric": 49432,
       "unit": "KiB",
-      "basis": "Total network payload for energyx.com/black-giant/ measured by Lighthouse 13.5.0 on an emulated Moto G Power with Slow 4G throttling, single page session, initial load.",
+      "basis": "Total network payload for energyx.com/black-giant/ measured by Lighthouse 13.5.0 on an emulated Moto G Power with Slow 4G throttling, single page session, initial load. Page weight was not re-measured on 2026-11-10; this byte figure is from the earlier measurement.",
       "basisSource": "stated",
       "kind": "actual",
       "source": { "title": "Lighthouse report, /black-giant/, run by Raj", "url": "https://lighthouse-metrics.com/lighthouse/checks/61b0122a-6331-465b-8a57-b53766d3c8a8", "accessed": "2026-10-08" },
@@ -598,10 +604,342 @@
       "value": "0.9 MB",
       "numeric": 908.2,
       "unit": "KiB",
-      "basis": "Total transferred for this demo's deployed /black-giant/ across 12 requests, measured by Lighthouse 13.5.0, mobile, US West (us-west1) test location, initial load. lighthouse-metrics reported 930 kB (decimal kilobytes, 930,000 bytes); stored as 908.2 KiB under the registry's byte convention.",
+      "basis": "Total transferred for this demo's deployed /black-giant/ across 12 requests, measured by Lighthouse 13.5.0, mobile, US West (us-west1) test location, initial load. lighthouse-metrics reported 930 kB (decimal kilobytes, 930,000 bytes); stored as 908.2 KiB under the registry's byte convention. Page weight was not re-measured on 2026-11-10; this byte figure is from the earlier measurement.",
       "basisSource": "stated",
       "kind": "actual",
       "source": { "title": "Lighthouse report, this demo's /black-giant/, US West", "url": "https://lighthouse-metrics.com/lighthouse/checks/168b3b56-46ac-4476-8552-6ab6acc1413c/runs/009ad0ce-9418-45b2-9d80-172127bb2ccf", "accessed": "2026-10-19" },
+      "owner": "Raj (own measurement)",
+      "approvedAt": null,
+      "verified": true
+    },
+    {
+      "id": "lh2-demo-home-perf",
+      "label": "Re-measured: this demo's home page, Lighthouse performance score",
+      "value": "96",
+      "numeric": 96,
+      "basis": "Lighthouse 13.5.0 on lighthouse-metrics.com, mobile preset, US West (us-west1) test location, single run on 2026-11-10. A lab measurement, not field data from real users. The lighthouse-metrics.com check page is account-scoped and not publicly shareable, so the saved report (a PDF kept in this repo under public/evidence/lighthouse-2026-11-10/) is the evidence. The report is served from this demo and therefore sits behind its basic auth. Measures this demo's /. This is the 2026-11-10 re-measurement; earlier measurements are kept as separate facts and keep their own dates.",
+      "basisSource": "stated",
+      "kind": "actual",
+      "source": {
+        "title": "Saved Lighthouse report (PDF), this demo's /, 2026-11-10",
+        "url": "https://energy-concept.vercel.app/evidence/lighthouse-2026-11-10/demo-home_lighthouse-mobile_2026-11-10.pdf",
+        "accessed": "2026-11-10"
+      },
+      "owner": "Raj (own measurement)",
+      "approvedAt": null,
+      "verified": true
+    },
+    {
+      "id": "lh2-demo-home-lcp",
+      "label": "Re-measured: this demo's home page, Largest Contentful Paint",
+      "value": "1.6 s",
+      "numeric": 1.6,
+      "unit": "s",
+      "basis": "Lighthouse 13.5.0 on lighthouse-metrics.com, mobile preset, US West (us-west1) test location, single run on 2026-11-10. A lab measurement, not field data from real users. The lighthouse-metrics.com check page is account-scoped and not publicly shareable, so the saved report (a PDF kept in this repo under public/evidence/lighthouse-2026-11-10/) is the evidence. The report is served from this demo and therefore sits behind its basic auth. Measures this demo's /. This is the 2026-11-10 re-measurement; earlier measurements are kept as separate facts and keep their own dates.",
+      "basisSource": "stated",
+      "kind": "actual",
+      "source": {
+        "title": "Saved Lighthouse report (PDF), this demo's /, 2026-11-10",
+        "url": "https://energy-concept.vercel.app/evidence/lighthouse-2026-11-10/demo-home_lighthouse-mobile_2026-11-10.pdf",
+        "accessed": "2026-11-10"
+      },
+      "owner": "Raj (own measurement)",
+      "approvedAt": null,
+      "verified": true
+    },
+    {
+      "id": "lh2-demo-home-tbt",
+      "label": "Re-measured: this demo's home page, Total Blocking Time",
+      "value": "228 ms",
+      "numeric": 228,
+      "unit": "ms",
+      "basis": "Lighthouse 13.5.0 on lighthouse-metrics.com, mobile preset, US West (us-west1) test location, single run on 2026-11-10. A lab measurement, not field data from real users. The lighthouse-metrics.com check page is account-scoped and not publicly shareable, so the saved report (a PDF kept in this repo under public/evidence/lighthouse-2026-11-10/) is the evidence. The report is served from this demo and therefore sits behind its basic auth. Measures this demo's /. This is the 2026-11-10 re-measurement; earlier measurements are kept as separate facts and keep their own dates. This is above the 150 ms Total Blocking Time budget in CLAUDE.md section 6. It was a single run, and TBT across the six test regions in that run ranged from 65 ms to 228 ms. The budget is unchanged.",
+      "basisSource": "stated",
+      "kind": "actual",
+      "source": {
+        "title": "Saved Lighthouse report (PDF), this demo's /, 2026-11-10",
+        "url": "https://energy-concept.vercel.app/evidence/lighthouse-2026-11-10/demo-home_lighthouse-mobile_2026-11-10.pdf",
+        "accessed": "2026-11-10"
+      },
+      "owner": "Raj (own measurement)",
+      "approvedAt": null,
+      "verified": true
+    },
+    {
+      "id": "lh2-demo-home-cls",
+      "label": "Re-measured: this demo's home page, Cumulative Layout Shift",
+      "value": "0",
+      "numeric": 0,
+      "basis": "Lighthouse 13.5.0 on lighthouse-metrics.com, mobile preset, US West (us-west1) test location, single run on 2026-11-10. A lab measurement, not field data from real users. The lighthouse-metrics.com check page is account-scoped and not publicly shareable, so the saved report (a PDF kept in this repo under public/evidence/lighthouse-2026-11-10/) is the evidence. The report is served from this demo and therefore sits behind its basic auth. Measures this demo's /. This is the 2026-11-10 re-measurement; earlier measurements are kept as separate facts and keep their own dates.",
+      "basisSource": "stated",
+      "kind": "actual",
+      "source": {
+        "title": "Saved Lighthouse report (PDF), this demo's /, 2026-11-10",
+        "url": "https://energy-concept.vercel.app/evidence/lighthouse-2026-11-10/demo-home_lighthouse-mobile_2026-11-10.pdf",
+        "accessed": "2026-11-10"
+      },
+      "owner": "Raj (own measurement)",
+      "approvedAt": null,
+      "verified": true
+    },
+    {
+      "id": "lh2-demo-bg-perf",
+      "label": "Re-measured: this demo's Black Giant page, Lighthouse performance score",
+      "value": "98",
+      "numeric": 98,
+      "basis": "Lighthouse 13.5.0 on lighthouse-metrics.com, mobile preset, US West (us-west1) test location, single run on 2026-11-10. A lab measurement, not field data from real users. The lighthouse-metrics.com check page is account-scoped and not publicly shareable, so the saved report (a PDF kept in this repo under public/evidence/lighthouse-2026-11-10/) is the evidence. The report is served from this demo and therefore sits behind its basic auth. Measures this demo's /black-giant. This is the 2026-11-10 re-measurement; earlier measurements are kept as separate facts and keep their own dates. The earlier figure is fact demo-bg-perf.",
+      "basisSource": "stated",
+      "kind": "actual",
+      "source": {
+        "title": "Saved Lighthouse report (PDF), this demo's /black-giant, 2026-11-10",
+        "url": "https://energy-concept.vercel.app/evidence/lighthouse-2026-11-10/demo-black-giant_lighthouse-mobile_2026-11-10.pdf",
+        "accessed": "2026-11-10"
+      },
+      "owner": "Raj (own measurement)",
+      "approvedAt": null,
+      "verified": true
+    },
+    {
+      "id": "lh2-demo-bg-lcp",
+      "label": "Re-measured: this demo's Black Giant page, Largest Contentful Paint",
+      "value": "2.0 s",
+      "numeric": 2,
+      "unit": "s",
+      "basis": "Lighthouse 13.5.0 on lighthouse-metrics.com, mobile preset, US West (us-west1) test location, single run on 2026-11-10. A lab measurement, not field data from real users. The lighthouse-metrics.com check page is account-scoped and not publicly shareable, so the saved report (a PDF kept in this repo under public/evidence/lighthouse-2026-11-10/) is the evidence. The report is served from this demo and therefore sits behind its basic auth. Measures this demo's /black-giant. This is the 2026-11-10 re-measurement; earlier measurements are kept as separate facts and keep their own dates. The earlier figure is fact demo-bg-lcp.",
+      "basisSource": "stated",
+      "kind": "actual",
+      "source": {
+        "title": "Saved Lighthouse report (PDF), this demo's /black-giant, 2026-11-10",
+        "url": "https://energy-concept.vercel.app/evidence/lighthouse-2026-11-10/demo-black-giant_lighthouse-mobile_2026-11-10.pdf",
+        "accessed": "2026-11-10"
+      },
+      "owner": "Raj (own measurement)",
+      "approvedAt": null,
+      "verified": true
+    },
+    {
+      "id": "lh2-demo-bg-tbt",
+      "label": "Re-measured: this demo's Black Giant page, Total Blocking Time",
+      "value": "138 ms",
+      "numeric": 138,
+      "unit": "ms",
+      "basis": "Lighthouse 13.5.0 on lighthouse-metrics.com, mobile preset, US West (us-west1) test location, single run on 2026-11-10. A lab measurement, not field data from real users. The lighthouse-metrics.com check page is account-scoped and not publicly shareable, so the saved report (a PDF kept in this repo under public/evidence/lighthouse-2026-11-10/) is the evidence. The report is served from this demo and therefore sits behind its basic auth. Measures this demo's /black-giant. This is the 2026-11-10 re-measurement; earlier measurements are kept as separate facts and keep their own dates. The earlier figure is fact demo-bg-tbt.",
+      "basisSource": "stated",
+      "kind": "actual",
+      "source": {
+        "title": "Saved Lighthouse report (PDF), this demo's /black-giant, 2026-11-10",
+        "url": "https://energy-concept.vercel.app/evidence/lighthouse-2026-11-10/demo-black-giant_lighthouse-mobile_2026-11-10.pdf",
+        "accessed": "2026-11-10"
+      },
+      "owner": "Raj (own measurement)",
+      "approvedAt": null,
+      "verified": true
+    },
+    {
+      "id": "lh2-demo-bg-cls",
+      "label": "Re-measured: this demo's Black Giant page, Cumulative Layout Shift",
+      "value": "0",
+      "numeric": 0,
+      "basis": "Lighthouse 13.5.0 on lighthouse-metrics.com, mobile preset, US West (us-west1) test location, single run on 2026-11-10. A lab measurement, not field data from real users. The lighthouse-metrics.com check page is account-scoped and not publicly shareable, so the saved report (a PDF kept in this repo under public/evidence/lighthouse-2026-11-10/) is the evidence. The report is served from this demo and therefore sits behind its basic auth. Measures this demo's /black-giant. This is the 2026-11-10 re-measurement; earlier measurements are kept as separate facts and keep their own dates. The earlier figure is fact demo-bg-cls.",
+      "basisSource": "stated",
+      "kind": "actual",
+      "source": {
+        "title": "Saved Lighthouse report (PDF), this demo's /black-giant, 2026-11-10",
+        "url": "https://energy-concept.vercel.app/evidence/lighthouse-2026-11-10/demo-black-giant_lighthouse-mobile_2026-11-10.pdf",
+        "accessed": "2026-11-10"
+      },
+      "owner": "Raj (own measurement)",
+      "approvedAt": null,
+      "verified": true
+    },
+    {
+      "id": "lh2-ex-home-perf",
+      "label": "Re-measured: the energyx.com home page, Lighthouse performance score",
+      "value": "38",
+      "numeric": 38,
+      "basis": "Lighthouse 13.5.0 on lighthouse-metrics.com, mobile preset, US West (us-west1) test location, single run on 2026-11-10. A lab measurement, not field data from real users. The lighthouse-metrics.com check page is account-scoped and not publicly shareable, so the saved report (a PDF kept in this repo under public/evidence/lighthouse-2026-11-10/) is the evidence. The report is served from this demo and therefore sits behind its basic auth. Measures energyx.com /. This is the 2026-11-10 re-measurement; earlier measurements are kept as separate facts and keep their own dates.",
+      "basisSource": "stated",
+      "kind": "actual",
+      "source": {
+        "title": "Saved Lighthouse report (PDF), energyx.com /, 2026-11-10",
+        "url": "https://energy-concept.vercel.app/evidence/lighthouse-2026-11-10/energyx-com-home_lighthouse-mobile_2026-11-10.pdf",
+        "accessed": "2026-11-10"
+      },
+      "owner": "Raj (own measurement)",
+      "approvedAt": null,
+      "verified": true
+    },
+    {
+      "id": "lh2-ex-home-lcp",
+      "label": "Re-measured: the energyx.com home page, Largest Contentful Paint",
+      "value": "7.8 s",
+      "numeric": 7.8,
+      "unit": "s",
+      "basis": "Lighthouse 13.5.0 on lighthouse-metrics.com, mobile preset, US West (us-west1) test location, single run on 2026-11-10. A lab measurement, not field data from real users. The lighthouse-metrics.com check page is account-scoped and not publicly shareable, so the saved report (a PDF kept in this repo under public/evidence/lighthouse-2026-11-10/) is the evidence. The report is served from this demo and therefore sits behind its basic auth. Measures energyx.com /. This is the 2026-11-10 re-measurement; earlier measurements are kept as separate facts and keep their own dates.",
+      "basisSource": "stated",
+      "kind": "actual",
+      "source": {
+        "title": "Saved Lighthouse report (PDF), energyx.com /, 2026-11-10",
+        "url": "https://energy-concept.vercel.app/evidence/lighthouse-2026-11-10/energyx-com-home_lighthouse-mobile_2026-11-10.pdf",
+        "accessed": "2026-11-10"
+      },
+      "owner": "Raj (own measurement)",
+      "approvedAt": null,
+      "verified": true
+    },
+    {
+      "id": "lh2-ex-home-tbt",
+      "label": "Re-measured: the energyx.com home page, Total Blocking Time",
+      "value": "2.9 s",
+      "numeric": 2.9,
+      "unit": "s",
+      "basis": "Lighthouse 13.5.0 on lighthouse-metrics.com, mobile preset, US West (us-west1) test location, single run on 2026-11-10. A lab measurement, not field data from real users. The lighthouse-metrics.com check page is account-scoped and not publicly shareable, so the saved report (a PDF kept in this repo under public/evidence/lighthouse-2026-11-10/) is the evidence. The report is served from this demo and therefore sits behind its basic auth. Measures energyx.com /. This is the 2026-11-10 re-measurement; earlier measurements are kept as separate facts and keep their own dates. The earlier figure is fact lh-home-tbt.",
+      "basisSource": "stated",
+      "kind": "actual",
+      "source": {
+        "title": "Saved Lighthouse report (PDF), energyx.com /, 2026-11-10",
+        "url": "https://energy-concept.vercel.app/evidence/lighthouse-2026-11-10/energyx-com-home_lighthouse-mobile_2026-11-10.pdf",
+        "accessed": "2026-11-10"
+      },
+      "owner": "Raj (own measurement)",
+      "approvedAt": null,
+      "verified": true
+    },
+    {
+      "id": "lh2-ex-home-cls",
+      "label": "Re-measured: the energyx.com home page, Cumulative Layout Shift",
+      "value": "0",
+      "numeric": 0,
+      "basis": "Lighthouse 13.5.0 on lighthouse-metrics.com, mobile preset, US West (us-west1) test location, single run on 2026-11-10. A lab measurement, not field data from real users. The lighthouse-metrics.com check page is account-scoped and not publicly shareable, so the saved report (a PDF kept in this repo under public/evidence/lighthouse-2026-11-10/) is the evidence. The report is served from this demo and therefore sits behind its basic auth. Measures energyx.com /. This is the 2026-11-10 re-measurement; earlier measurements are kept as separate facts and keep their own dates.",
+      "basisSource": "stated",
+      "kind": "actual",
+      "source": {
+        "title": "Saved Lighthouse report (PDF), energyx.com /, 2026-11-10",
+        "url": "https://energy-concept.vercel.app/evidence/lighthouse-2026-11-10/energyx-com-home_lighthouse-mobile_2026-11-10.pdf",
+        "accessed": "2026-11-10"
+      },
+      "owner": "Raj (own measurement)",
+      "approvedAt": null,
+      "verified": true
+    },
+    {
+      "id": "lh2-ex-bg-perf",
+      "label": "Re-measured: the energyx.com Black Giant page, Lighthouse performance score",
+      "value": "51",
+      "numeric": 51,
+      "basis": "Lighthouse 13.5.0 on lighthouse-metrics.com, mobile preset, US West (us-west1) test location, single run on 2026-11-10. A lab measurement, not field data from real users. The lighthouse-metrics.com check page is account-scoped and not publicly shareable, so the saved report (a PDF kept in this repo under public/evidence/lighthouse-2026-11-10/) is the evidence. The report is served from this demo and therefore sits behind its basic auth. Measures energyx.com /black-giant/. This is the 2026-11-10 re-measurement; earlier measurements are kept as separate facts and keep their own dates. The earlier figure is fact lh-bg-perf. Essentially unchanged since October (50 then, 51 now), so the October analysis still holds.",
+      "basisSource": "stated",
+      "kind": "actual",
+      "source": {
+        "title": "Saved Lighthouse report (PDF), energyx.com /black-giant/, 2026-11-10",
+        "url": "https://energy-concept.vercel.app/evidence/lighthouse-2026-11-10/energyx-com-black-giant_lighthouse-mobile_2026-11-10.pdf",
+        "accessed": "2026-11-10"
+      },
+      "owner": "Raj (own measurement)",
+      "approvedAt": null,
+      "verified": true
+    },
+    {
+      "id": "lh2-ex-bg-lcp",
+      "label": "Re-measured: the energyx.com Black Giant page, Largest Contentful Paint",
+      "value": "6.8 s",
+      "numeric": 6.8,
+      "unit": "s",
+      "basis": "Lighthouse 13.5.0 on lighthouse-metrics.com, mobile preset, US West (us-west1) test location, single run on 2026-11-10. A lab measurement, not field data from real users. The lighthouse-metrics.com check page is account-scoped and not publicly shareable, so the saved report (a PDF kept in this repo under public/evidence/lighthouse-2026-11-10/) is the evidence. The report is served from this demo and therefore sits behind its basic auth. Measures energyx.com /black-giant/. This is the 2026-11-10 re-measurement; earlier measurements are kept as separate facts and keep their own dates. The earlier figure is fact lh-bg-lcp.",
+      "basisSource": "stated",
+      "kind": "actual",
+      "source": {
+        "title": "Saved Lighthouse report (PDF), energyx.com /black-giant/, 2026-11-10",
+        "url": "https://energy-concept.vercel.app/evidence/lighthouse-2026-11-10/energyx-com-black-giant_lighthouse-mobile_2026-11-10.pdf",
+        "accessed": "2026-11-10"
+      },
+      "owner": "Raj (own measurement)",
+      "approvedAt": null,
+      "verified": true
+    },
+    {
+      "id": "lh2-ex-bg-tbt",
+      "label": "Re-measured: the energyx.com Black Giant page, Total Blocking Time",
+      "value": "1.2 s",
+      "numeric": 1.2,
+      "unit": "s",
+      "basis": "Lighthouse 13.5.0 on lighthouse-metrics.com, mobile preset, US West (us-west1) test location, single run on 2026-11-10. A lab measurement, not field data from real users. The lighthouse-metrics.com check page is account-scoped and not publicly shareable, so the saved report (a PDF kept in this repo under public/evidence/lighthouse-2026-11-10/) is the evidence. The report is served from this demo and therefore sits behind its basic auth. Measures energyx.com /black-giant/. This is the 2026-11-10 re-measurement; earlier measurements are kept as separate facts and keep their own dates. The earlier figure is fact lh-bg-tbt.",
+      "basisSource": "stated",
+      "kind": "actual",
+      "source": {
+        "title": "Saved Lighthouse report (PDF), energyx.com /black-giant/, 2026-11-10",
+        "url": "https://energy-concept.vercel.app/evidence/lighthouse-2026-11-10/energyx-com-black-giant_lighthouse-mobile_2026-11-10.pdf",
+        "accessed": "2026-11-10"
+      },
+      "owner": "Raj (own measurement)",
+      "approvedAt": null,
+      "verified": true
+    },
+    {
+      "id": "lh2-ex-bg-cls",
+      "label": "Re-measured: the energyx.com Black Giant page, Cumulative Layout Shift",
+      "value": "0.01",
+      "numeric": 0.01,
+      "basis": "Lighthouse 13.5.0 on lighthouse-metrics.com, mobile preset, US West (us-west1) test location, single run on 2026-11-10. A lab measurement, not field data from real users. The lighthouse-metrics.com check page is account-scoped and not publicly shareable, so the saved report (a PDF kept in this repo under public/evidence/lighthouse-2026-11-10/) is the evidence. The report is served from this demo and therefore sits behind its basic auth. Measures energyx.com /black-giant/. This is the 2026-11-10 re-measurement; earlier measurements are kept as separate facts and keep their own dates. The earlier figure is fact lh-bg-cls.",
+      "basisSource": "stated",
+      "kind": "actual",
+      "source": {
+        "title": "Saved Lighthouse report (PDF), energyx.com /black-giant/, 2026-11-10",
+        "url": "https://energy-concept.vercel.app/evidence/lighthouse-2026-11-10/energyx-com-black-giant_lighthouse-mobile_2026-11-10.pdf",
+        "accessed": "2026-11-10"
+      },
+      "owner": "Raj (own measurement)",
+      "approvedAt": null,
+      "verified": true
+    },
+    {
+      "id": "lh2-demo-home-tbt-range",
+      "label": "Re-measured: this demo's /, Total Blocking Time range across six test regions",
+      "value": "65 ms to 228 ms",
+      "basis": "In the single 2026-11-10 run of this demo's / (Lighthouse 13.5.0, mobile preset), Total Blocking Time across the six lighthouse-metrics.com test regions ranged from 65 ms to 228 ms. The top of the range is the US West figure used elsewhere. A lab measurement, not field data. The lighthouse-metrics.com check page is account-scoped and not publicly shareable, so the saved report is the evidence. The report is served from this demo and therefore sits behind its basic auth.",
+      "basisSource": "stated",
+      "kind": "actual",
+      "source": {
+        "title": "Saved Lighthouse report (PDF), this demo's /, 2026-11-10",
+        "url": "https://energy-concept.vercel.app/evidence/lighthouse-2026-11-10/demo-home_lighthouse-mobile_2026-11-10.pdf",
+        "accessed": "2026-11-10"
+      },
+      "owner": "Raj (own measurement)",
+      "approvedAt": null,
+      "verified": true
+    },
+    {
+      "id": "budget-tbt",
+      "label": "Project performance budget: Total Blocking Time",
+      "value": "150 ms",
+      "numeric": 150,
+      "unit": "ms",
+      "basis": "The Total Blocking Time ceiling in the project's performance budgets (CLAUDE.md section 6). It is this project's own rule, not an EnergyX figure and not a measurement. It is unchanged.",
+      "basisSource": "stated",
+      "kind": "actual",
+      "source": {
+        "title": "CLAUDE.md section 6, performance budgets",
+        "url": "https://github.com/Raj-Purohith-Arjun/energy_concept/blob/main/CLAUDE.md",
+        "accessed": "2026-11-10"
+      },
+      "owner": "Raj (own measurement)",
+      "approvedAt": null,
+      "verified": true
+    },
+    {
+      "id": "demo-css-caught-claim",
+      "label": "CSS added for the caught-claim walkthrough on /evals, gzip",
+      "value": "178 B",
+      "numeric": 178,
+      "unit": "B (gzip)",
+      "basis": "Measured on the production build: the caught-claim walkthrough CSS is 872 B raw, 178 B gzip and 170 B brotli. The gzip figure is the one quoted. The source is the caught-claim block in src/app/globals.css; the measurement is of the built output, so there is no public page showing the figure.",
+      "basisSource": "stated",
+      "kind": "actual",
+      "source": {
+        "title": "Caught-claim CSS, production build (no public URL)",
+        "url": "TODO(content) local measurement, no public URL",
+        "accessed": "2026-11-10"
+      },
       "owner": "Raj (own measurement)",
       "approvedAt": null,
       "verified": true
@@ -612,7 +950,7 @@
       "value": "33.7 MB",
       "numeric": 32933,
       "unit": "KiB",
-      "basis": "Total network payload for energyx.com measured by Lighthouse 13.5.0, emulated Moto G Power, Slow 4G throttling, initial load.",
+      "basis": "Total network payload for energyx.com measured by Lighthouse 13.5.0, emulated Moto G Power, Slow 4G throttling, initial load. Page weight was not re-measured on 2026-11-10; this byte figure is from the earlier measurement.",
       "basisSource": "stated",
       "kind": "actual",
       "source": { "title": "Lighthouse report, homepage, run by Raj", "url": "https://lighthouse-metrics.com/lighthouse/checks/cf7dc6e1-132d-49c3-863c-5f780cd9df5b", "accessed": "2026-10-08" },

@@ -233,8 +233,8 @@ export function scanTsx(file: string, source: string, knownIds: ReadonlySet<stri
 // Registry warnings: unverified facts and unfinished TODO(content) markers.
 // ---------------------------------------------------------------------------
 
-// This demo's own first-load JavaScript figures are measured on a local `next start`
-// build, so there is no public page to link. That is a decision, not unfinished
+// This demo's own first-load JavaScript and caught-claim CSS figures are measured on a
+// local build, so there is no public page to link. That is a decision, not unfinished
 // work, and it is the only TODO(content) text treated as one. Exact match, and only
 // as a fact's own source.url: any other TODO(content), or this text anywhere else,
 // is still an unfinished marker and still warns.

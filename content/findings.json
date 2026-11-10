@@ -9,7 +9,7 @@
   "title": "Findings",
   "heading": "Findings",
   "verdict": {
-    "heading": "Black Giant page: EnergyX → this demo",
+    "heading": "Black Giant page, October measurements: EnergyX → this demo",
     "pairs": [
       { "label": "Largest Contentful Paint", "before": "lh-bg-lcp", "after": "demo-bg-lcp" },
       { "label": "Page weight", "before": "lh-bg-weight", "after": "demo-bg-weight" },
@@ -20,6 +20,21 @@
   "intro": "The whole argument on one page: what EnergyX's pages transfer and why, what this demo changes, what it cannot prove, and what the fact registry turned up. Every figure links to its source.",
   "caveatsLink": "Read the caveats",
   "pending": "Pending measurement",
+
+  "whyPlain": {
+    "heading": "Why this looks plain",
+    "body": "A good-looking animated site is the easy half. The result usually looks like a lot of modern sites do: beautiful, and slow. Measured today, same tool, same region, same hour: energyx.com's Black Giant page scores {fact:lh2-ex-bg-perf} and takes {fact:lh2-ex-bg-lcp} to render its main content on a phone. This demo's version scores {fact:lh2-demo-bg-perf} and takes {fact:lh2-demo-bg-lcp}. That gap isn't about design, it's about delivery: large video files served as single full-size downloads instead of encoded and served poster-first. The footage isn't the problem; the pipeline around it is, and that's an engineering problem, not a creative one. So this build spent its budget on the parts that are hard to fake: every number traced to the EnergyX page it came from, a refusal that runs before the model does, and a check that caught one of my own drafts calling a grant 'backing'. The whole animation budget was {fact:demo-css-caught-claim} of compressed CSS, and it went to showing that check working. The cinematic version is a day of work on top of this, and it stays fast, because the speed budget is enforced in the build.",
+    "notesHeading": "Measured 2026-11-10, and what it does not cover",
+    "notes": [
+      "One run per page on lighthouse-metrics.com, Lighthouse 13.5.0, mobile preset, US West. Lab measurements, not field data. Each figure's source is the saved report, because the check page is account-scoped and not publicly shareable. The October measurements are kept as they were, each with its own date.",
+      "This demo's home page: score {fact:lh2-demo-home-perf}, main content in {fact:lh2-demo-home-lcp}, layout shift {fact:lh2-demo-home-cls}. Its Total Blocking Time was {fact:lh2-demo-home-tbt}, against the project's budget of {fact:budget-tbt}. That is over the budget. It was a single run, and across the six test regions in that run Total Blocking Time ranged from {fact:lh2-demo-home-tbt-range}. The budget is unchanged.",
+      "This demo's Black Giant page: score {fact:lh2-demo-bg-perf}, main content in {fact:lh2-demo-bg-lcp}, blocking time {fact:lh2-demo-bg-tbt}, layout shift {fact:lh2-demo-bg-cls}.",
+      "energyx.com's home page: score {fact:lh2-ex-home-perf}, main content in {fact:lh2-ex-home-lcp}, blocking time {fact:lh2-ex-home-tbt}, layout shift {fact:lh2-ex-home-cls}.",
+      "energyx.com's Black Giant page: score {fact:lh2-ex-bg-perf}, main content in {fact:lh2-ex-bg-lcp}, blocking time {fact:lh2-ex-bg-tbt}, layout shift {fact:lh2-ex-bg-cls}. The score is essentially unchanged since October ({fact:lh-bg-perf} then, {fact:lh2-ex-bg-perf} now), so the October analysis on this page still holds.",
+      "Page weight was not re-measured on 2026-11-10. Every byte figure on this page is from the October measurements.",
+      "I didn't optimise this demo for SEO. It is noindexed on purpose, so a low SEO score is expected and isn't part of what's being compared."
+    ]
+  },
 
   "timeline": {
     "heading": "What that wait looks like",
@@ -38,7 +53,7 @@
   "payload": {
     "heading": "Where the bytes go",
     "body": [
-      "EnergyX's Black Giant page transfers {fact:lh-bg-weight} on a first visit. Of that, {fact:lh-bg-video-total} is two video files. Everything else on the page together comes to {fact:lh-bg-other-bytes}.",
+      "EnergyX's Black Giant page transfers {fact:lh-bg-weight} on a first visit. Of that, {fact:lh-bg-video-total} is two video files. Everything else on the page together comes to {fact:lh-bg-other-bytes}. These byte figures are from the 2026-10-08 measurement; page weight was not re-measured on 2026-11-10.",
       "So the page is not heavy because it is rich. The design, copy and images are a small slice of the total. The weight is two finished videos reaching the browser as large single downloads, because there is no delivery step between the footage and the page. The homepage has the same shape."
     ],
     "totalLabel": "Total",
@@ -73,7 +88,7 @@
   "comparison": {
     "heading": "Before and after",
     "intro": "The Black Giant page as EnergyX serves it, and as this demo delivers it: a still poster first, video only after the page has loaded.",
-    "caption": "Lighthouse lab results, Black Giant page",
+    "caption": "Lighthouse lab results, Black Giant page (EnergyX measured 2026-10-08, this demo 2026-10-19)",
     "columns": {
       "metric": "Measure",
       "before": "EnergyX",
@@ -86,7 +101,7 @@
       { "label": "Total Blocking Time", "before": "lh-bg-tbt", "after": "demo-bg-tbt" },
       { "label": "Total bytes", "before": "lh-bg-weight", "after": "demo-bg-weight" }
     ],
-    "method": "Both columns use the same settings: Lighthouse 13.5.0, mobile, emulated Moto G Power on Slow 4G throttling, first visit. Each figure links to its report."
+    "method": "Both columns use the same settings: Lighthouse 13.5.0, mobile, emulated Moto G Power on Slow 4G throttling, first visit. Each figure links to its report. A later, single-run re-measurement of 2026-11-10 is in the section above; page weight was not re-measured then, so the bytes here are from October."
   },
 
   "bundle": {

@@ -494,6 +494,31 @@
       "headroom",
       "spare",
       "margin"
+    ],
+    "remeasured": [
+      "re-measured",
+      "remeasured",
+      "re-measurement",
+      "latest measurement"
+    ],
+    "energyx-site": [
+      "energyx homepage",
+      "energyx black giant",
+      "energyx.com"
+    ],
+    "regions": [
+      "range",
+      "regions",
+      "region"
+    ],
+    "css": [
+      "css",
+      "stylesheet"
+    ],
+    "caught-claim": [
+      "caught claim",
+      "caught-claim",
+      "walkthrough"
     ]
   },
   "factConcepts": {
@@ -729,6 +754,117 @@
     "lh-home-tbt": [
       "homepage",
       "tbt"
+    ],
+    "lh2-demo-home-perf": [
+      "remeasured",
+      "demo",
+      "homepage",
+      "lighthouse-score"
+    ],
+    "lh2-demo-home-lcp": [
+      "remeasured",
+      "demo",
+      "homepage",
+      "lcp"
+    ],
+    "lh2-demo-home-tbt": [
+      "remeasured",
+      "demo",
+      "homepage",
+      "tbt"
+    ],
+    "lh2-demo-home-cls": [
+      "remeasured",
+      "demo",
+      "homepage",
+      "cls"
+    ],
+    "lh2-demo-bg-perf": [
+      "remeasured",
+      "demo",
+      "black-giant",
+      "lighthouse-score"
+    ],
+    "lh2-demo-bg-lcp": [
+      "remeasured",
+      "demo",
+      "black-giant",
+      "lcp"
+    ],
+    "lh2-demo-bg-tbt": [
+      "remeasured",
+      "demo",
+      "black-giant",
+      "tbt"
+    ],
+    "lh2-demo-bg-cls": [
+      "remeasured",
+      "demo",
+      "black-giant",
+      "cls"
+    ],
+    "lh2-ex-home-perf": [
+      "remeasured",
+      "energyx-site",
+      "homepage",
+      "lighthouse-score"
+    ],
+    "lh2-ex-home-lcp": [
+      "remeasured",
+      "energyx-site",
+      "homepage",
+      "lcp"
+    ],
+    "lh2-ex-home-tbt": [
+      "remeasured",
+      "energyx-site",
+      "homepage",
+      "tbt"
+    ],
+    "lh2-ex-home-cls": [
+      "remeasured",
+      "energyx-site",
+      "homepage",
+      "cls"
+    ],
+    "lh2-ex-bg-perf": [
+      "remeasured",
+      "energyx-site",
+      "black-giant",
+      "lighthouse-score"
+    ],
+    "lh2-ex-bg-lcp": [
+      "remeasured",
+      "energyx-site",
+      "black-giant",
+      "lcp"
+    ],
+    "lh2-ex-bg-tbt": [
+      "remeasured",
+      "energyx-site",
+      "black-giant",
+      "tbt"
+    ],
+    "lh2-ex-bg-cls": [
+      "remeasured",
+      "energyx-site",
+      "black-giant",
+      "cls"
+    ],
+    "lh2-demo-home-tbt-range": [
+      "remeasured",
+      "demo",
+      "homepage",
+      "tbt",
+      "regions"
+    ],
+    "budget-tbt": [
+      "budget",
+      "tbt"
+    ],
+    "demo-css-caught-claim": [
+      "css",
+      "caught-claim"
     ]
   },
   "related": {
@@ -800,7 +936,26 @@
     "lh-home-lcp-element": "What is the homepage LCP element?",
     "lh-home-cls": "What is the CLS of the homepage?",
     "lh-home-tbt": "What's the total blocking time on the homepage?",
-    "lh-agentic": "Is EnergyX visible to AI agents?"
+    "lh-agentic": "Is EnergyX visible to AI agents?",
+    "lh2-demo-home-perf": "What is the demo's homepage Lighthouse performance score in the latest re-measurement?",
+    "lh2-demo-home-lcp": "What is the demo's homepage LCP in the latest re-measurement?",
+    "lh2-demo-home-tbt": "What is the demo's homepage total blocking time in the latest re-measurement?",
+    "lh2-demo-home-cls": "What is the demo's homepage CLS in the latest re-measurement?",
+    "lh2-demo-bg-perf": "What is the demo's Black Giant page Lighthouse performance score in the latest re-measurement?",
+    "lh2-demo-bg-lcp": "What is the demo's Black Giant page LCP in the latest re-measurement?",
+    "lh2-demo-bg-tbt": "What is the demo's Black Giant page total blocking time in the latest re-measurement?",
+    "lh2-demo-bg-cls": "What is the demo's Black Giant page CLS in the latest re-measurement?",
+    "lh2-ex-home-perf": "What is the EnergyX homepage Lighthouse performance score in the latest re-measurement?",
+    "lh2-ex-home-lcp": "What is the EnergyX homepage LCP in the latest re-measurement?",
+    "lh2-ex-home-tbt": "What is the EnergyX homepage total blocking time in the latest re-measurement?",
+    "lh2-ex-home-cls": "What is the EnergyX homepage CLS in the latest re-measurement?",
+    "lh2-ex-bg-perf": "What is the EnergyX Black Giant page Lighthouse performance score in the latest re-measurement?",
+    "lh2-ex-bg-lcp": "What is the EnergyX Black Giant page LCP in the latest re-measurement?",
+    "lh2-ex-bg-tbt": "What is the EnergyX Black Giant page total blocking time in the latest re-measurement?",
+    "lh2-ex-bg-cls": "What is the EnergyX Black Giant page CLS in the latest re-measurement?",
+    "lh2-demo-home-tbt-range": "What was the range of the demo's homepage total blocking time across regions in the latest re-measurement?",
+    "budget-tbt": "What is the total blocking time budget?",
+    "demo-css-caught-claim": "How much CSS does the caught-claim walkthrough add?"
   },
   "trace": {
     "understood": "What I understood",

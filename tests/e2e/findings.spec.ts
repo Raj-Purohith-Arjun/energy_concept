@@ -8,7 +8,7 @@ const scriptSrcs = (page: Page) =>
 test("renders every section, with every table cell measured", async ({ page }) => {
   await page.goto(PATH);
   await expect(page.getByRole("heading", { level: 1, name: "Findings" })).toBeVisible();
-  for (const name of ["What that wait looks like", "Where the bytes go", "Before and after", "What these numbers do not show", "What the registry found", "First week on your codebase"]) {
+  for (const name of ["Why this looks plain", "What that wait looks like", "Where the bytes go", "Before and after", "What these numbers do not show", "What the registry found", "First week on your codebase"]) {
     await expect(page.getByRole("heading", { level: 2, name })).toBeVisible();
   }
   // Verdict above all prose: three before/after pairs, each a registry fact.
