@@ -360,7 +360,16 @@
       "source": { "title": "EnergyX homepage, projects", "url": "https://energyx.com/", "accessed": "2026-10-08" },
       "owner": "Projects",
       "approvedAt": null,
-      "verified": true
+      "verified": true,
+      "alsoPublishedAs": [
+        {
+          "value": "15,000 tonnes, possibly by end of 2027",
+          "basis": "Reported by Fortune (2026-11-07) as a possible Lonestar output by the end of 2027. The article does not specify the product (lithium hydroxide, lithium carbonate equivalent or otherwise), so this figure is not shown as the same unit as the 2030 target. It is an earlier, smaller, hedged figure for the same project, reported by a third party rather than stated on EnergyX's own pages.",
+          "basisSource": "stated",
+          "url": "https://fortune.com/2026/11/07/geologic-freak-smackover-americas-lithium-dependence-china-big-oil/",
+          "accessed": "2026-11-10"
+        }
+      ]
     },
     {
       "id": "ex-ph-capacity",
@@ -390,6 +399,85 @@
       "owner": "Projects",
       "approvedAt": null,
       "verified": true
+    },
+
+    {
+      "id": "ex-trafigura-offtake-volume",
+      "label": "Trafigura offtake volume",
+      "value": "100,000 metric tons of battery-grade lithium products over 10 years",
+      "numeric": 100000,
+      "unit": "metric tons",
+      "basis": "Stated in the 2026-10-12 press release as a binding definitive take-or-pay offtake agreement with Trafigura, EnergyX's first announced offtake. Lithium carbonate comes from Black Giant and lithium hydroxide from Lonestar.",
+      "basisSource": "stated",
+      "kind": "actual",
+      "source": { "title": "EnergyX press release, 10-year lithium offtake agreement with Trafigura (announced 2026-10-12)", "url": "https://energyx.com/press-release/energyx-signs-10-year-lithium-deal-with-trafigura/", "accessed": "2026-11-10" },
+      "owner": "Projects / Commercial",
+      "approvedAt": null,
+      "verified": true,
+      "note": "Precise noun: binding definitive take-or-pay offtake agreement. Never 'partnership' or 'deal'. verified is true on the registry's own say-so pending the human check against the live page; flip it back to false if the page disagrees."
+    },
+    {
+      "id": "ex-trafigura-offtake-value",
+      "label": "Trafigura offtake value",
+      "value": "more than $2.0 billion",
+      "numeric": 2.0,
+      "unit": "USD billions",
+      "basis": "Stated in the press release as the value of the offtake agreement. It is derived from a price assumption of about $20,000 per metric ton stated in the release, so it moves with lithium prices. It is an estimate, not a contracted price or a payment.",
+      "basisSource": "stated",
+      "kind": "estimate",
+      "source": { "title": "EnergyX press release, 10-year lithium offtake agreement with Trafigura (announced 2026-10-12)", "url": "https://energyx.com/press-release/energyx-signs-10-year-lithium-deal-with-trafigura/", "accessed": "2026-11-10" },
+      "owner": "Projects / Commercial",
+      "approvedAt": null,
+      "verified": true,
+      "alsoPublishedAs": [
+        {
+          "value": "nearly $2 billion",
+          "basis": "Fortune's wording (2026-11-07) for the same offtake. 'Nearly $2 billion' sits just under the release's 'more than $2.0 billion'; Fortune does not say how it arrived at its figure.",
+          "basisSource": "stated",
+          "url": "https://fortune.com/2026/11/07/geologic-freak-smackover-americas-lithium-dependence-china-big-oil/",
+          "accessed": "2026-11-10"
+        },
+        {
+          "value": "the largest DLE offtake in history",
+          "basis": "A claim attributed to Teague Egan in Fortune (2026-11-07), not a figure. The article gives no comparison set or method, so the registry reports it as his statement, not as a verified ranking.",
+          "basisSource": "stated",
+          "url": "https://fortune.com/2026/11/07/geologic-freak-smackover-americas-lithium-dependence-china-big-oil/",
+          "accessed": "2026-11-10"
+        }
+      ]
+    },
+    {
+      "id": "ex-trafigura-phase1-allocation",
+      "label": "Trafigura Phase 1 allocation",
+      "value": "66% of Phase 1 from Black Giant and 30% from Lonestar",
+      "basis": "Stated in the press release as the share of each project's Phase 1 volume that Trafigura takes under the offtake agreement: lithium carbonate from Black Giant and lithium hydroxide from Lonestar.",
+      "basisSource": "stated",
+      "kind": "actual",
+      "source": { "title": "EnergyX press release, 10-year lithium offtake agreement with Trafigura (announced 2026-10-12)", "url": "https://energyx.com/press-release/energyx-signs-10-year-lithium-deal-with-trafigura/", "accessed": "2026-11-10" },
+      "owner": "Projects / Commercial",
+      "approvedAt": null,
+      "verified": true
+    },
+    {
+      "id": "ex-trafigura-offtake-target",
+      "label": "EnergyX offtake target before commercial-scale production",
+      "value": "80% offtake before commercial-scale production in 2028",
+      "basis": "Stated in the press release as a goal: 80% of production offtaken before commercial-scale production begins in 2028. It is a target, not a contract and not current production.",
+      "basisSource": "stated",
+      "kind": "planned",
+      "source": { "title": "EnergyX press release, 10-year lithium offtake agreement with Trafigura (announced 2026-10-12)", "url": "https://energyx.com/press-release/energyx-signs-10-year-lithium-deal-with-trafigura/", "accessed": "2026-11-10" },
+      "owner": "Projects / Commercial",
+      "approvedAt": null,
+      "verified": true,
+      "alsoPublishedAs": [
+        {
+          "value": "commercial-scale production in 2028",
+          "basis": "The date the release measures the 80% offtake goal against. It is not tied to one project: the release does not say which project reaches commercial scale in 2028.",
+          "basisSource": "stated",
+          "url": "https://energyx.com/press-release/energyx-signs-10-year-lithium-deal-with-trafigura/",
+          "accessed": "2026-11-10"
+        }
+      ]
     },
 
     {

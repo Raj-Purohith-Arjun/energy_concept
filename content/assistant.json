@@ -36,7 +36,9 @@
           "How heavy is the Black Giant page?",
           "What is Black Giant's capacity?",
           "Who is EnergyX's CEO?",
-          "Who is EnergyX's CMO?"
+          "Who is EnergyX's CMO?",
+          "What is the Trafigura deal?",
+          "How much is the Trafigura offtake worth?"
         ]
       },
       {
@@ -338,6 +340,52 @@
       "great salt lake",
       "ogden"
     ],
+    "trafigura": [
+      "trafigura"
+    ],
+    "offtake": [
+      "offtake",
+      "off-take",
+      "off take",
+      "take-or-pay",
+      "take or pay",
+      "deal",
+      "agreement",
+      "contract"
+    ],
+    "offtake-worth": [
+      "worth",
+      "value",
+      "valued",
+      "billion",
+      "dollars",
+      "price"
+    ],
+    "offtake-size": [
+      "how large",
+      "how big",
+      "how many tons",
+      "how many tonnes",
+      "volume",
+      "size",
+      "metric tons",
+      "tons",
+      "tonnes"
+    ],
+    "phase-one": [
+      "phase 1",
+      "phase one",
+      "phase i",
+      "allocation",
+      "split",
+      "share of"
+    ],
+    "offtake-target": [
+      "offtake target",
+      "offtake goal",
+      "commercial-scale",
+      "commercial scale"
+    ],
     "grant": [
       "grant",
       "doe",
@@ -596,6 +644,23 @@
     "ex-bm-target": [
       "battery-mecca",
       "capacity"
+    ],
+    "ex-trafigura-offtake-volume": [
+      "trafigura",
+      "offtake"
+    ],
+    "ex-trafigura-offtake-value": [
+      "trafigura",
+      "offtake",
+      "offtake-worth"
+    ],
+    "ex-trafigura-phase1-allocation": [
+      "trafigura",
+      "phase-one"
+    ],
+    "ex-trafigura-offtake-target": [
+      "offtake",
+      "offtake-target"
     ],
     "lh-bg-weight": [
       "black-giant",
@@ -868,6 +933,23 @@
     ]
   },
   "related": {
+    "ex-trafigura-offtake-volume": [
+      "ex-trafigura-offtake-value",
+      "ex-trafigura-phase1-allocation",
+      "ex-trafigura-offtake-target"
+    ],
+    "ex-trafigura-offtake-value": [
+      "ex-trafigura-offtake-volume",
+      "ex-trafigura-phase1-allocation"
+    ],
+    "ex-trafigura-phase1-allocation": [
+      "ex-trafigura-offtake-volume",
+      "ex-trafigura-offtake-value"
+    ],
+    "ex-trafigura-offtake-target": [
+      "ex-trafigura-offtake-volume",
+      "ex-trafigura-phase1-allocation"
+    ],
     "ex-water-reduction": [
       "ex-water-conventional",
       "ex-water-dle"
@@ -904,6 +986,10 @@
     "ex-lonestar-target": "What is Lonestar's capacity?",
     "ex-ph-capacity": "What is Powder Hound's capacity?",
     "ex-bm-target": "What is Battery Mecca's production capacity?",
+    "ex-trafigura-offtake-volume": "What is the Trafigura deal?",
+    "ex-trafigura-offtake-value": "How much is the Trafigura offtake worth?",
+    "ex-trafigura-phase1-allocation": "How much of Phase 1 does Trafigura take?",
+    "ex-trafigura-offtake-target": "What is EnergyX's offtake target before commercial-scale production?",
     "lh-bg-weight": "How heavy is the Black Giant page?",
     "lh-bg-hero-video": "How big is the hero video on the Black Giant page?",
     "lh-bg-second-video": "How big is the second video on the Black Giant page?",
